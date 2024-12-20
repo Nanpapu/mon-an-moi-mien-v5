@@ -14,7 +14,7 @@ export const ThemeToggle = () => {
     } else if (currentTheme.id.includes('-dark')) {
       return "moon-outline";
     } else if (currentTheme.id.includes('light')) {
-      return "sunny-outline";
+      return "sunny";
     }
   };
   
