@@ -10,7 +10,7 @@ export const ThemeToggle = () => {
   // Hàm helper để xác định icon dựa vào theme ID
   const getThemeIcon = () => {
     if (currentTheme.id.includes('special')) {
-      return "diamond-outline";
+      return "star-outline";
     } else if (currentTheme.id.includes('dark')) {
       return "moon-outline";
     } else if (currentTheme.id.includes('light')) {
