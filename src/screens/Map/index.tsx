@@ -17,6 +17,7 @@ import { RegionService } from '../../services/regionService';
 import { ViewVietnamButton } from './components/ViewVietnamButton';
 import { useToast } from '../../hooks/useToast';
 import { useRandomAnimation } from './hooks/useRandomAnimation';
+import { MarkerClustering } from './components/MarkerClustering';
 
 export default function MapScreen({ navigation }: { navigation: any }) {
   const { theme } = useTheme();
@@ -184,19 +185,16 @@ export default function MapScreen({ navigation }: { navigation: any }) {
           setIsMapReady(true);
           setIsMapLoading(false);
         }}
-        onLayout={() => {
-          console.log('Map layout complete');
-        }}
       >
-        {!isMapLoading && (
-          <MapMarkers
+        {!isMapLoading && isMapReady && (
+          <MarkerClustering
             regions={loadedRegions}
-            isMapReady={isMapReady}
             onMarkerPress={(recipes, regionName) => {
               setSelectedRecipes(recipes);
               setSelectedRegionName(regionName);
               setModalVisible(true);
             }}
+            mapRegion={region}
           />
         )}
       </MapView>
