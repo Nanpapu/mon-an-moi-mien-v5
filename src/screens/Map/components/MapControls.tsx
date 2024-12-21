@@ -11,6 +11,7 @@ import { RandomRecipeButton } from './RandomRecipeButton';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
+import { SearchBar } from './SearchBar';
 
 interface Props {
   onRefresh: () => Promise<void>;
@@ -89,55 +90,7 @@ export function MapControls({
 
   return (
     <>
-      <Animated.View
-        style={[
-          styles.searchContainer,
-          {
-            backgroundColor: theme.colors.background.paper,
-            width: searchWidth,
-            ...theme.shadows.sm,
-          },
-        ]}
-      >
-        {!showSearch ? (
-          <TouchableOpacity onPress={toggleSearch} style={styles.searchIcon}>
-            <Ionicons
-              name="search"
-              size={24}
-              color={theme.colors.text.secondary}
-            />
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.searchInputWrapper}>
-            <TouchableOpacity onPress={toggleSearch} style={styles.searchIcon}>
-              <Ionicons
-                name="arrow-back"
-                size={24}
-                color={theme.colors.text.secondary}
-              />
-            </TouchableOpacity>
-
-            <View style={styles.searchBarWrapper}>
-              <TextInput
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Tìm kiếm địa điểm..."
-                placeholderTextColor={theme.colors.text.secondary}
-                style={[
-                  styles.input,
-                  {
-                    color: theme.colors.text.primary,
-                    backgroundColor: theme.colors.background.paper,
-                    borderColor: theme.colors.divider,
-                    ...theme.shadows.sm,
-                  },
-                ]}
-                onSubmitEditing={handleSubmit}
-              />
-            </View>
-          </View>
-        )}
-      </Animated.View>
+      <SearchBar onSearch={onSearch} />
 
       <Animated.View
         style={[
