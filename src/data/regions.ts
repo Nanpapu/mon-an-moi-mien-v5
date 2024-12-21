@@ -410,6 +410,17 @@ export const regions: Region[] = [
             'Rắc đậu phộng rang',
             'Ăn kèm với rau sống và mắm nêm',
           ],
+          tips: [
+            'Chọn cá lăng tươi, thịt chắc',
+            'Nghệ tươi giã nhuyễn sẽ có màu đẹp hơn nghệ bột',
+            'Nên nướng trên bếp than để có mùi thơm đặc trưng',
+            'Rau thì là phải tươi và xanh mướt',
+          ],
+          storage: [
+            'Cá đã ướp có thể bảo quản trong tủ lạnh đến 24 giờ',
+            'Nước mắm pha có thể giữ trong tủ lạnh đến 1 tuần',
+            'Rau sống nên rửa sạch và bọc trong khăn ẩm trước khi cho vào tủ lạnh',
+          ],
         },
       },
     ],
@@ -1640,7 +1651,7 @@ export const regions: Region[] = [
         instructions: {
           preparation: [
             'Tôm bóc vỏ, giữ đầu',
-            'Đậu xanh ngâm 4 tiếng, xay nhuyễn',
+            'Đậu xanh ngâm 4 tiếng, xay nhuyễn', 
             'Hành tím băm nhuyễn',
           ],
           processing: [
@@ -1652,6 +1663,13 @@ export const regions: Region[] = [
             'Đổ bột vào khuôn bánh cống',
             'Đặt tôm lên trên, đầu tôm hướng lên',
             'Chiên trong dầu nóng với lửa vừa đến khi vàng giòn',
+          ],
+          // Thêm phần assembly bắt buộc
+          assembly: [
+            'Chuẩn bị đĩa bánh:',
+            '- Xếp bánh cống ra đĩa có lót giấy thấm dầu',
+            '- Bày rau sống và các loại rau thơm xung quanh',
+            '- Đặt chén nước mắm pha bên cạnh',
           ],
           serving: [
             'Nhúng bánh tráng qua nước ấm nhanh',
@@ -1673,7 +1691,7 @@ export const regions: Region[] = [
             'Bột sống có thể bảo quản trong tủ lạnh đến 24 giờ',
             'Bánh đã chiên nên ăn nóng ngay để giữ độ giòn',
             'Nếu cần bảo quản bánh đã chiên, để nguội hoàn toàn rồi cho vào hộp kín, hâm nóng lại bằng lò vi sóng',
-            'Nhân đậu xanh và thịt đã trộn có thể bảo quản trong tủ lạnh đến 24 giờ',
+            'Nhân đậu xanh và thịt đã trộn có thể bảo quản trong tủ lạnh đến 24 giờ', 
             'Nước mắm pha có thể bảo quản trong tủ lạnh đến 1 tuần',
             'Đồ chua bảo quản trong tủ lạnh đến 2 tuần',
           ],
