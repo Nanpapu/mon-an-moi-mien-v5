@@ -210,7 +210,11 @@ export function RecipeCard({
               <View style={styles.ingredientsList}>
                 {recipe.ingredients.map((ingredient, index) => (
                   <View key={index} style={styles.ingredientItem}>
-                    <View style={styles.ingredientBullet} />
+                    <View style={styles.ingredientNumber}>
+                      <Typography style={styles.ingredientNumberText}>
+                        {index + 1}
+                      </Typography>
+                    </View>
                     <Typography
                       variant="body1"
                       style={[

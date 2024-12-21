@@ -223,11 +223,11 @@ export const createStyles = (theme: Theme) =>
     ingredientsContainer: {
       backgroundColor: theme.colors.background.paper,
       borderRadius: theme.spacing.md,
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       marginTop: theme.spacing.md,
     },
     ingredientsList: {
-      marginTop: theme.spacing.sm,
+      marginTop: theme.spacing.xs,
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'space-between',
@@ -239,21 +239,35 @@ export const createStyles = (theme: Theme) =>
       width: '48%',
       marginBottom: theme.spacing.xs,
     },
-    ingredientBullet: {
-      width: 6,
-      height: 6,
-      borderRadius: 3,
+    ingredientNumber: {
+      width: 24,
+      height: 24,
+      borderRadius: 12,
       backgroundColor: theme.colors.primary.main,
+      justifyContent: 'center',
+      alignItems: 'center',
       marginRight: theme.spacing.sm,
+      ...theme.shadows.xs,
+    },
+    ingredientNumberText: {
+      color: theme.colors.primary.contrast,
+      fontSize: 12,
+      fontWeight: 'bold',
+      lineHeight: 24,
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      includeFontPadding: false,
+      padding: 0,
     },
     ingredientText: {
       flex: 1,
       color: theme.colors.text.primary,
+      fontSize: 14,
     },
     instructionsContainer: {
       backgroundColor: theme.colors.background.paper,
       borderRadius: theme.spacing.md,
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       marginTop: theme.spacing.md,
     },
     instructionsList: {
@@ -265,6 +279,7 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.background.default,
       borderRadius: theme.spacing.sm,
       padding: theme.spacing.sm,
+      alignItems: 'center',
       ...theme.shadows.xs,
     },
     instructionNumber: {
