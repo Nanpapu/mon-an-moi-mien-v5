@@ -195,6 +195,54 @@ export function RecipeCard({
           </TouchableOpacity>
         </View>
 
+        <View style={styles.recipeMetaContainer}>
+          <View style={styles.metaItem}>
+            <View style={styles.metaIcon}>
+              <Ionicons
+                name="time-outline"
+                size={16}
+                color={theme.colors.primary.main}
+              />
+            </View>
+            <Typography style={styles.metaLabel}>Thời gian</Typography>
+            <Typography style={styles.metaValue}>
+              {recipe.cookingTime ? `${recipe.cookingTime} phút` : '--'}
+            </Typography>
+          </View>
+
+          <View style={styles.metaDivider} />
+
+          <View style={styles.metaItem}>
+            <View style={styles.metaIcon}>
+              <Ionicons
+                name="speedometer-outline"
+                size={16}
+                color={theme.colors.primary.main}
+              />
+            </View>
+            <Typography style={styles.metaLabel}>Độ khó</Typography>
+            <Typography style={styles.metaValue}>
+              {recipe.difficulty ? `${recipe.difficulty}/5` : '--'}
+            </Typography>
+          </View>
+
+          <View style={styles.metaDivider} />
+
+          <View style={styles.metaItem}>
+            <View style={styles.metaIcon}>
+              <Ionicons
+                name="people-outline"
+                size={16}
+                color={theme.colors.primary.main}
+              />
+            </View>
+            <Typography style={styles.metaLabel}>Khẩu phần</Typography>
+            <Typography style={styles.metaValue}>
+              {recipe.servings ? `${recipe.servings} người` : '--'}
+            </Typography>
+          </View>
+        </View>
+
         {showDetails && (
           <View style={styles.details}>
             <View style={styles.ingredientsContainer}>
