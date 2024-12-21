@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, StyleSheet, View, Easing } from 'react-native';
 import { Typography } from './Typography';
 import { useTheme } from '../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +13,7 @@ interface Props {
   message: string;
   type: ToastType;
   position?: 'top' | 'bottom';
+  isExiting?: boolean;
 }
 
 // Toast component
@@ -21,9 +22,14 @@ export const Toast = ({
   message,
   type,
   position = 'bottom',
+  isExiting,
 }: Props) => {
   const { theme } = useTheme();
-  const translateY = new Animated.Value(position === 'top' ? -100 : 100);
+  const translateY = useRef(
+    new Animated.Value(position === 'top' ? -100 : 100)
+  ).current;
+  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(0.8)).current;
 
   // Hàm lấy màu toast dựa trên type
   const getToastColor = () => {
@@ -55,22 +61,52 @@ export const Toast = ({
 
   // Effect hook để tạo hiệu ứng chuyển động
   useEffect(() => {
-    if (visible) {
-      Animated.spring(translateY, {
-        toValue: 0,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(translateY, {
-        toValue: position === 'top' ? -100 : 100,
-        duration: THEME_CONSTANTS.animation.duration,
-        useNativeDriver: true,
-      }).start();
+    if (visible && !isExiting) {
+      // Entrance animation
+      Animated.parallel([
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+          friction: 8,
+          tension: 40,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          useNativeDriver: true,
+          friction: 8,
+          tension: 40,
+        }),
+      ]).start();
+    } else if (isExiting) {
+      // Exit animation
+      Animated.parallel([
+        Animated.timing(translateY, {
+          toValue: position === 'top' ? -100 : 100,
+          duration: 500,
+          useNativeDriver: true,
+          easing: Easing.out(Easing.ease),
+        }),
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scale, {
+          toValue: 0.8,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
-  }, [visible]);
+  }, [visible, isExiting]);
 
   // Nếu không visible, trả về null
-  if (!visible) return null;
+  if (!visible && !isExiting) return null;
 
   return (
     <RootSiblingParent>
@@ -78,15 +114,11 @@ export const Toast = ({
         style={[
           styles.container,
           {
-            transform: [{ translateY }],
+            transform: [{ translateY }, { scale }],
+            opacity,
             backgroundColor: getToastColor(),
-            [position]: THEME_CONSTANTS.layout.tabBarHeight + theme.spacing.md,
-            left: theme.spacing.md,
-            right: theme.spacing.md,
-            padding: theme.spacing.md,
-            borderRadius: THEME_CONSTANTS.layout.borderRadius.sm,
-            ...theme.shadows.md,
           },
+          position === 'top' ? styles.topPosition : styles.bottomPosition,
         ]}
       >
         <View style={styles.content}>
@@ -113,8 +145,24 @@ export const Toast = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    zIndex: 999999,
-    elevation: 999999,
+    left: 16,
+    right: 16,
+    padding: 16,
+    borderRadius: 8,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  topPosition: {
+    top: 44, // Adjust based on your needs
+  },
+  bottomPosition: {
+    bottom: 44, // Adjust based on your needs
   },
   content: {
     flexDirection: 'row',

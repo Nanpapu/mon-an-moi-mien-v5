@@ -21,6 +21,7 @@ export const useToast = () => {
         duration?: number;
         position?: 'top' | 'bottom';
         immediate?: boolean;
+        groupSimilar?: boolean;
       }
     ) => {
       // Tăng số lần gọi
@@ -31,11 +32,15 @@ export const useToast = () => {
         clearTimeout(debounceTimerRef.current);
       }
 
-      // Tính toán duration dựa vào số lần gọi
-      const calculatedDuration =
+      // Tính toán duration dựa vào độ dài message
+      const baseDuration = options?.duration || 3000;
+      const messageLengthFactor = Math.min(message.length / 50, 2); // Tăng duration cho message dài
+      const calculatedDuration = Math.max(
+        2000,
         callCountRef.current > 1
-          ? Math.min(options?.duration || 3000, 1000)
-          : options?.duration;
+          ? Math.min(baseDuration * messageLengthFactor, 3000)
+          : baseDuration * messageLengthFactor
+      );
 
       // Nếu immediate = true, hiện toast ngay lập tức
       if (options?.immediate) {
@@ -43,14 +48,13 @@ export const useToast = () => {
         return;
       }
 
-      // Debounce toast trong 300ms
+      // Tăng debounce time để xử lý spam tốt hơn
       debounceTimerRef.current = setTimeout(() => {
         context.showToast(type, message, calculatedDuration);
-        // Reset số lần gọi sau khi hiển thị
         setTimeout(() => {
           callCountRef.current = 0;
-        }, 1000);
-      }, 300);
+        }, 1500);
+      }, 500);
     },
     [context]
   );

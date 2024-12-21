@@ -30,7 +30,11 @@ export const useRandomAnimation = (mapRef: React.RefObject<MapView>) => {
       animationTimeouts.current = [];
       isAnimating.current = false;
       if (hasStartedAnimation.current) {
-        showToast('info', 'Đã dừng tìm kiếm ngẫu nhiên');
+        showToast('info', 'Đã dừng tìm kiếm ngẫu nhiên', {
+          duration: 1500,
+          position: 'bottom',
+          immediate: true,
+        });
       }
       hasStartedAnimation.current = false;
     }

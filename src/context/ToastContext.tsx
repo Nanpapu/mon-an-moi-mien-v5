@@ -14,62 +14,72 @@ interface ToastContextType {
 
 export const ToastContext = createContext<ToastContextType | null>(null);
 
-interface ToastItem {
+interface ToastState {
+  id: string;
   type: ToastType;
   message: string;
   duration: number;
-  id: string;
+  isExiting?: boolean;
 }
 
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
-  const [toastQueue, setToastQueue] = useState<ToastItem[]>([]);
-  const [currentToast, setCurrentToast] = useState<ToastItem | null>(null);
+  const [currentToast, setCurrentToast] = useState<ToastState | null>(null);
+  const [toastQueue, setToastQueue] = useState<ToastState[]>([]);
+  const exitAnimationTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const lastToastRef = useRef<{
-    type: ToastType;
-    message: string;
-    timestamp: number;
-  } | null>(null);
+  const handleToastExit = useCallback((toast: ToastState) => {
+    setCurrentToast((prev) => (prev ? { ...prev, isExiting: true } : null));
+
+    exitAnimationTimeoutRef.current = setTimeout(() => {
+      setCurrentToast(null);
+    }, 500);
+  }, []);
 
   useEffect(() => {
     if (toastQueue.length > 0 && !currentToast) {
       const nextToast = toastQueue[0];
-      setCurrentToast(nextToast);
-      setToastQueue((prev) => prev.slice(1));
 
-      const adjustedDuration =
-        toastQueue.length > 1
-          ? Math.min(nextToast.duration, 1000)
-          : nextToast.duration;
+      const similarToasts = toastQueue.filter(
+        (toast) =>
+          toast.type === nextToast.type && toast.message === nextToast.message
+      );
+
+      const message =
+        similarToasts.length > 1
+          ? `${nextToast.message} (${similarToasts.length})`
+          : nextToast.message;
+
+      setCurrentToast({ ...nextToast, message, isExiting: false });
+
+      setToastQueue((prev) =>
+        prev.filter(
+          (toast) =>
+            !(
+              toast.type === nextToast.type &&
+              toast.message === nextToast.message
+            )
+        )
+      );
+
+      const adjustedDuration = Math.max(
+        1000,
+        similarToasts.length > 1 ? 2000 : nextToast.duration
+      );
 
       setTimeout(() => {
-        setCurrentToast(null);
+        handleToastExit(nextToast);
       }, adjustedDuration);
     }
-  }, [toastQueue, currentToast]);
+  }, [toastQueue, currentToast, handleToastExit]);
 
   const showToast = useCallback(
     (type: ToastType, message: string, duration = 3000) => {
-      const now = Date.now();
-      const lastToast = lastToastRef.current;
-
-      if (
-        lastToast &&
-        lastToast.type === type &&
-        lastToast.message === message &&
-        now - lastToast.timestamp < 500
-      ) {
-        return;
+      if (exitAnimationTimeoutRef.current) {
+        clearTimeout(exitAnimationTimeoutRef.current);
       }
 
-      lastToastRef.current = {
-        type,
-        message,
-        timestamp: now,
-      };
-
-      if (currentToast?.type === type && currentToast?.message === message) {
-        return;
+      if (currentToast && !currentToast.isExiting) {
+        handleToastExit(currentToast);
       }
 
       setToastQueue((prev) => {
@@ -78,14 +88,15 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
           {
             type,
             message,
-            duration: prev.length > 0 ? Math.min(duration, 1500) : duration,
+            duration: prev.length > 0 ? Math.min(duration, 2000) : duration,
             id: `${Date.now()}-${Math.random()}`,
+            isExiting: false,
           },
         ];
-        return newQueue.slice(-3);
+        return newQueue.slice(-5);
       });
     },
-    [currentToast]
+    [currentToast, handleToastExit]
   );
 
   return (

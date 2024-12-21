@@ -118,10 +118,18 @@ export function ImportButton() {
       }
 
       await batch.commit();
-      showToast('success', 'Đã import và đồng bộ dữ liệu');
+      showToast('success', 'Import dữ liệu thành công', {
+        duration: 2000,
+        position: 'bottom',
+        immediate: true,
+      });
     } catch (error) {
       console.error('Lỗi khi import dữ liệu:', error);
-      showToast('error', 'Có lỗi xảy ra khi import dữ liệu');
+      showToast('error', 'Lỗi khi import dữ liệu', {
+        duration: 3000,
+        position: 'bottom',
+        immediate: true,
+      });
     } finally {
       setIsImporting(false);
     }
