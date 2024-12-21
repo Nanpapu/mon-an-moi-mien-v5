@@ -6,19 +6,25 @@ import { RegionService } from '../../../services/regionService';
 export const useMapData = () => {
   const { showToast } = useToast();
   const [regions, setRegions] = useState<Region[]>([]);
+  const [loadedRegions, setLoadedRegions] = useState<Region[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadRegions = async (forceRefresh = false) => {
     try {
       setIsLoading(true);
+      setLoadedRegions([]);
 
       if (forceRefresh) {
-        // Xóa cache nếu cần refresh
         await RegionService.clearRegionsCache();
       }
 
       const data = await RegionService.getAllRegions();
-      console.log('Loaded data from RegionService:', data);
+
+      for (const region of data) {
+        setLoadedRegions((prev) => [...prev, region]);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
       setRegions(data);
     } catch (error) {
       console.error('Lỗi khi tải dữ liệu:', error);
@@ -34,7 +40,8 @@ export const useMapData = () => {
 
   return {
     regions,
+    loadedRegions,
     isLoading,
-    refreshRegions: () => loadRegions(true), // Force refresh khi người dùng pull-to-refresh
+    refreshRegions: () => loadRegions(true),
   };
 };

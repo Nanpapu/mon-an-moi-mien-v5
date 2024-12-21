@@ -14,12 +14,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
 
 interface Props {
-  onRefresh: () => void;
+  onRefresh: () => Promise<void>;
   regions: Region[];
   onRandomSelect: (latitude: number, longitude: number, recipes: any[]) => void;
   onSearch: (query: string) => void;
   isAnimating?: boolean;
   onAnimationStart?: () => void;
+  isRefreshing?: boolean;
 }
 
 export function MapControls({
@@ -29,12 +30,14 @@ export function MapControls({
   onSearch,
   isAnimating,
   onAnimationStart,
+  isRefreshing = false,
 }: Props) {
   const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const searchWidth = useRef(new Animated.Value(48)).current;
   const reloadTop = useRef(new Animated.Value(20)).current;
+  const spinValue = useRef(new Animated.Value(0)).current;
 
   const expandedWidth = Platform.OS === 'ios' ? 358 : 328;
 
@@ -65,6 +68,25 @@ export function MapControls({
       toggleSearch();
     }
   };
+
+  React.useEffect(() => {
+    if (isRefreshing) {
+      Animated.loop(
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        })
+      ).start();
+    } else {
+      spinValue.setValue(0);
+    }
+  }, [isRefreshing]);
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   return (
     <>
@@ -128,8 +150,23 @@ export function MapControls({
           },
         ]}
       >
-        <TouchableOpacity onPress={onRefresh}>
-          <Ionicons name="reload" size={24} color={theme.colors.primary.main} />
+        <TouchableOpacity
+          onPress={onRefresh}
+          disabled={isRefreshing}
+          style={[
+            styles.reloadButtonInner,
+            { opacity: isRefreshing ? 0.7 : 1 },
+          ]}
+        >
+          <Animated.View
+            style={[styles.iconWrapper, { transform: [{ rotate: spin }] }]}
+          >
+            <Ionicons
+              name="reload"
+              size={22}
+              color={theme.colors.primary.main}
+            />
+          </Animated.View>
         </TouchableOpacity>
       </Animated.View>
 
@@ -180,8 +217,21 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
+    overflow: 'hidden',
+    zIndex: 1,
+  },
+  reloadButtonInner: {
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
+  },
+  iconWrapper: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 1,
+    paddingTop: 1,
   },
 });

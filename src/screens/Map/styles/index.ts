@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,12 +9,13 @@ export const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   modalView: {
     flex: 1,
-    backgroundColor: "#f5f5f5", 
+    backgroundColor: '#f5f5f5',
     marginTop: 50,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -23,11 +24,11 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   recipeCard: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 15,
     marginBottom: 20,
     elevation: 3,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -70,12 +71,12 @@ export const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   loadingOverlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
@@ -84,5 +85,13 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: '#007AFF',
+  },
+  reloadButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
 });

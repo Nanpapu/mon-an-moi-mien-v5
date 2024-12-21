@@ -26,9 +26,11 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [isMapReady, setIsMapReady] = useState(false);
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [isRandomAnimating, setIsRandomAnimating] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isViewingVietnam, setIsViewingVietnam] = useState(false);
 
   const mapRef = useRef<MapView>(null);
-  const { regions, isLoading, refreshRegions } = useMapData();
+  const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
   const {
     currentZoom,
     region,
@@ -159,18 +161,34 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
   const handleRefresh = async () => {
     try {
+      setIsRefreshing(true);
       await RegionService.clearRegionsCache();
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       await refreshRegions();
+      showToast('success', 'Đã tải lại dữ liệu thành công');
     } catch (error) {
       console.error('Lỗi khi refresh:', error);
       showToast('error', 'Không thể tải lại dữ liệu');
+    } finally {
+      setIsRefreshing(false);
     }
+  };
+
+  const handleViewVietnam = () => {
+    setIsViewingVietnam(true);
+    viewVietnam(mapRef);
+
+    setTimeout(() => {
+      setIsViewingVietnam(false);
+    }, 1000);
   };
 
   if (!regions || regions.length === 0) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Không có dữ liệu vùng miền</Text>
+        <Loading text="Đang tải dữ liệu vùng miền..." />
       </View>
     );
   }
@@ -193,7 +211,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         }}
       >
         <MapMarkers
-          regions={regions}
+          regions={loadedRegions}
           isMapReady={isMapReady}
           currentZoom={currentZoom}
           shouldShowMarker={shouldShowMarker}
@@ -212,6 +230,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         onSearch={onSearch}
         isAnimating={isRandomAnimating}
         onAnimationStart={() => setIsRandomAnimating(true)}
+        isRefreshing={isRefreshing}
       />
 
       <RecipeModal
@@ -224,9 +243,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
       {isLoading && <Loading overlay text="Đang tải..." />}
 
       <ViewVietnamButton
-        onPress={() => {
-          viewVietnam(mapRef);
-        }}
+        onPress={handleViewVietnam}
+        disabled={isViewingVietnam || isRandomAnimating}
       />
     </View>
   );
