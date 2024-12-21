@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { Recipe, Review } from '../../types';
+import { Recipe, Review, Instructions } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { ReviewService } from '../../services/reviewService';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +22,7 @@ import { db } from '../../config/firebase';
 import { COLLECTIONS } from '../../constants';
 import { ImageUtils } from '../../utils/imageUtils';
 import { ImageCacheService } from '../../services/imageCacheService';
+import { formatInstructions } from '../../utils/formatInstructions';
 
 // Props interface cho RecipeCard
 interface Props {
@@ -31,6 +32,87 @@ interface Props {
   showActions?: boolean;
   showReviews?: boolean;
 }
+
+// Thêm component InstructionsSection mới
+const InstructionsSection = ({
+  instructions,
+}: {
+  instructions: Instructions;
+}) => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  // Định nghĩa các section theo thứ tự hiển thị
+  const sections = [
+    { key: 'preparation', title: 'Chuẩn bị nguyên liệu', icon: 'list-outline' },
+    { key: 'processing', title: 'Sơ chế', icon: 'cut-outline' },
+    { key: 'marinating', title: 'Ướp gia vị', icon: 'flask-outline' },
+    { key: 'broth', title: 'Nấu nước dùng', icon: 'water-outline' },
+    { key: 'sauce', title: 'Làm nước chấm', icon: 'color-fill-outline' },
+    { key: 'cooking', title: 'Nấu chính', icon: 'flame-outline' },
+    { key: 'steaming', title: 'Hấp/Luộc', icon: 'thermometer-outline' },
+    { key: 'filling', title: 'Làm nhân', icon: 'layers-outline' },
+    { key: 'dough', title: 'Làm vỏ/bột', icon: 'disc-outline' },
+    { key: 'assembly', title: 'Hoàn thiện', icon: 'construct-outline' },
+    { key: 'serving', title: 'Cách dùng', icon: 'restaurant-outline' },
+    { key: 'tips', title: 'Mẹo và lưu ý', icon: 'bulb-outline' },
+    { key: 'storage', title: 'Bảo quản', icon: 'file-tray-outline' },
+  ];
+
+  // Lọc ra các section có dữ liệu và đánh số lại
+  const availableSections = sections.filter(({ key }) => {
+    const steps = instructions?.[key as keyof Instructions];
+    return Array.isArray(steps) && steps.length > 0;
+  });
+
+  return (
+    <View style={styles.instructionsContainer}>
+      <View style={styles.sectionTitle}>
+        <Ionicons
+          name="book-outline"
+          size={20}
+          color={theme.colors.primary.main}
+          style={styles.sectionIcon}
+        />
+        <Typography variant="h3">Cách làm</Typography>
+      </View>
+
+      {sections.map(({ key, title, icon }) => {
+        const steps = instructions[key as keyof Instructions];
+        // Kiểm tra steps tồn tại và có phần tử
+        if (!steps?.length) return null;
+
+        return (
+          <View key={key} style={styles.instructionSection}>
+            <View style={styles.instructionSectionHeader}>
+              <Ionicons
+                name={icon as any}
+                size={18}
+                color={theme.colors.primary.main}
+                style={styles.instructionSectionIcon}
+              />
+              <Typography style={styles.instructionSectionTitle}>
+                {title}
+              </Typography>
+            </View>
+            {steps.map((step, index) => (
+              <View key={index} style={styles.instructionItem}>
+                <View style={styles.instructionNumber}>
+                  <Typography style={styles.instructionNumberText}>
+                    {index + 1}
+                  </Typography>
+                </View>
+                <View style={styles.instructionContent}>
+                  <Typography style={styles.instructionText}>{step}</Typography>
+                </View>
+              </View>
+            ))}
+          </View>
+        );
+      })}
+    </View>
+  );
+};
 
 // RecipeCard component
 export function RecipeCard({
@@ -201,12 +283,12 @@ export function RecipeCard({
               <Ionicons
                 name="time-outline"
                 size={16}
-                color={theme.colors.primary.main}
+                color={theme.colors.text.secondary}
               />
             </View>
             <Typography style={styles.metaLabel}>Thời gian</Typography>
             <Typography style={styles.metaValue}>
-              {recipe.cookingTime ? `${recipe.cookingTime} phút` : '--'}
+              {recipe.cookingTime ? `${recipe.cookingTime} phút` : 'N/A'}
             </Typography>
           </View>
 
@@ -215,14 +297,14 @@ export function RecipeCard({
           <View style={styles.metaItem}>
             <View style={styles.metaIcon}>
               <Ionicons
-                name="speedometer-outline"
+                name="bar-chart-outline"
                 size={16}
-                color={theme.colors.primary.main}
+                color={theme.colors.text.secondary}
               />
             </View>
             <Typography style={styles.metaLabel}>Độ khó</Typography>
             <Typography style={styles.metaValue}>
-              {recipe.difficulty ? `${recipe.difficulty}/5` : '--'}
+              {recipe.difficulty ? `${recipe.difficulty}/5` : 'N/A'}
             </Typography>
           </View>
 
@@ -233,12 +315,12 @@ export function RecipeCard({
               <Ionicons
                 name="people-outline"
                 size={16}
-                color={theme.colors.primary.main}
+                color={theme.colors.text.secondary}
               />
             </View>
             <Typography style={styles.metaLabel}>Khẩu phần</Typography>
             <Typography style={styles.metaValue}>
-              {recipe.servings ? `${recipe.servings} người` : '--'}
+              {recipe.servings ? `${recipe.servings} người` : 'N/A'}
             </Typography>
           </View>
         </View>
@@ -263,53 +345,16 @@ export function RecipeCard({
                         {index + 1}
                       </Typography>
                     </View>
-                    <Typography
-                      variant="body1"
-                      style={[
-                        styles.ingredientText,
-                        { fontSize: ingredient.length > 30 ? 12 : 14 },
-                      ]}
-                      numberOfLines={2}
-                    >
-                      {ingredient}
+                    <Typography style={styles.ingredientText}>
+                      {`${ingredient.amount} ${ingredient.unit} ${ingredient.name}`}
+                      {ingredient.note && ` (${ingredient.note})`}
                     </Typography>
                   </View>
                 ))}
               </View>
             </View>
 
-            <View style={styles.instructionsContainer}>
-              <View style={styles.sectionTitle}>
-                <Ionicons
-                  name="book-outline"
-                  size={20}
-                  color={theme.colors.primary.main}
-                  style={styles.sectionIcon}
-                />
-                <Typography variant="h3">Cách làm</Typography>
-              </View>
-
-              <View style={styles.instructionsList}>
-                {recipe.instructions.map((instruction, index) => (
-                  <View key={index} style={styles.instructionItem}>
-                    <View style={styles.instructionNumber}>
-                      <Typography style={styles.instructionNumberText}>
-                        {index + 1}
-                      </Typography>
-                    </View>
-
-                    <View style={styles.instructionContent}>
-                      <Typography
-                        variant="body2"
-                        style={styles.instructionText}
-                      >
-                        {instruction}
-                      </Typography>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            </View>
+            <InstructionsSection instructions={recipe.instructions} />
           </View>
         )}
 

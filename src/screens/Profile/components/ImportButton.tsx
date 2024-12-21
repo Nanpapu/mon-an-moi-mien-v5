@@ -77,6 +77,7 @@ export function ImportButton() {
       for (const region of regions) {
         const { recipes: regionRecipes, ...regionData } = region;
 
+        // Tạo document cho region với timestamp
         const regionRef = doc(db, COLLECTIONS.REGIONS, region.id);
         batch.set(regionRef, {
           ...regionData,
@@ -84,13 +85,18 @@ export function ImportButton() {
           updatedAt: Timestamp.now(),
         });
 
+        // Import từng recipe của region
         for (const recipe of regionRecipes) {
           newRecipeIds.add(recipe.id);
 
+          // Tạo recipe document với các trường mới
           const recipeRef = doc(db, COLLECTIONS.RECIPES, recipe.id);
           batch.set(recipeRef, {
             ...recipe,
             regionId: region.id,
+            cookingTime: recipe.cookingTime || 0,
+            difficulty: recipe.difficulty || 0,
+            servings: recipe.servings || 0,
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           });

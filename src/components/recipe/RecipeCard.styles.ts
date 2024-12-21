@@ -263,6 +263,7 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
       color: theme.colors.text.primary,
       fontSize: 14,
+      lineHeight: 20,
     },
     instructionsContainer: {
       backgroundColor: theme.colors.background.paper,
@@ -273,25 +274,6 @@ export const createStyles = (theme: Theme) =>
     instructionsList: {
       marginTop: theme.spacing.xs,
     },
-    instructionItem: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      marginBottom: theme.spacing.sm,
-      backgroundColor: theme.colors.background.default,
-      borderRadius: theme.spacing.md,
-      padding: theme.spacing.sm,
-      ...theme.shadows.xs,
-    },
-    instructionNumber: {
-      minWidth: 24,
-      height: 24,
-      borderRadius: 12,
-      backgroundColor: theme.colors.primary.main,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: theme.spacing.sm,
-    },
     instructionNumberText: {
       color: theme.colors.primary.contrast,
       fontSize: 12,
@@ -301,12 +283,10 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
     },
     instructionTitle: {
-      display: 'none',
-    },
-    instructionText: {
-      color: theme.colors.text.secondary,
-      fontSize: 14,
-      lineHeight: 18,
+      ...theme.typography.subtitle1,
+      color: theme.colors.primary.main,
+      marginBottom: theme.spacing.xs,
+      fontWeight: '600',
     },
     savedButton: {
       backgroundColor: theme.colors.success.main,
@@ -362,5 +342,49 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.divider,
       marginHorizontal: 4,
       alignSelf: 'center',
+    },
+    instructionSection: {
+      marginTop: theme.spacing.md,
+      backgroundColor: theme.colors.background.default,
+      borderRadius: theme.spacing.md,
+      overflow: 'hidden',
+    },
+    instructionSectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background.paper,
+      padding: theme.spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.divider,
+    },
+    instructionSectionIcon: {
+      marginRight: theme.spacing.sm,
+    },
+    instructionSectionTitle: {
+      ...theme.typography.subtitle1,
+      color: theme.colors.primary.main,
+      fontWeight: '600',
+    },
+    instructionItem: {
+      flexDirection: 'row',
+      padding: theme.spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.divider,
+    },
+    instructionNumber: {
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      backgroundColor: theme.colors.primary.main,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: theme.spacing.sm,
+      ...theme.shadows.xs,
+    },
+    instructionText: {
+      flex: 1,
+      color: theme.colors.text.secondary,
+      fontSize: 14,
+      lineHeight: 20,
     },
   });
