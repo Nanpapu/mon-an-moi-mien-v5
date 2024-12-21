@@ -68,6 +68,8 @@ export const UNITS = {
     RING: 'khoanh',
     /** Con - dùng cho tôm, cua, vv */
     UNIT: 'con',
+    /** Cặp */
+    PAIR: 'cặp',
   },
   /** Đơn vị đóng gói */
   PACKAGE: {

@@ -1,16 +1,15 @@
 import { Region } from '../../../types';
-import { phoHaNoi } from './01_01';
-import { bunChaHaNoi } from './01_02';
-import { chaCaLaVong } from './01_03';
+import { bunCaCanTho } from './92_01';
+import { banhCong } from './92_02';
 
 export const region: Region = {
-  id: '01',
-  name: 'Hà Nội',
-  coordinate: {
-    latitude: 21.0285,
-    longitude: 105.8542,
+  id: '92',
+    name: 'Cần Thơ',
+    coordinate: {
+      latitude: 10.0452,
+      longitude: 105.7469,
   },
-  recipes: [phoHaNoi, bunChaHaNoi, chaCaLaVong],
+  recipes: [bunCaCanTho, banhCong],
 };
 
 export default region;

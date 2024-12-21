@@ -17,7 +17,7 @@ import {
   getDocs,
 } from 'firebase/firestore';
 import { COLLECTIONS } from '../../../constants';
-import { regions } from '../../../data/regions';
+import { regions } from '../../../data/regions/index';
 import { useToast } from '../../../hooks/useToast';
 
 export function ImportButton() {

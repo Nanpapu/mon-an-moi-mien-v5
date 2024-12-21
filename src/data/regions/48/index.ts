@@ -3,11 +3,11 @@ import { miQuang } from './48_01';
 import { banhTrangCuonThitHeo } from './48_02';
 
 export const region: Region = {
-  id: '01',
-  name: 'Hà Nội',
-  coordinate: {
-    latitude: 21.0285,
-    longitude: 105.8542,
+  id: '48',
+    name: 'Đà Nẵng',
+    coordinate: {
+      latitude: 16.0544,
+      longitude: 108.2022,
   },
   recipes: [miQuang, banhTrangCuonThitHeo],
 };
