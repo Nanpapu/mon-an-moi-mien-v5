@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../types';
 import * as Haptics from 'expo-haptics';
 import { Tooltip } from '../shared/Tooltip';
@@ -9,11 +9,24 @@ import { Tooltip } from '../shared/Tooltip';
 // Props interface cho RandomRecipeButton
 interface Props {
   regions: Region[]; // Danh sách các vùng miền
-  onRandomSelect: (latitude: number, longitude: number, recipes: any[], shouldAnimate?: boolean) => void; // Callback khi chọn ngẫu nhiên
+  onRandomSelect: (
+    latitude: number,
+    longitude: number,
+    recipes: any[],
+    shouldAnimate?: boolean
+  ) => void; // Callback khi chọn ngẫu nhiên
   disabled?: boolean; // Trạng thái vô hiệu hóa button
+  isAnimating?: boolean; // Thêm prop mới
+  onAnimationStart?: () => void; // Thêm prop mới
 }
 
-export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props) {
+export function RandomRecipeButton({
+  regions,
+  onRandomSelect,
+  disabled,
+  isAnimating,
+  onAnimationStart,
+}: Props) {
   const { theme } = useTheme();
   // State quản lý trạng thái loading
   const [isLoading, setIsLoading] = useState(false);
@@ -22,16 +35,28 @@ export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props)
   // State quản lý trạng thái scale
   const scaleValue = useRef(new Animated.Value(1)).current;
 
+  // Reset animation khi isAnimating thay đổi
+  useEffect(() => {
+    if (!isAnimating) {
+      setIsLoading(false);
+      spinValue.setValue(0);
+      scaleValue.setValue(1);
+    }
+  }, [isAnimating]);
+
   // Interpolate giá trị xoay
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
+    outputRange: ['0deg', '360deg'],
   });
 
   // Xử lý chọn ngẫu nhiên công thức nấu ăn
   const handleRandomRecipe = async () => {
-    const allRegions = regions.filter(region => region.recipes.length > 0);
-    if (allRegions.length === 0 || disabled) return;
+    const allRegions = regions.filter((region) => region.recipes.length > 0);
+    if (allRegions.length === 0 || disabled || isAnimating) return;
+
+    // Thông báo bắt đầu animation
+    onAnimationStart?.();
 
     // Set trạng thái loading
     setIsLoading(true);
@@ -45,15 +70,15 @@ export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props)
         toValue: 0.8,
         useNativeDriver: true,
         speed: 50,
-        bounciness: 10
+        bounciness: 10,
       }),
       // Animation scale
       Animated.spring(scaleValue, {
         toValue: 1,
         useNativeDriver: true,
         speed: 50,
-        bounciness: 10
-      })
+        bounciness: 10,
+      }),
     ]).start();
 
     // Animation xoay
@@ -63,15 +88,16 @@ export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props)
         toValue: 1,
         duration: 1000,
         easing: Easing.linear,
-        useNativeDriver: true
+        useNativeDriver: true,
       })
     ).start();
 
     // Delay nhẹ 200ms
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Chọn ngẫu nhiên vùng miền
-    const randomRegion = allRegions[Math.floor(Math.random() * allRegions.length)];
+    const randomRegion =
+      allRegions[Math.floor(Math.random() * allRegions.length)];
     // Gọi callback khi chọn ngẫu nhiên
     onRandomSelect(
       randomRegion.coordinate.latitude,
@@ -79,12 +105,6 @@ export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props)
       randomRegion.recipes,
       true // flag để trigger animation
     );
-
-    // Reset trạng thái loading sau 1 giây
-    setTimeout(() => {
-      setIsLoading(false);
-      spinValue.setValue(0);
-    }, 1000);
   };
 
   return (
@@ -94,26 +114,19 @@ export function RandomRecipeButton({ regions, onRandomSelect, disabled }: Props)
           styles.button,
           {
             backgroundColor: theme.colors.background.paper,
-            opacity: disabled ? 0.6 : 1,
+            opacity: disabled || isAnimating ? 0.6 : 1,
             ...theme.shadows.sm,
-          }
+          },
         ]}
         onPress={handleRandomRecipe}
-        disabled={disabled || isLoading}
+        disabled={disabled || isLoading || isAnimating}
       >
-        <Animated.View 
-          style={{ 
-            transform: [
-              { rotate: spin },
-              { scale: scaleValue }
-            ]
+        <Animated.View
+          style={{
+            transform: [{ rotate: spin }, { scale: scaleValue }],
           }}
         >
-          <Ionicons
-            name="dice"
-            size={24}
-            color={theme.colors.primary.main}
-          />
+          <Ionicons name="dice" size={24} color={theme.colors.primary.main} />
         </Animated.View>
       </TouchableOpacity>
     </Tooltip>
@@ -131,5 +144,5 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });

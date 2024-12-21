@@ -18,6 +18,8 @@ interface Props {
   regions: Region[];
   onRandomSelect: (latitude: number, longitude: number, recipes: any[]) => void;
   onSearch: (query: string) => void;
+  isAnimating?: boolean;
+  onAnimationStart?: () => void;
 }
 
 export function MapControls({
@@ -25,6 +27,8 @@ export function MapControls({
   regions,
   onRandomSelect,
   onSearch,
+  isAnimating,
+  onAnimationStart,
 }: Props) {
   const { theme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
@@ -129,7 +133,12 @@ export function MapControls({
         </TouchableOpacity>
       </Animated.View>
 
-      <RandomRecipeButton regions={regions} onRandomSelect={onRandomSelect} />
+      <RandomRecipeButton
+        regions={regions}
+        onRandomSelect={onRandomSelect}
+        isAnimating={isAnimating}
+        onAnimationStart={onAnimationStart}
+      />
     </>
   );
 }

@@ -16,7 +16,7 @@ import * as Location from 'expo-location';
 import { RegionService } from '../../services/regionService';
 import { ViewVietnamButton } from './components/ViewVietnamButton';
 import { useToast } from '../../hooks/useToast';
-import { useRandomRecipeAnimation } from './hooks/useRandomRecipeAnimation';
+import { useRandomAnimation } from './hooks/useRandomAnimation';
 
 export default function MapScreen({ navigation }: { navigation: any }) {
   const { theme } = useTheme();
@@ -25,6 +25,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [isMapReady, setIsMapReady] = useState(false);
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
+  const [isRandomAnimating, setIsRandomAnimating] = useState(false);
 
   const mapRef = useRef<MapView>(null);
   const { regions, isLoading, refreshRegions } = useMapData();
@@ -39,7 +40,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   } = useMapInteraction();
 
   const { showToast } = useToast();
-  const { animateRandomSearch } = useRandomRecipeAnimation(mapRef);
+  const { animateRandomSearch, cleanupAnimation } = useRandomAnimation(mapRef);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -54,6 +55,17 @@ export default function MapScreen({ navigation }: { navigation: any }) {
       setHasLocationPermission(status === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      if (isRandomAnimating) {
+        cleanupAnimation();
+        setIsRandomAnimating(false);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, isRandomAnimating, cleanupAnimation]);
 
   const handleSaveRecipe = async (recipe: Recipe) => {
     try {
@@ -86,17 +98,24 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     shouldAnimate = false
   ) => {
     if (shouldAnimate) {
-      animateRandomSearch(latitude, longitude, recipes, (recipes) => {
-        setSelectedRecipes(recipes);
-        setModalVisible(true);
-      });
+      setIsRandomAnimating(true);
+      setTimeout(() => {
+        animateRandomSearch(latitude, longitude, recipes, (recipes) => {
+          setSelectedRecipes(recipes);
+          setModalVisible(true);
+          setIsRandomAnimating(false);
+        });
+      }, 0);
     } else {
-      mapRef.current?.animateToRegion({
-        latitude,
-        longitude,
-        latitudeDelta: 2,
-        longitudeDelta: 2,
-      }, 1000);
+      mapRef.current?.animateToRegion(
+        {
+          latitude,
+          longitude,
+          latitudeDelta: 2,
+          longitudeDelta: 2,
+        },
+        1000
+      );
 
       setTimeout(() => {
         setSelectedRecipes(recipes);
@@ -191,6 +210,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         regions={regions}
         onRandomSelect={handleRandomRecipe}
         onSearch={onSearch}
+        isAnimating={isRandomAnimating}
+        onAnimationStart={() => setIsRandomAnimating(true)}
       />
 
       <RecipeModal
