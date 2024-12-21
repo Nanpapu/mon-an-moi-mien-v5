@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Recipe } from '../../../types';
 import { FavoriteService } from '../../../services/favoriteService';
+import { containsSearchQuery } from '../../../utils/stringUtils';
 
 export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,14 +25,24 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       recipes = recipes.filter((recipe) => recipe.region === selectedRegion);
     }
 
-    recipes = recipes.filter((recipe) => {
-      const matchesSearch =
-        recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        recipe.ingredients.some((i) =>
-          i.toLowerCase().includes(searchQuery.toLowerCase())
+    if (searchQuery.trim()) {
+      recipes = recipes.filter((recipe) => {
+        // Tìm theo tên món
+        const matchesName = containsSearchQuery(recipe.name, searchQuery);
+
+        // Tìm theo nguyên liệu
+        const matchesIngredients = recipe.ingredients.some((ingredient) =>
+          containsSearchQuery(ingredient, searchQuery)
         );
-      return matchesSearch;
-    });
+
+        // Tìm theo cách làm
+        const matchesInstructions = recipe.instructions.some((instruction) =>
+          containsSearchQuery(instruction, searchQuery)
+        );
+
+        return matchesName || matchesIngredients || matchesInstructions;
+      });
+    }
 
     if (showFavorites) {
       return recipes.filter((recipe) =>

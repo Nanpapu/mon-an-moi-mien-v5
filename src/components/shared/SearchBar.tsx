@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
+import { SearchSuggestions } from './SearchSuggestions';
 
 // Props interface cho SearchBar
 interface Props {
@@ -9,6 +10,8 @@ interface Props {
   onChangeText: (text: string) => void;
   placeholder?: string;
   onSubmitEditing?: () => void;
+  recentSearches?: string[];
+  onSaveRecentSearch?: (search: string) => void;
 }
 
 // SearchBar component
@@ -17,13 +20,30 @@ export const SearchBar = ({
   onChangeText,
   placeholder = 'Tìm kiếm...',
   onSubmitEditing,
+  recentSearches,
+  onSaveRecentSearch,
 }: Props) => {
   const { theme } = useTheme();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // Hàm xử lý xóa text
   const handleClear = () => {
     onChangeText('');
   };
+
+  // Xử lý suggestions khi người dùng nhập
+  useEffect(() => {
+    if (value.trim().length > 0 && recentSearches?.length) {
+      const filtered = recentSearches
+        .filter((search) => search.toLowerCase().includes(value.toLowerCase()))
+        .slice(0, 5);
+      setSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  }, [value, recentSearches]);
 
   return (
     <View
@@ -75,6 +95,19 @@ export const SearchBar = ({
             color={theme.colors.text.secondary}
           />
         </TouchableOpacity>
+      )}
+
+      {showSuggestions && (
+        <SearchSuggestions
+          suggestions={suggestions}
+          onSelect={(suggestion) => {
+            onChangeText(suggestion);
+            if (onSaveRecentSearch) {
+              onSaveRecentSearch(suggestion);
+            }
+            setShowSuggestions(false);
+          }}
+        />
       )}
     </View>
   );
