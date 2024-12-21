@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 interface Props {
   value: string;
   onChangeText: (text: string) => void;
-  onClear?: () => void;
   placeholder?: string;
   onSubmitEditing?: () => void;
 }
@@ -16,10 +15,15 @@ interface Props {
 export const SearchBar = ({
   value,
   onChangeText,
-  onClear,
   placeholder = 'Tìm kiếm...',
+  onSubmitEditing,
 }: Props) => {
   const { theme } = useTheme();
+
+  // Hàm xử lý xóa text
+  const handleClear = () => {
+    onChangeText('');
+  };
 
   return (
     <View
@@ -53,10 +57,18 @@ export const SearchBar = ({
             borderColor: theme.colors.divider,
           },
         ]}
+        onSubmitEditing={onSubmitEditing}
+        numberOfLines={1}
+        maxLength={100}
+        multiline={false}
       />
 
-      {value.length > 0 && onClear && (
-        <TouchableOpacity onPress={onClear}>
+      {/* Hiển thị nút xóa khi có text */}
+      {value.length > 0 && (
+        <TouchableOpacity
+          onPress={handleClear}
+          hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+        >
           <Ionicons
             name="close-circle"
             size={20}
@@ -72,7 +84,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 25,
     borderWidth: 1,
