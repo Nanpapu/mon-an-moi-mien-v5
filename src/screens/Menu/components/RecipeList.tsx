@@ -8,6 +8,7 @@ import { createStyles } from '../styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useGridZoom } from '../hooks/useGridZoom';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecipes } from '../../../context/RecipeContext';
 
 interface Props {
   isLoading: boolean;
@@ -44,11 +45,18 @@ export const RecipeList = ({
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme, insets);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const { refreshSavedRecipes } = useRecipes();
+
+  const handleRecipePress = async (recipe: Recipe) => {
+    // Refresh data trước khi show
+    await refreshSavedRecipes();
+    setSelectedRecipe(recipe);
+  };
 
   if (!isLoading && filteredRecipes.length === 0) {
     return (
-      <EmptyState 
-        hasRecipes={savedRecipes.length > 0} 
+      <EmptyState
+        hasRecipes={savedRecipes.length > 0}
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
       />
@@ -69,7 +77,7 @@ export const RecipeList = ({
             <RecipeGridItem
               key={recipe.id}
               recipe={recipe}
-              onPress={() => setSelectedRecipe(recipe)}
+              onPress={() => handleRecipePress(recipe)}
               width={calculateItemWidth()}
               config={currentConfig}
               onFavoriteChange={onFavoriteChange}
@@ -86,8 +94,13 @@ export const RecipeList = ({
         <RecipeDetailModal
           visible={!!selectedRecipe}
           recipe={selectedRecipe}
-          onClose={() => setSelectedRecipe(null)}
+          onClose={() => {
+            setSelectedRecipe(null);
+            refreshSavedRecipes(); // Refresh sau khi đóng
+          }}
           onDelete={onDeleteRecipe}
+          // onSave={handleSaveRecipe}
+          showReviews={true}
         />
       )}
     </>
