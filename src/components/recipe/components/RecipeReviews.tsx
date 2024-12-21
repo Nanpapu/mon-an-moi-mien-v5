@@ -1,0 +1,229 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Recipe, Review } from '../../../types';
+import { createStyles } from '../RecipeCard.styles';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Typography } from '../../shared';
+import { ReviewModal, ReviewsList } from '../../reviews';
+import { ReviewService } from '../../../services/reviewService';
+import { useAuth } from '../../../context/AuthContext';
+import { onSnapshot, doc } from 'firebase/firestore';
+import { db } from '../../../config/firebase';
+import { COLLECTIONS } from '../../../constants';
+
+interface Props {
+  recipe: Recipe;
+}
+
+export const RecipeReviews = ({ recipe }: Props) => {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+  const { user } = useAuth();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [existingReview, setExistingReview] = useState<Review | null>(null);
+  const [showReviewsList, setShowReviewsList] = useState(false);
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    setIsLoadingStats(true);
+
+    const unsubscribe = onSnapshot(
+      doc(db, COLLECTIONS.RECIPE_STATS, recipe.id),
+      (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          setStats({
+            averageRating: data.averageRating || 0,
+            totalReviews: data.totalReviews || 0,
+          });
+        }
+        setIsLoadingStats(false);
+      },
+      (error) => {
+        console.error('Lỗi khi lắng nghe thay đổi stats:', error);
+        setIsLoadingStats(false);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+      setIsLoadingStats(false);
+    };
+  }, [recipe.id]);
+
+  useEffect(() => {
+    if (user) {
+      const loadUserReview = async () => {
+        const review = await ReviewService.getUserReviewForRecipe(
+          recipe.id,
+          user.uid
+        );
+        setExistingReview(review);
+      };
+      loadUserReview();
+    }
+  }, [user, recipe.id]);
+
+  const loadReviews = async () => {
+    try {
+      const reviewsList = await ReviewService.getRecipeReviews(recipe.id);
+      setAllReviews(reviewsList);
+    } catch (error) {
+      console.error('Lỗi khi t��i đánh giá:', error);
+    }
+  };
+
+  return (
+    <>
+      <View style={styles.ratingContainer}>
+        <View style={styles.ratingHeader}>
+          <View style={styles.ratingScore}>
+            {!isLoadingStats && stats.totalReviews > 0 ? (
+              <>
+                <Typography variant="h2" style={styles.averageRating}>
+                  {stats.averageRating.toFixed(1)}
+                </Typography>
+                <View style={styles.starsRow}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Ionicons
+                      key={star}
+                      name={
+                        star <= stats.averageRating ? 'star' : 'star-outline'
+                      }
+                      size={16}
+                      color="#FFD700"
+                    />
+                  ))}
+                </View>
+                <Typography variant="caption" color="secondary">
+                  {stats.totalReviews} đánh giá
+                </Typography>
+              </>
+            ) : isLoadingStats ? (
+              <ActivityIndicator
+                size="small"
+                color={theme.colors.primary.main}
+              />
+            ) : (
+              <View style={styles.noReviewsContainer}>
+                <Ionicons
+                  name="star-outline"
+                  size={24}
+                  color={theme.colors.text.secondary}
+                />
+                <Typography variant="body2" style={styles.noReviews}>
+                  Chưa có đánh giá
+                </Typography>
+              </View>
+            )}
+          </View>
+
+          {user && (
+            <TouchableOpacity
+              style={styles.addReviewButton}
+              onPress={() => setModalVisible(true)}
+            >
+              <Ionicons
+                name={existingReview ? 'create' : 'add'}
+                size={20}
+                color={theme.colors.primary.contrast}
+              />
+              <Typography
+                variant="body1"
+                style={{ color: theme.colors.primary.contrast }}
+              >
+                {existingReview ? 'Sửa đánh giá' : 'Đánh giá'}
+              </Typography>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={styles.viewAllButton}
+          onPress={() => {
+            loadReviews();
+            setShowReviewsList(true);
+          }}
+        >
+          <Typography variant="body1" style={styles.viewAllText}>
+            Xem tất cả {stats.totalReviews} đánh giá
+          </Typography>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.primary.main}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {user && (
+        <ReviewModal
+          visible={modalVisible}
+          recipeId={recipe.id}
+          userId={user.uid}
+          existingReview={existingReview}
+          onClose={() => setModalVisible(false)}
+          onSubmit={async () => {
+            const recipeStats = await ReviewService.getRecipeStats(recipe.id);
+            setStats(recipeStats);
+            if (user) {
+              const review = await ReviewService.getUserReviewForRecipe(
+                recipe.id,
+                user.uid
+              );
+              setExistingReview(review);
+            }
+            setModalVisible(false);
+          }}
+        />
+      )}
+
+      <Modal
+        visible={showReviewsList}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowReviewsList(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={[styles.modalContent, { height: '60%' }]}>
+            <View style={styles.modalHeader}>
+              <View style={styles.modalHeaderBackground}>
+                <Typography variant="h3" style={styles.modalTitle}>
+                  Đánh giá
+                </Typography>
+                <TouchableOpacity
+                  onPress={() => setShowReviewsList(false)}
+                  style={styles.closeButton}
+                >
+                  <Ionicons
+                    name="close"
+                    size={24}
+                    color={theme.colors.text.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <ScrollView style={styles.modalBody}>
+              <ReviewsList
+                reviews={allReviews}
+                recipeId={recipe.id}
+                averageRating={stats.averageRating}
+                totalReviews={stats.totalReviews}
+              />
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
