@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Instructions } from '../../../types';
 import { createStyles } from '../RecipeCard.styles';
@@ -10,26 +10,104 @@ interface Props {
   instructions: Instructions;
 }
 
-// Component hiển thị phần hướng dẫn nấu ăn
 export const InstructionsSection = ({ instructions }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set()
+  );
 
-  // Định nghĩa các section theo thứ tự hiển thị
+  const toggleSection = (key: string) => {
+    setExpandedSections((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(key)) {
+        newSet.delete(key);
+      } else {
+        newSet.add(key);
+      }
+      return newSet;
+    });
+  };
+
   const sections = [
-    { key: 'preparation', title: 'Chuẩn bị nguyên liệu', icon: 'list-outline' },
-    { key: 'processing', title: 'Sơ chế', icon: 'cut-outline' },
-    { key: 'marinating', title: 'Ướp gia vị', icon: 'flask-outline' },
-    { key: 'broth', title: 'Nấu nước dùng', icon: 'water-outline' },
-    { key: 'sauce', title: 'Làm nước chấm', icon: 'color-fill-outline' },
-    { key: 'cooking', title: 'Nấu chính', icon: 'flame-outline' },
-    { key: 'steaming', title: 'Hấp/Luộc', icon: 'thermometer-outline' },
-    { key: 'filling', title: 'Làm nhân', icon: 'layers-outline' },
-    { key: 'dough', title: 'Làm vỏ/bột', icon: 'disc-outline' },
-    { key: 'assembly', title: 'Hoàn thiện', icon: 'construct-outline' },
-    { key: 'serving', title: 'Cách dùng', icon: 'restaurant-outline' },
-    { key: 'tips', title: 'Mẹo và lưu ý', icon: 'bulb-outline' },
-    { key: 'storage', title: 'Bảo quản', icon: 'file-tray-outline' },
+    {
+      key: 'preparation',
+      title: 'Chuẩn bị nguyên liệu',
+      icon: 'list-outline',
+      color: '#4CAF50',
+    },
+    {
+      key: 'processing',
+      title: 'Sơ chế',
+      icon: 'cut-outline',
+      color: '#FF9800',
+    },
+    {
+      key: 'marinating',
+      title: 'Ướp gia vị',
+      icon: 'flask-outline',
+      color: '#9C27B0',
+    },
+    {
+      key: 'broth',
+      title: 'Nấu nước dùng',
+      icon: 'water-outline',
+      color: '#2196F3',
+    },
+    {
+      key: 'sauce',
+      title: 'Làm nước chấm',
+      icon: 'color-fill-outline',
+      color: '#F44336',
+    },
+    {
+      key: 'cooking',
+      title: 'Nấu chính',
+      icon: 'flame-outline',
+      color: '#E91E63',
+    },
+    {
+      key: 'steaming',
+      title: 'Hấp/Luộc',
+      icon: 'thermometer-outline',
+      color: '#00BCD4',
+    },
+    {
+      key: 'filling',
+      title: 'Làm nhân',
+      icon: 'layers-outline',
+      color: '#795548',
+    },
+    {
+      key: 'dough',
+      title: 'Làm vỏ/bột',
+      icon: 'disc-outline',
+      color: '#607D8B',
+    },
+    {
+      key: 'assembly',
+      title: 'Hoàn thiện',
+      icon: 'construct-outline',
+      color: '#3F51B5',
+    },
+    {
+      key: 'serving',
+      title: 'Cách dùng',
+      icon: 'restaurant-outline',
+      color: '#8BC34A',
+    },
+    {
+      key: 'tips',
+      title: 'Mẹo và lưu ý',
+      icon: 'bulb-outline',
+      color: '#FFC107',
+    },
+    {
+      key: 'storage',
+      title: 'Bảo quản',
+      icon: 'file-tray-outline',
+      color: '#9E9E9E',
+    },
   ];
 
   return (
@@ -44,35 +122,82 @@ export const InstructionsSection = ({ instructions }: Props) => {
         <Typography variant="h3">Cách làm</Typography>
       </View>
 
-      {sections.map(({ key, title, icon }) => {
+      {sections.map(({ key, title, icon, color }) => {
         const steps = instructions[key as keyof Instructions];
         if (!steps?.length) return null;
 
+        const isExpanded = expandedSections.has(key);
+
         return (
-          <View key={key} style={styles.instructionSection}>
-            <View style={styles.instructionSectionHeader}>
+          <View
+            key={key}
+            style={[
+              styles.instructionSection,
+              { marginBottom: theme.spacing.sm },
+            ]}
+          >
+            <TouchableOpacity
+              style={[
+                styles.instructionSectionHeader,
+                {
+                  backgroundColor: isExpanded
+                    ? color
+                    : theme.colors.background.paper,
+                },
+              ]}
+              onPress={() => toggleSection(key)}
+            >
               <Ionicons
                 name={icon as any}
                 size={18}
-                color={theme.colors.primary.main}
+                color={isExpanded ? theme.colors.background.paper : color}
                 style={styles.instructionSectionIcon}
               />
-              <Typography style={styles.instructionSectionTitle}>
+              <Typography
+                style={[
+                  styles.instructionSectionTitle,
+                  { color: isExpanded ? theme.colors.background.paper : color },
+                ]}
+              >
                 {title}
               </Typography>
-            </View>
-            {steps.map((step, index) => (
-              <View key={index} style={styles.instructionItem}>
-                <View style={styles.instructionNumber}>
-                  <Typography style={styles.instructionNumberText}>
-                    {index + 1}
-                  </Typography>
-                </View>
-                <View style={styles.instructionContent}>
-                  <Typography style={styles.instructionText}>{step}</Typography>
-                </View>
+              <Ionicons
+                name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                size={18}
+                color={isExpanded ? theme.colors.background.paper : color}
+                style={{ marginLeft: 'auto' }}
+              />
+            </TouchableOpacity>
+
+            {isExpanded && (
+              <View style={styles.instructionSteps}>
+                {steps.map((step, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.instructionItem,
+                      index === steps.length - 1 && { borderBottomWidth: 0 },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.instructionNumber,
+                        { backgroundColor: color },
+                      ]}
+                    >
+                      <Typography style={styles.instructionNumberText}>
+                        {index + 1}
+                      </Typography>
+                    </View>
+                    <View style={styles.instructionContent}>
+                      <Typography style={styles.instructionText}>
+                        {step}
+                      </Typography>
+                    </View>
+                  </View>
+                ))}
               </View>
-            ))}
+            )}
           </View>
         );
       })}

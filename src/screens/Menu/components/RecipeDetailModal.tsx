@@ -9,6 +9,7 @@ import { RecipeCard } from '../../../components/recipe';
 import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { COLLECTIONS } from '../../../constants';
+import { RecipeDetail } from '../../../components/recipe/components/RecipeDetail';
 
 interface Props {
   visible: boolean;
@@ -69,10 +70,7 @@ export const RecipeDetailModal = ({
       onRequestClose={onClose}
     >
       <View
-        style={{
-          flex: 1,
-          backgroundColor: theme.colors.background.default,
-        }}
+        style={{ flex: 1, backgroundColor: theme.colors.background.default }}
       >
         {/* Header */}
         <View
@@ -101,51 +99,20 @@ export const RecipeDetailModal = ({
             />
           </TouchableOpacity>
 
-          <View style={{ flex: 1 }}>
-            <Typography variant="h2" style={{ fontSize: 20 }}>
-              Chi tiết công thức
-            </Typography>
-          </View>
-
-          {onDelete && (
-            <TouchableOpacity
-              onPress={() => onDelete(currentRecipe)}
-              style={{
-                padding: theme.spacing.sm,
-              }}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={24}
-                color={theme.colors.error.main}
-              />
-            </TouchableOpacity>
-          )}
+          <Typography variant="h2" style={{ fontSize: 20 }}>
+            {currentRecipe.name}
+          </Typography>
         </View>
 
-        {/* Recipe Content */}
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{
-            padding: theme.spacing.md,
-            paddingBottom: insets.bottom + theme.spacing.xl,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: theme.colors.background.paper,
-              borderRadius: theme.spacing.md,
-              ...theme.shadows.sm,
-            }}
-          >
-            <RecipeCard
-              recipe={currentRecipe}
-              showActions={false}
-              showReviews={showReviews}
-              onSave={onSave}
-            />
-          </View>
-        </ScrollView>
+        {/* Content */}
+        <RecipeDetail
+          recipe={currentRecipe}
+          onClose={onClose}
+          onSave={onSave}
+          onDelete={onDelete}
+          showActions={true}
+          showReviews={showReviews}
+        />
       </View>
     </Modal>
   );

@@ -343,20 +343,6 @@ export const createStyles = (theme: Theme) =>
       marginHorizontal: 4,
       alignSelf: 'center',
     },
-    instructionSection: {
-      marginTop: theme.spacing.md,
-      backgroundColor: theme.colors.background.default,
-      borderRadius: theme.spacing.md,
-      overflow: 'hidden',
-    },
-    instructionSectionHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: theme.colors.background.paper,
-      padding: theme.spacing.sm,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.divider,
-    },
     instructionSectionIcon: {
       marginRight: theme.spacing.sm,
     },
@@ -386,5 +372,39 @@ export const createStyles = (theme: Theme) =>
       color: theme.colors.text.secondary,
       fontSize: 14,
       lineHeight: 20,
+    },
+    detailContainer: {
+      flex: 1,
+      backgroundColor: theme.colors.background.default,
+    },
+    detailContent: {
+      padding: theme.spacing.md,
+    },
+    detailSection: {
+      marginBottom: theme.spacing.lg,
+      backgroundColor: theme.colors.background.paper,
+      borderRadius: theme.spacing.md,
+      padding: theme.spacing.md,
+      ...theme.shadows.sm,
+    },
+    detailActions: {
+      marginTop: theme.spacing.md,
+      paddingHorizontal: theme.spacing.md,
+    },
+    instructionSteps: {
+      backgroundColor: theme.colors.background.default,
+    },
+    instructionSectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: theme.spacing.md,
+      borderTopLeftRadius: theme.spacing.md,
+      borderTopRightRadius: theme.spacing.md,
+    },
+    instructionSection: {
+      borderRadius: theme.spacing.md,
+      overflow: 'hidden',
+      backgroundColor: theme.colors.background.default,
+      ...theme.shadows.sm,
     },
   });
