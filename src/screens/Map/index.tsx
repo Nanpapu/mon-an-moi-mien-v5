@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, Image } from 'react-native';
 import MapView, { Region as MapRegion } from 'react-native-maps';
 import { Recipe } from '../../types';
 import { saveRecipe } from '../../utils/storage';
@@ -71,6 +71,25 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
     return unsubscribe;
   }, [navigation, isRandomAnimating, cleanupAnimation]);
+
+  useEffect(() => {
+    const prefetchImages = async () => {
+      try {
+        const imagePrefetchTasks = regions
+          .flatMap((region) => region.recipes)
+          .filter((recipe) => recipe.image)
+          .map((recipe) => Image.prefetch(recipe.image));
+
+        await Promise.all(imagePrefetchTasks);
+      } catch (error) {
+        console.warn('Lỗi khi prefetch hình ảnh:', error);
+      }
+    };
+
+    if (regions.length > 0) {
+      prefetchImages();
+    }
+  }, [regions]);
 
   const handleSaveRecipe = async (recipe: Recipe) => {
     try {

@@ -1,6 +1,6 @@
 // Component hiển thị thông tin chi tiết của một công thức nấu ăn
 // Bao gồm hình ảnh, tên món, vùng miền, nguyên liệu và cách làm
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Modal,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { Image } from 'expo-image';
+import FastImage from 'react-native-fast-image';
 import { Recipe, Review } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { ReviewService } from '../../services/reviewService';
@@ -71,6 +71,22 @@ export function RecipeCard({
   const [justSaved, setJustSaved] = useState(false);
   const [wasSaved, setWasSaved] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  // Thêm state quản lý retry
+  const [imageRetry, setImageRetry] = useState(0);
+  const [imageError, setImageError] = useState(false);
+
+  // Xử lý khi load hình thất bại
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+    // Thử lại tối đa 3 lần
+    if (imageRetry < 3) {
+      setTimeout(() => {
+        setImageRetry((prev) => prev + 1);
+        setImageError(false);
+      }, 1000); // Đợi 1s rồi thử lại
+    }
+  }, [imageRetry]);
 
   // Effect hook để tải hình ảnh từ Firebase Storage
   useEffect(() => {
@@ -161,13 +177,36 @@ export function RecipeCard({
         },
       ]}
     >
-      <Image
-        source={imageUrl || require('../../../assets/default-avatar.png')}
-        style={[styles.image, { borderColor: theme.colors.border }]}
-        contentFit="cover"
-        transition={200}
-        cachePolicy="memory-disk"
-      />
+      {imageError ? (
+        <View style={[styles.image, styles.errorContainer]}>
+          <Ionicons
+            name="image-outline"
+            size={32}
+            color={theme.colors.text.secondary}
+          />
+          <Typography
+            variant="caption"
+            color="secondary"
+            style={{ marginTop: 4 }}
+          >
+            Không thể tải hình
+          </Typography>
+        </View>
+      ) : (
+        <FastImage
+          source={{
+            uri: recipe.image,
+            priority: FastImage.priority.normal,
+            cache: FastImage.cacheControl.immutable,
+          }}
+          style={[styles.image, { borderColor: theme.colors.border }]}
+          resizeMode={FastImage.resizeMode.cover}
+          onError={handleImageError}
+          fallback={true}
+          key={`${recipe.id}-${imageRetry}`}
+          defaultSource={require('../../../assets/recipe-placeholder.png')}
+        />
+      )}
 
       <View style={styles.content}>
         <View style={styles.header}>

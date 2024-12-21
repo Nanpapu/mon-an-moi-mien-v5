@@ -286,4 +286,9 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.primary.light,
       opacity: 0.8,
     },
+    errorContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background.default,
+    },
   });
