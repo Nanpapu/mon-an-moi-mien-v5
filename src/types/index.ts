@@ -5,6 +5,66 @@
 import { Timestamp } from 'firebase/firestore';
 
 /**
+ * Interface cho nguyên liệu
+ * @interface Ingredient
+ */
+export interface Ingredient {
+  /** Tên nguyên liệu */
+  name: string;
+  /** Số lượng */
+  amount: number;
+  /** Đơn vị tính */
+  unit: string;
+  /** Ghi chú */
+  note?: string;
+}
+
+/**
+ * Các bước thực hiện được phân loại theo giai đoạn
+ * @interface Instructions
+ */
+export interface Instructions {
+  /** Các bước chuẩn bị nguyên liệu */
+  preparation: string[];
+
+  /** Các bước sơ chế (làm sạch, thái, cắt...) */
+  processing?: string[];
+
+  /** Các bước ướp gia vị */
+  marinating?: string[];
+
+  /** Các bước nấu nước dùng/xốt */
+  broth?: string[];
+
+  /** Các bước làm nước chấm/sốt */
+  sauce?: string[];
+
+  /** Các bước nướng/chiên/xào */
+  cooking?: string[];
+
+  /** Các bước hấp/luộc */
+  steaming?: string[];
+
+  /** Các bước làm nhân (cho bánh, nem...) */
+  filling?: string[];
+
+  /** Các bước làm vỏ/bột (cho bánh) */
+  dough?: string[];
+
+  /** Các bước hoàn thiện món ăn */
+  assembly: string[];
+
+  /** Cách thưởng thức */
+  serving: string[];
+
+  /** Các mẹo và lưu ý quan trọng - bắt buộc để đảm bảo chất lượng */
+  tips: string[];
+
+  /** Cách bảo quản - bắt buộc để hướng dẫn người dùng */
+  storage: string[];
+}
+
+/**
  * Thông tin cơ bản của một công thức nấu ăn
  * @interface BaseRecipe
  */
@@ -17,10 +77,10 @@ export interface BaseRecipe {
   region: string;
   /** URL hình ảnh món ăn */
   image: string;
-  /** Danh sách nguyên liệu */
-  ingredients: string[];
-  /** Các bước thực hiện */
-  instructions: string[];
+  /** Danh sách nguyên liệu với số lượng cụ thể */
+  ingredients: Ingredient[];
+  /** Các bước thực hiện được phân loại theo giai đoạn */
+  instructions: Instructions;
 }
 
 /**
