@@ -229,7 +229,7 @@ export const ThemeSelector = () => {
             <View style={[styles.section]}>
               <View style={styles.sectionHeader}>
                 <Ionicons
-                  name="star-outline"
+                  name="diamond-outline"
                   size={18}
                   color={currentTheme.colors.text.primary}
                   style={{ marginRight: 6 }}
