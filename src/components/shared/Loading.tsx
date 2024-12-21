@@ -2,12 +2,12 @@ import React from 'react';
 import {
   View,
   ActivityIndicator,
-  Text,
   StyleSheet,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
+import { Typography } from './Typography';
 
 // Props interface cho Loading
 interface LoadingProps {
@@ -47,15 +47,13 @@ export const Loading = ({
         color={overlay ? '#fff' : theme.colors.primary.main}
       />
       {text && (
-        <Text
-          style={[
-            styles.text,
-            theme.typography.body2,
-            { color: overlay ? '#fff' : theme.colors.text.primary },
-          ]}
+        <Typography
+          variant="body2"
+          color={overlay ? 'primary' : 'primary'}
+          style={styles.text}
         >
           {text}
-        </Text>
+        </Typography>
       )}
     </View>
   );

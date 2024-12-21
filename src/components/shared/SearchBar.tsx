@@ -9,34 +9,36 @@ interface Props {
   onChangeText: (text: string) => void;
   onClear?: () => void;
   placeholder?: string;
-  onSubmitEditing?: () => void; 
+  onSubmitEditing?: () => void;
 }
 
 // SearchBar component
-export const SearchBar = ({ 
-  value, 
-  onChangeText, 
+export const SearchBar = ({
+  value,
+  onChangeText,
   onClear,
-  placeholder = "Tìm kiếm..." 
+  placeholder = 'Tìm kiếm...',
 }: Props) => {
   const { theme } = useTheme();
 
   return (
-    <View style={[
-      styles.container,
-      {
-        backgroundColor: theme.colors.background.paper,
-        borderColor: theme.colors.divider,
-        ...theme.shadows.sm
-      }
-    ]}>
-      <Ionicons 
-        name="search" 
-        size={20} 
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background.paper,
+          borderColor: theme.colors.divider,
+          ...theme.shadows.sm,
+        },
+      ]}
+    >
+      <Ionicons
+        name="search"
+        size={20}
         color={theme.colors.text.secondary}
         style={{ marginRight: theme.spacing.sm }}
       />
-      
+
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -44,19 +46,20 @@ export const SearchBar = ({
         placeholderTextColor={theme.colors.text.secondary}
         style={[
           styles.input,
+          theme.typography.body1,
           {
             color: theme.colors.text.primary,
             backgroundColor: theme.colors.background.paper,
-            borderColor: theme.colors.divider
-          }
+            borderColor: theme.colors.divider,
+          },
         ]}
       />
 
       {value.length > 0 && onClear && (
         <TouchableOpacity onPress={onClear}>
-          <Ionicons 
-            name="close-circle" 
-            size={20} 
+          <Ionicons
+            name="close-circle"
+            size={20}
             color={theme.colors.text.secondary}
           />
         </TouchableOpacity>
@@ -81,4 +84,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 0,
   },
-}); 
+});

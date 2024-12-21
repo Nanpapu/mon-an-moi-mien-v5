@@ -19,19 +19,22 @@ export const AppBar = ({ title, rightComponent }: Props) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[
-      styles.container,
-      {
-        paddingTop: insets.top,
-        backgroundColor: theme.colors.background.paper,
-        borderBottomColor: theme.colors.divider,
-      }
-    ]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingTop: insets.top,
+          backgroundColor: theme.colors.background.paper,
+          borderBottomColor: theme.colors.divider,
+          ...theme.shadows.sm,
+        },
+      ]}
+    >
       <View style={styles.content}>
         <Typography variant="h2" style={{ flex: 1 }}>
           {title}
         </Typography>
-        
+
         <View style={styles.actions}>
           <ThemeToggle />
           {rightComponent}
@@ -55,5 +58,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  }
-}); 
+  },
+});

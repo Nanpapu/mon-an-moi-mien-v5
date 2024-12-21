@@ -43,7 +43,7 @@ export function RecipeCard({
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const { user } = useAuth();
-  
+
   // State quản lý trạng thái modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -56,7 +56,7 @@ export function RecipeCard({
 
   // State quản lý trạng thái hiển thị danh sách đánh giá
   const [showReviewsList, setShowReviewsList] = useState(false);
-  
+
   // State quản lý trạng thái hiển thị chi tiết công thức
   const [showDetails, setShowDetails] = useState(false);
 
@@ -151,11 +151,19 @@ export function RecipeCard({
   };
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor: theme.colors.background.paper,
+          borderColor: theme.colors.border,
+          ...theme.shadows.sm,
+        },
+      ]}
+    >
       <Image
-        //Placeholder.png
         source={imageUrl || require('../../../assets/default-avatar.png')}
-        style={styles.image}
+        style={[styles.image, { borderColor: theme.colors.border }]}
         contentFit="cover"
         transition={200}
         cachePolicy="memory-disk"
@@ -242,16 +250,16 @@ export function RecipeCard({
         {showActions && (
           <View style={styles.actions}>
             {onSave && (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[
                   styles.saveButton,
                   isSaving && styles.savingButton,
                   justSaved && styles.savedButton,
-                  wasSaved && styles.wasSavedButton
-                ]} 
+                  wasSaved && styles.wasSavedButton,
+                ]}
                 onPress={async () => {
                   if (isSaving) return;
-                  
+
                   setIsSaving(true);
                   if (onSave) {
                     const success = await onSave();
@@ -275,10 +283,13 @@ export function RecipeCard({
               >
                 <Ionicons
                   name={
-                    isSaving ? "hourglass-outline" :
-                    justSaved ? "checkmark-circle" :
-                    wasSaved ? "bookmark" : 
-                    "bookmark-outline"
+                    isSaving
+                      ? 'hourglass-outline'
+                      : justSaved
+                        ? 'checkmark-circle'
+                        : wasSaved
+                          ? 'bookmark'
+                          : 'bookmark-outline'
                   }
                   size={20}
                   color={theme.colors.background.default}
@@ -286,21 +297,24 @@ export function RecipeCard({
                 />
                 <Typography
                   variant="body1"
-                  style={{ 
+                  style={{
                     color: theme.colors.background.default,
-                    fontWeight: justSaved ? 'bold' : 'normal'
+                    fontWeight: justSaved ? 'bold' : 'normal',
                   }}
                 >
-                  {isSaving ? "Đang lưu..." : 
-                   justSaved ? "Đã lưu!" :
-                   wasSaved ? "Đã lưu trước đó" :
-                   "Lưu công thức"}
+                  {isSaving
+                    ? 'Đang lưu...'
+                    : justSaved
+                      ? 'Đã lưu!'
+                      : wasSaved
+                        ? 'Đã lưu trước đó'
+                        : 'Lưu công thức'}
                 </Typography>
                 {isSaving && (
-                  <ActivityIndicator 
-                    size="small" 
+                  <ActivityIndicator
+                    size="small"
                     color={theme.colors.background.default}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </TouchableOpacity>

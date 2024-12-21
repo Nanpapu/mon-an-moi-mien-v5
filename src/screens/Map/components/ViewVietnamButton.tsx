@@ -10,17 +10,18 @@ interface Props {
 
 export const ViewVietnamButton = ({ onPress }: Props) => {
   const { theme } = useTheme();
-  
+
   return (
     <Tooltip text="Xem toàn bộ Việt Nam">
       <TouchableOpacity
         onPress={onPress}
         style={[
           styles.button,
-          { 
+          {
             backgroundColor: theme.colors.background.paper,
-            ...theme.shadows.sm
-          }
+            // padding: theme.spacing.md,
+            ...theme.shadows.sm,
+          },
         ]}
       >
         <Ionicons
