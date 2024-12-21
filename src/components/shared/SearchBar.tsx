@@ -26,6 +26,7 @@ export const SearchBar = ({
   const { theme } = useTheme();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   // Hàm xử lý xóa text
   const handleClear = () => {
@@ -34,7 +35,7 @@ export const SearchBar = ({
 
   // Xử lý suggestions khi người dùng nhập
   useEffect(() => {
-    if (value.trim().length > 0 && recentSearches?.length) {
+    if (value.trim().length > 0 && recentSearches?.length && isFocused) {
       const filtered = recentSearches
         .filter((search) => search.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 5);
@@ -43,7 +44,7 @@ export const SearchBar = ({
     } else {
       setShowSuggestions(false);
     }
-  }, [value, recentSearches]);
+  }, [value, recentSearches, isFocused]);
 
   return (
     <View
@@ -81,6 +82,8 @@ export const SearchBar = ({
         numberOfLines={1}
         maxLength={100}
         multiline={false}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
 
       {/* Hiển thị nút xóa khi có text */}
@@ -123,6 +126,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 16,
     marginVertical: 8,
+    zIndex: 100,
+    elevation: 1,
   },
   input: {
     flex: 1,

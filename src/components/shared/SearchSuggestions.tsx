@@ -61,6 +61,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
     maxHeight: 200,
     zIndex: 1000,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   suggestionItem: {
     flexDirection: 'row',

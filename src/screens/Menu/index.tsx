@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading } from '../../components/shared';
@@ -15,6 +15,7 @@ import { Typography } from '../../components/shared/Typography';
 import { removeRecipe } from '../../utils/storage';
 import { useToast } from '../../hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SearchHistoryService } from '../../services/searchHistoryService';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -56,6 +57,23 @@ export default function MenuScreen() {
   const [selectedRecipes, setSelectedRecipes] = useState<Set<string>>(
     new Set()
   );
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    loadSearchHistory();
+  }, []);
+
+  const loadSearchHistory = async () => {
+    const history = await SearchHistoryService.getSearchHistory();
+    setRecentSearches(history);
+  };
+
+  const handleSaveSearch = async (search: string) => {
+    if (search.trim()) {
+      await SearchHistoryService.saveSearch(search);
+      await loadSearchHistory();
+    }
+  };
 
   const handleLongPress = (recipeId: string) => {
     setIsSelectionMode(true);
@@ -164,6 +182,9 @@ export default function MenuScreen() {
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Tìm theo tên món hoặc nguyên liệu..."
+        recentSearches={recentSearches}
+        onSaveRecentSearch={handleSaveSearch}
+        onSubmitEditing={() => handleSaveSearch(searchQuery)}
       />
 
       <View style={styles.headerControls}>
