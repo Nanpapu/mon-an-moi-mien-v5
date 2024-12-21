@@ -18,17 +18,16 @@ export const MapMarkers = memo(
     shouldShowMarker,
     onMarkerPress,
   }: Props) => {
-    console.log('MapMarkers render:', {
-      regionsCount: regions.length,
-      isMapReady,
-      currentZoom,
-    });
+    // Chỉ log trong development và khi thực sự cần thiết
+    // if (__DEV__) {
+    //   console.log('MapMarkers render:', {
+    //     regionsCount: regions.length,
+    //     isMapReady,
+    //     currentZoom,
+    //   });
+    // }
 
     if (!isMapReady || !regions || regions.length === 0) {
-      console.log('MapMarkers không render vì:', {
-        isMapReady,
-        hasRegions: regions && regions.length > 0,
-      });
       return null;
     }
 
@@ -36,18 +35,11 @@ export const MapMarkers = memo(
       <>
         {regions.map((region) => {
           if (!region.coordinate || !region.id) {
-            console.log('Region không hợp lệ:', region);
+            console.warn('Region không hợp lệ:', region);
             return null;
           }
 
           const shouldShow = shouldShowMarker(region.id, currentZoom);
-
-          // console.log('Marker check:', {
-          //   regionId: region.id,
-          //   shouldShow,
-          //   zoom: currentZoom,
-          //   coordinate: region.coordinate,
-          // });
 
           if (!shouldShow) return null;
 
@@ -64,6 +56,14 @@ export const MapMarkers = memo(
           );
         })}
       </>
+    );
+  },
+  // Thêm hàm so sánh để tránh re-render không cần thiết
+  (prevProps, nextProps) => {
+    return (
+      prevProps.isMapReady === nextProps.isMapReady &&
+      prevProps.currentZoom === nextProps.currentZoom &&
+      prevProps.regions.length === nextProps.regions.length
     );
   }
 );
