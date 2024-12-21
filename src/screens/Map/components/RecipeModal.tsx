@@ -18,6 +18,8 @@ interface Props {
   onClose: () => void;
   recipes: Recipe[];
   onSaveRecipe: (recipe: Recipe) => Promise<boolean>;
+  regionName: string;
+  isRandomRecipe?: boolean;
 }
 
 export function RecipeModal({
@@ -25,9 +27,18 @@ export function RecipeModal({
   onClose,
   recipes,
   onSaveRecipe,
+  regionName,
+  isRandomRecipe = false,
 }: Props) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+
+  const getTitle = () => {
+    if (isRandomRecipe) {
+      return `Khám phá món ăn tại ${regionName}`;
+    }
+    return `Các món ăn ở ${regionName}`;
+  };
 
   if (!recipes || recipes.length === 0) {
     return null;
@@ -76,7 +87,7 @@ export function RecipeModal({
 
           <View style={{ flex: 1 }}>
             <Typography variant="h2" style={{ fontSize: 20 }}>
-              Các món ăn trong vùng
+              {getTitle()}
             </Typography>
             <Typography
               variant="body2"

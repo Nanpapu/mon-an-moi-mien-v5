@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { Marker } from 'react-native-maps';
-import { Region } from '../../../types';
+import { Recipe, Region } from '../../../types';
 
 interface Props {
   regions: Region[];
   isMapReady: boolean;
   currentZoom: number;
   shouldShowMarker: (regionId: string, zoom: number) => boolean;
-  onMarkerPress: (recipes: any[]) => void;
+  onMarkerPress: (recipes: Recipe[], regionName: string) => void;
 }
 
 export const MapMarkers = memo(
@@ -49,7 +49,7 @@ export const MapMarkers = memo(
               identifier={region.id}
               coordinate={region.coordinate}
               title={region.name}
-              onPress={() => onMarkerPress(region.recipes)}
+              onPress={() => onMarkerPress(region.recipes, region.name)}
               tracksViewChanges={false}
               zIndex={1}
             />

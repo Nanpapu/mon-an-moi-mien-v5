@@ -29,6 +29,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isViewingVietnam, setIsViewingVietnam] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [selectedRegionName, setSelectedRegionName] = useState<string>('');
+  const [isRandomRecipe, setIsRandomRecipe] = useState(false);
 
   const mapRef = useRef<MapView>(null);
   const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
@@ -94,37 +96,20 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     }
   };
 
-  const handleRandomRecipe = (
-    latitude: number,
-    longitude: number,
-    recipes: Recipe[],
-    shouldAnimate = false
-  ) => {
-    if (shouldAnimate) {
-      setIsRandomAnimating(true);
-      setTimeout(() => {
-        animateRandomSearch(latitude, longitude, recipes, (recipes) => {
-          setSelectedRecipes(recipes);
-          setModalVisible(true);
-          setIsRandomAnimating(false);
-        });
-      }, 0);
-    } else {
-      mapRef.current?.animateToRegion(
-        {
-          latitude,
-          longitude,
-          latitudeDelta: 2,
-          longitudeDelta: 2,
-        },
-        1000
-      );
+  const handleRandomRecipe = () => {
+    if (isRandomAnimating) return;
 
-      setTimeout(() => {
-        setSelectedRecipes(recipes);
+    setIsRandomAnimating(true);
+    setIsRandomRecipe(true);
+
+    setTimeout(() => {
+      animateRandomSearch(regions, (recipe, regionName) => {
+        setSelectedRecipes([recipe]);
+        setSelectedRegionName(regionName);
         setModalVisible(true);
-      }, 1000);
-    }
+        setIsRandomAnimating(false);
+      });
+    }, 0);
   };
 
   const onSearch = async (query: string) => {
@@ -221,9 +206,9 @@ export default function MapScreen({ navigation }: { navigation: any }) {
             isMapReady={isMapReady}
             currentZoom={currentZoom}
             shouldShowMarker={shouldShowMarker}
-            onMarkerPress={(recipes) => {
-              console.log('Marker pressed, recipes:', recipes.length);
+            onMarkerPress={(recipes, regionName) => {
               setSelectedRecipes(recipes);
+              setSelectedRegionName(regionName);
               setModalVisible(true);
             }}
           />
@@ -242,9 +227,14 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
       <RecipeModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={() => {
+          setModalVisible(false);
+          setIsRandomRecipe(false);
+        }}
         recipes={selectedRecipes}
         onSaveRecipe={handleSaveRecipe}
+        regionName={selectedRegionName}
+        isRandomRecipe={isRandomRecipe}
       />
 
       {isLoading && <Loading overlay text="Đang tải..." />}
