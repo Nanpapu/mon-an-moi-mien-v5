@@ -7,7 +7,7 @@ import {
   Platform,
   TextInput,
 } from 'react-native';
-import { RandomRecipeButton } from '../../../components/buttons';
+import { RandomRecipeButton } from './RandomRecipeButton';
 import { SearchBar, Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';

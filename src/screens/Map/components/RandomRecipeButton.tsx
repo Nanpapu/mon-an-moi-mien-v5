@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
-import { useTheme } from '../../theme/ThemeContext';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-import { Region } from '../../types';
+import { Region } from '../../../types';
 import * as Haptics from 'expo-haptics';
-import { Tooltip } from '../shared/Tooltip';
+import { Tooltip } from '../../../components/shared/Tooltip';
 
 // Props interface cho RandomRecipeButton
 interface Props {
