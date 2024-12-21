@@ -274,6 +274,8 @@ export const createStyles = (theme: Theme) =>
       marginTop: theme.spacing.xs,
     },
     instructionItem: {
+      justifyContent: 'center',
+      alignItems: 'center',
       flexDirection: 'row',
       marginBottom: theme.spacing.sm,
       backgroundColor: theme.colors.background.default,
