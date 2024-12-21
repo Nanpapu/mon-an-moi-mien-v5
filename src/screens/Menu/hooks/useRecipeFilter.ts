@@ -32,13 +32,15 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
         // Tìm theo nguyên liệu
         const matchesIngredients = recipe.ingredients.some((ingredient) =>
-          containsSearchQuery(ingredient, searchQuery)
+          containsSearchQuery(ingredient.name, searchQuery)
         );
 
         // Tìm theo cách làm
-        const matchesInstructions = recipe.instructions.some((instruction) =>
-          containsSearchQuery(instruction, searchQuery)
-        );
+        const matchesInstructions = Object.values(recipe.instructions)
+          .flat()
+          .some((instruction: string) =>
+            containsSearchQuery(instruction, searchQuery)
+          );
 
         return matchesName || matchesIngredients || matchesInstructions;
       });
