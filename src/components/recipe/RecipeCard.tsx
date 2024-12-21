@@ -248,12 +248,6 @@ export function RecipeCard({
 
                     <View style={styles.instructionContent}>
                       <Typography
-                        variant="body1"
-                        style={styles.instructionTitle}
-                      >
-                        Bước {index + 1}
-                      </Typography>
-                      <Typography
                         variant="body2"
                         style={styles.instructionText}
                       >
