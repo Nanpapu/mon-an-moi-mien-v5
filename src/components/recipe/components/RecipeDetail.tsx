@@ -19,6 +19,7 @@ interface Props {
   onDelete?: (recipe: Recipe) => void;
   showActions?: boolean;
   showReviews?: boolean;
+  defaultExpandedInstructions?: boolean;
 }
 
 export const RecipeDetail = ({
@@ -28,6 +29,7 @@ export const RecipeDetail = ({
   onDelete,
   showActions = true,
   showReviews = true,
+  defaultExpandedInstructions = false,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -45,7 +47,10 @@ export const RecipeDetail = ({
 
         {/* Phần hướng dẫn */}
         <View style={styles.detailSection}>
-          <InstructionsSection instructions={recipe.instructions} />
+          <InstructionsSection
+            instructions={recipe.instructions}
+            defaultExpanded={defaultExpandedInstructions}
+          />
         </View>
 
         {/* Phần đánh giá */}

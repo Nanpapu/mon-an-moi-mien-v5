@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Instructions } from '../../../types';
@@ -8,14 +8,30 @@ import { Typography } from '../../shared';
 
 interface Props {
   instructions: Instructions;
+  defaultExpanded?: boolean;
 }
 
-export const InstructionsSection = ({ instructions }: Props) => {
+export const InstructionsSection = ({
+  instructions,
+  defaultExpanded = false,
+}: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set()
   );
+
+  useEffect(() => {
+    if (defaultExpanded) {
+      const allSections = sections
+        .filter(
+          (section) =>
+            (instructions[section.key as keyof Instructions] ?? []).length > 0
+        )
+        .map((section) => section.key);
+      setExpandedSections(new Set(allSections));
+    }
+  }, [defaultExpanded, instructions]);
 
   const toggleSection = (key: string) => {
     setExpandedSections((prev) => {
@@ -123,8 +139,8 @@ export const InstructionsSection = ({ instructions }: Props) => {
       </View>
 
       {sections.map(({ key, title, icon, color }) => {
-        const steps = instructions[key as keyof Instructions];
-        if (!steps?.length) return null;
+        const steps = instructions[key as keyof Instructions] ?? [];
+        if (!steps.length) return null;
 
         const isExpanded = expandedSections.has(key);
 

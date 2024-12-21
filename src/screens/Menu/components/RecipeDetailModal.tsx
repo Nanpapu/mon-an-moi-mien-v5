@@ -112,6 +112,7 @@ export const RecipeDetailModal = ({
           onDelete={onDelete}
           showActions={true}
           showReviews={showReviews}
+          defaultExpandedInstructions={true}
         />
       </View>
     </Modal>
