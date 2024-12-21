@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading } from '../../components/shared';
-import { SearchBar } from '../../components/shared/SearchBar';
+import { MenuSearchBar } from './components/MenuSearchBar';
 import { useMenuData } from './hooks/useMenuData';
 import { useRecipeFilter } from './hooks/useRecipeFilter';
 import { RegionFilter } from './components/RegionFilter';
@@ -178,7 +178,7 @@ export default function MenuScreen() {
         </View>
       )}
 
-      <SearchBar
+      <MenuSearchBar
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Tìm theo tên món hoặc nguyên liệu..."
