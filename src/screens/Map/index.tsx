@@ -28,6 +28,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [isRandomAnimating, setIsRandomAnimating] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isViewingVietnam, setIsViewingVietnam] = useState(false);
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   const mapRef = useRef<MapView>(null);
   const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
@@ -208,19 +209,25 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         onMapReady={() => {
           console.log('Map is ready');
           setIsMapReady(true);
+          setIsMapLoading(false);
+        }}
+        onLayout={() => {
+          console.log('Map layout complete');
         }}
       >
-        <MapMarkers
-          regions={loadedRegions}
-          isMapReady={isMapReady}
-          currentZoom={currentZoom}
-          shouldShowMarker={shouldShowMarker}
-          onMarkerPress={(recipes) => {
-            console.log('Marker pressed, recipes:', recipes.length);
-            setSelectedRecipes(recipes);
-            setModalVisible(true);
-          }}
-        />
+        {!isMapLoading && (
+          <MapMarkers
+            regions={loadedRegions}
+            isMapReady={isMapReady}
+            currentZoom={currentZoom}
+            shouldShowMarker={shouldShowMarker}
+            onMarkerPress={(recipes) => {
+              console.log('Marker pressed, recipes:', recipes.length);
+              setSelectedRecipes(recipes);
+              setModalVisible(true);
+            }}
+          />
+        )}
       </MapView>
 
       <MapControls

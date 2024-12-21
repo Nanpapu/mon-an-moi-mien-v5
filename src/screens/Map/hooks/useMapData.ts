@@ -20,12 +20,31 @@ export const useMapData = () => {
 
       const data = await RegionService.getAllRegions();
 
-      for (const region of data) {
-        setLoadedRegions((prev) => [...prev, region]);
-        await new Promise((resolve) => setTimeout(resolve, 100));
+      const validRegions = data.filter((region) => {
+        const isValid =
+          region &&
+          region.id &&
+          region.coordinate &&
+          typeof region.coordinate.latitude === 'number' &&
+          typeof region.coordinate.longitude === 'number';
+
+        if (!isValid) {
+          console.warn('Phát hiện region không hợp lệ:', region);
+        }
+        return isValid;
+      });
+
+      for (const region of validRegions) {
+        setLoadedRegions((prev) => {
+          if (prev.some((r) => r.id === region.id)) {
+            return prev;
+          }
+          return [...prev, region];
+        });
+        await new Promise((resolve) => setTimeout(resolve, 50));
       }
 
-      setRegions(data);
+      setRegions(validRegions);
     } catch (error) {
       console.error('Lỗi khi tải dữ liệu:', error);
       showToast('error', 'Không thể tải dữ liệu vùng miền');
