@@ -279,7 +279,7 @@ export const createStyles = (theme: Theme) =>
       flexDirection: 'row',
       marginBottom: theme.spacing.sm,
       backgroundColor: theme.colors.background.default,
-      borderRadius: theme.spacing.sm,
+      borderRadius: theme.spacing.xl,
       padding: theme.spacing.sm,
       ...theme.shadows.xs,
     },
