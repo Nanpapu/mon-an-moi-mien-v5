@@ -5,12 +5,14 @@ import React, {
   useState,
   useEffect,
   useRef,
-} from "react";
-import { useColorScheme, Animated, Easing } from "react-native";
-import { typography } from "./typography";
-import { spacing, layout } from "./spacing";
-import { shadows } from "./shadows";
+} from 'react';
+import { useColorScheme, Animated, Easing } from 'react-native';
+import { typography } from './typography';
+import { spacing, layout } from './spacing';
+import { shadows } from './shadows';
 import { themes, ThemeType, ThemeColors } from './themes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '../constants/storage';
 
 // Định nghĩa kiểu dữ liệu cho theme
 export type Theme = {
@@ -48,42 +50,77 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentTheme, setCurrentTheme] = useState<ThemeType>(themes[0]);
   const [defaultLightTheme, setDefaultLightTheme] = useState('light');
   const [defaultDarkTheme, setDefaultDarkTheme] = useState('classic-dark');
-  const [defaultSpecialTheme, setDefaultSpecialTheme] = useState('neon-dark-special');
+  const [defaultSpecialTheme, setDefaultSpecialTheme] =
+    useState('neon-dark-special');
 
-  const setDefaultTheme = (themeId: string) => {
-    const theme = themes.find(t => t.id === themeId);
-    if (!theme) return;
-    
-    if (theme.id.includes('-special')) {
-      setDefaultSpecialTheme(theme.id);
-    } else if (theme.id.includes('dark')) {
-      setDefaultDarkTheme(theme.id);
-    } else {
-      setDefaultLightTheme(theme.id);
+  const loadSavedThemes = async () => {
+    try {
+      const [currentThemeId, defaultLightId, defaultDarkId, defaultSpecialId] =
+        await Promise.all([
+          AsyncStorage.getItem(STORAGE_KEYS.THEME.CURRENT),
+          AsyncStorage.getItem(STORAGE_KEYS.THEME.DEFAULT_LIGHT),
+          AsyncStorage.getItem(STORAGE_KEYS.THEME.DEFAULT_DARK),
+          AsyncStorage.getItem(STORAGE_KEYS.THEME.DEFAULT_SPECIAL),
+        ]);
+
+      if (currentThemeId) {
+        setCurrentTheme(
+          themes.find((t) => t.id === currentThemeId) || themes[0]
+        );
+      }
+      if (defaultLightId) setDefaultLightTheme(defaultLightId);
+      if (defaultDarkId) setDefaultDarkTheme(defaultDarkId);
+      if (defaultSpecialId) setDefaultSpecialTheme(defaultSpecialId);
+    } catch (error) {
+      console.error('Lỗi khi load theme:', error);
     }
   };
 
-  const setTheme = (themeId: string) => {
-    const newTheme = themes.find(t => t.id === themeId);
-    if (!newTheme) return;
-    setCurrentTheme(newTheme);
-    setDefaultTheme(themeId);
+  useEffect(() => {
+    loadSavedThemes();
+  }, []);
+
+  const setDefaultTheme = async (themeId: string) => {
+    try {
+      if (themeId.includes('-special')) {
+        setDefaultSpecialTheme(themeId);
+        await AsyncStorage.setItem(STORAGE_KEYS.THEME.DEFAULT_SPECIAL, themeId);
+      } else if (themeId.includes('dark')) {
+        setDefaultDarkTheme(themeId);
+        await AsyncStorage.setItem(STORAGE_KEYS.THEME.DEFAULT_DARK, themeId);
+      } else {
+        setDefaultLightTheme(themeId);
+        await AsyncStorage.setItem(STORAGE_KEYS.THEME.DEFAULT_LIGHT, themeId);
+      }
+    } catch (error) {
+      console.error('Lỗi khi lưu default theme:', error);
+    }
+  };
+
+  const setTheme = async (themeId: string) => {
+    const newTheme = themes.find((t) => t.id === themeId);
+    if (newTheme) {
+      setCurrentTheme(newTheme);
+      try {
+        await AsyncStorage.setItem(STORAGE_KEYS.THEME.CURRENT, themeId);
+      } catch (error) {
+        console.error('Lỗi khi lưu theme:', error);
+      }
+    }
   };
 
   const toggleTheme = () => {
-    const currentIsSpecial = currentTheme.id.includes('-special');
-    const currentIsDark = currentTheme.id.includes('dark');
+    const currentId = currentTheme.id;
 
-    let newTheme;
-    if (currentIsSpecial) {
-      newTheme = themes.find(t => t.id === defaultLightTheme)!;
-      setCurrentTheme(newTheme);
-    } else if (currentIsDark) {
-      newTheme = themes.find(t => t.id === defaultSpecialTheme)!;
-      setCurrentTheme(newTheme);
+    if (currentId.includes('special')) {
+      // Nếu đang ở special theme thì chuyển sang light theme
+      setTheme(defaultLightTheme);
+    } else if (currentId.includes('dark')) {
+      // Nếu đang ở dark theme thì chuyển sang special theme
+      setTheme(defaultSpecialTheme);
     } else {
-      newTheme = themes.find(t => t.id === defaultDarkTheme)!;
-      setCurrentTheme(newTheme);
+      // Nếu đang ở light theme thì chuyển sang dark theme
+      setTheme(defaultDarkTheme);
     }
   };
 
@@ -132,8 +169,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [currentTheme]);
 
   return (
-    <ThemeContext.Provider 
-      value={{ 
+    <ThemeContext.Provider
+      value={{
         currentTheme,
         setTheme,
         availableThemes: themes,
@@ -163,7 +200,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 };
