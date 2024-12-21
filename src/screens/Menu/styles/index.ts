@@ -139,5 +139,14 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       padding: 4,
       ...theme.shadows.sm,
     },
+    footer: {
+      padding: theme.spacing.md,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    columnWrapper: {
+      margin: -theme.spacing.xs,
+    },
   });
 };

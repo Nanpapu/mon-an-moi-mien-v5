@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { ScrollView, View, RefreshControl } from 'react-native';
+import {
+  FlatList,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
 import { Recipe } from '../../../types';
 import { RecipeGridItem } from './RecipeGridItem';
 import { RecipeDetailModal } from './RecipeDetailModal';
 import { EmptyState } from './EmptyState';
 import { createStyles } from '../styles';
 import { useTheme } from '../../../theme/ThemeContext';
-import { useGridZoom } from '../hooks/useGridZoom';
+import { Typography } from '../../../components/shared';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {
@@ -23,6 +28,8 @@ interface Props {
   selectedRecipes?: Set<string>;
   onLongPress?: (recipeId: string) => void;
   onToggleSelect?: (recipeId: string) => void;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 export const RecipeList = ({
@@ -39,6 +46,8 @@ export const RecipeList = ({
   selectedRecipes = new Set(),
   onLongPress,
   onToggleSelect,
+  hasMore = false,
+  onLoadMore,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -47,40 +56,65 @@ export const RecipeList = ({
 
   if (!isLoading && filteredRecipes.length === 0) {
     return (
-      <EmptyState 
-        hasRecipes={savedRecipes.length > 0} 
+      <EmptyState
+        hasRecipes={savedRecipes.length > 0}
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
       />
     );
   }
 
+  const renderFooter = () => {
+    if (!hasMore) return null;
+
+    return (
+      <View style={styles.footer}>
+        <ActivityIndicator size="small" color={theme.colors.primary.main} />
+        <Typography
+          variant="body2"
+          style={{ color: theme.colors.text.secondary, marginLeft: 8 }}
+        >
+          Đang tải thêm...
+        </Typography>
+      </View>
+    );
+  };
+
+  const handleEndReached = () => {
+    if (hasMore && !isLoading && !isRefreshing && onLoadMore) {
+      onLoadMore();
+    }
+  };
+
   return (
     <>
-      <ScrollView
-        style={styles.recipeList}
+      <FlatList
+        data={filteredRecipes}
+        numColumns={currentConfig.columns}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.gridContainer}
+        columnWrapperStyle={styles.columnWrapper}
+        renderItem={({ item }) => (
+          <RecipeGridItem
+            key={item.id}
+            recipe={item}
+            onPress={() => setSelectedRecipe(item)}
+            width={calculateItemWidth()}
+            config={currentConfig}
+            onFavoriteChange={onFavoriteChange}
+            isSelectionMode={isSelectionMode}
+            isSelected={selectedRecipes.has(item.id)}
+            onLongPress={() => onLongPress?.(item.id)}
+            onToggleSelect={() => onToggleSelect?.(item.id)}
+          />
+        )}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
-      >
-        <View style={styles.grid}>
-          {filteredRecipes.map((recipe) => (
-            <RecipeGridItem
-              key={recipe.id}
-              recipe={recipe}
-              onPress={() => setSelectedRecipe(recipe)}
-              width={calculateItemWidth()}
-              config={currentConfig}
-              onFavoriteChange={onFavoriteChange}
-              isSelectionMode={isSelectionMode}
-              isSelected={selectedRecipes.has(recipe.id)}
-              onLongPress={() => onLongPress?.(recipe.id)}
-              onToggleSelect={() => onToggleSelect?.(recipe.id)}
-            />
-          ))}
-        </View>
-      </ScrollView>
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+      />
 
       {!isSelectionMode && (
         <RecipeDetailModal

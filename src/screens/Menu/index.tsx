@@ -42,6 +42,8 @@ export default function MenuScreen() {
     filteredRecipes,
     regions,
     refreshFavorites,
+    hasMore,
+    loadMore,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -215,6 +217,8 @@ export default function MenuScreen() {
             selectedRecipes={selectedRecipes}
             onLongPress={handleLongPress}
             onToggleSelect={handleToggleSelect}
+            hasMore={hasMore}
+            onLoadMore={loadMore}
           />
           <ZoomControls
             onZoomIn={zoomIn}
