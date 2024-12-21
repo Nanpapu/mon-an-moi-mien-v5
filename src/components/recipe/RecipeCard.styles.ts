@@ -228,11 +228,16 @@ export const createStyles = (theme: Theme) =>
     },
     ingredientsList: {
       marginTop: theme.spacing.sm,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
     },
     ingredientItem: {
       flexDirection: 'row',
       alignItems: 'center',
       paddingVertical: theme.spacing.xs,
+      width: '48%',
+      marginBottom: theme.spacing.xs,
     },
     ingredientBullet: {
       width: 6,
@@ -256,25 +261,38 @@ export const createStyles = (theme: Theme) =>
     },
     instructionItem: {
       flexDirection: 'row',
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.lg,
+      backgroundColor: theme.colors.background.default,
+      borderRadius: theme.spacing.md,
+      padding: theme.spacing.md,
+      ...theme.shadows.xs,
     },
     instructionNumber: {
-      width: 24,
-      height: 24,
-      borderRadius: 12,
+      minWidth: 32,
+      height: 32,
+      borderRadius: 16,
       backgroundColor: theme.colors.primary.main,
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: theme.spacing.sm,
+      marginRight: theme.spacing.md,
+      ...theme.shadows.xs,
     },
     instructionNumberText: {
       color: theme.colors.primary.contrast,
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 'bold',
     },
-    instructionText: {
+    instructionContent: {
       flex: 1,
+    },
+    instructionTitle: {
       color: theme.colors.text.primary,
+      fontWeight: '600',
+      marginBottom: theme.spacing.xs,
+    },
+    instructionText: {
+      color: theme.colors.text.secondary,
+      lineHeight: 20,
     },
     savedButton: {
       backgroundColor: theme.colors.success.main,

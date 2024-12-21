@@ -211,7 +211,14 @@ export function RecipeCard({
                 {recipe.ingredients.map((ingredient, index) => (
                   <View key={index} style={styles.ingredientItem}>
                     <View style={styles.ingredientBullet} />
-                    <Typography variant="body1" style={styles.ingredientText}>
+                    <Typography
+                      variant="body1"
+                      style={[
+                        styles.ingredientText,
+                        { fontSize: ingredient.length > 30 ? 12 : 14 },
+                      ]}
+                      numberOfLines={2}
+                    >
                       {ingredient}
                     </Typography>
                   </View>
@@ -229,6 +236,7 @@ export function RecipeCard({
                 />
                 <Typography variant="h3">Cách làm</Typography>
               </View>
+
               <View style={styles.instructionsList}>
                 {recipe.instructions.map((instruction, index) => (
                   <View key={index} style={styles.instructionItem}>
@@ -237,9 +245,21 @@ export function RecipeCard({
                         {index + 1}
                       </Typography>
                     </View>
-                    <Typography variant="body1" style={styles.instructionText}>
-                      {instruction}
-                    </Typography>
+
+                    <View style={styles.instructionContent}>
+                      <Typography
+                        variant="body1"
+                        style={styles.instructionTitle}
+                      >
+                        Bước {index + 1}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        style={styles.instructionText}
+                      >
+                        {instruction}
+                      </Typography>
+                    </View>
                   </View>
                 ))}
               </View>
