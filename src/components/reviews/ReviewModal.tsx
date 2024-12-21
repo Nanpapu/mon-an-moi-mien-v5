@@ -164,6 +164,9 @@ export const ReviewModal = ({
               numberOfLines={4}
               textAlignVertical="top"
               containerStyle={{ marginBottom: theme.spacing.lg }}
+              returnKeyType="done"
+              onSubmitEditing={handleSubmit}
+              blurOnSubmit={true}
             />
 
             {/* Submit button */}

@@ -22,6 +22,9 @@ interface InputProps extends TextInputProps {
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
   labelStyle?: StyleProp<TextStyle>;
+  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
+  onSubmitEditing?: () => void;
+  blurOnSubmit?: boolean;
 }
 
 // Input component
@@ -34,6 +37,9 @@ export const Input = ({
   containerStyle,
   inputStyle,
   labelStyle,
+  returnKeyType,
+  onSubmitEditing,
+  blurOnSubmit,
   ...props
 }: InputProps) => {
   const { theme } = useTheme();
@@ -56,9 +62,7 @@ export const Input = ({
         style={[
           styles.inputContainer,
           {
-            borderColor: error
-              ? theme.colors.error.main
-              : theme.colors.border,
+            borderColor: error ? theme.colors.error.main : theme.colors.border,
             backgroundColor: theme.colors.background.paper,
           },
         ]}
@@ -79,6 +83,9 @@ export const Input = ({
             inputStyle,
           ]}
           placeholderTextColor={theme.colors.text.secondary}
+          returnKeyType={returnKeyType}
+          onSubmitEditing={onSubmitEditing}
+          blurOnSubmit={blurOnSubmit}
           {...props}
         />
         {rightIcon && (
