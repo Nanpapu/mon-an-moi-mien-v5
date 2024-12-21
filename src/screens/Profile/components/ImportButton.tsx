@@ -6,9 +6,9 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Typography } from '../shared';
-import { useTheme } from '../../theme/ThemeContext';
-import { db } from '../../config/firebase';
+import { Typography } from '../../../components/shared';
+import { useTheme } from '../../../theme/ThemeContext';
+import { db } from '../../../config/firebase';
 import {
   doc,
   writeBatch,
@@ -16,9 +16,9 @@ import {
   collection,
   getDocs,
 } from 'firebase/firestore';
-import { COLLECTIONS } from '../../constants';
-import { regions } from '../../data/regions';
-import { useToast } from '../../hooks/useToast';
+import { COLLECTIONS } from '../../../constants';
+import { regions } from '../../../data/regions';
+import { useToast } from '../../../hooks/useToast';
 
 export function ImportButton() {
   const { theme } = useTheme();

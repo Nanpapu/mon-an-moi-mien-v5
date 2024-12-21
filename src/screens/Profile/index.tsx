@@ -13,6 +13,7 @@ import { ResetPasswordModal } from './components/ResetPasswordModal';
 import { useToast } from '../../hooks/useToast';
 import { Card, Button } from '../../components/shared';
 import { ThemeSelector } from './components/ThemeSelector';
+import { ImportButton } from './components/ImportButton';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
