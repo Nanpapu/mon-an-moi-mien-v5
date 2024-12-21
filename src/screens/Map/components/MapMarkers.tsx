@@ -42,12 +42,12 @@ export const MapMarkers = memo(
 
           const shouldShow = shouldShowMarker(region.id, currentZoom);
 
-          console.log('Marker check:', {
-            regionId: region.id,
-            shouldShow,
-            zoom: currentZoom,
-            coordinate: region.coordinate,
-          });
+          // console.log('Marker check:', {
+          //   regionId: region.id,
+          //   shouldShow,
+          //   zoom: currentZoom,
+          //   coordinate: region.coordinate,
+          // });
 
           if (!shouldShow) return null;
 

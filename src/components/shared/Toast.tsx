@@ -12,12 +12,18 @@ interface Props {
   visible: boolean;
   message: string;
   type: ToastType;
+  position?: 'top' | 'bottom';
 }
 
 // Toast component
-export const Toast = ({ visible, message, type }: Props) => {
+export const Toast = ({
+  visible,
+  message,
+  type,
+  position = 'bottom',
+}: Props) => {
   const { theme } = useTheme();
-  const translateY = new Animated.Value(100);
+  const translateY = new Animated.Value(position === 'top' ? -100 : 100);
 
   // Hàm lấy màu toast dựa trên type
   const getToastColor = () => {
@@ -56,7 +62,7 @@ export const Toast = ({ visible, message, type }: Props) => {
       }).start();
     } else {
       Animated.timing(translateY, {
-        toValue: 100,
+        toValue: position === 'top' ? -100 : 100,
         duration: THEME_CONSTANTS.animation.duration,
         useNativeDriver: true,
       }).start();
@@ -74,7 +80,7 @@ export const Toast = ({ visible, message, type }: Props) => {
           {
             transform: [{ translateY }],
             backgroundColor: getToastColor(),
-            bottom: THEME_CONSTANTS.layout.tabBarHeight + theme.spacing.md,
+            [position]: THEME_CONSTANTS.layout.tabBarHeight + theme.spacing.md,
             left: theme.spacing.md,
             right: theme.spacing.md,
             padding: theme.spacing.md,
