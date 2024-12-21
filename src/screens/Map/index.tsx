@@ -34,15 +34,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
   const mapRef = useRef<MapView>(null);
   const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
-  const {
-    currentZoom,
-    region,
-    setRegion,
-    calculateZoom,
-    shouldShowMarker,
-    setCurrentZoom,
-    viewVietnam,
-  } = useMapInteraction();
+  const { region, setRegion, viewVietnam } = useMapInteraction();
 
   const { showToast } = useToast();
   const { animateRandomSearch, cleanupAnimation } = useRandomAnimation(mapRef);
@@ -186,11 +178,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         provider="google"
         style={{ flex: 1 }}
         initialRegion={region}
-        onRegionChange={(newRegion) => {
-          setRegion(newRegion);
-          const newZoom = calculateZoom(newRegion.latitudeDelta);
-          setCurrentZoom(newZoom);
-        }}
+        onRegionChange={setRegion}
         onMapReady={() => {
           console.log('Map is ready');
           setIsMapReady(true);
@@ -204,8 +192,6 @@ export default function MapScreen({ navigation }: { navigation: any }) {
           <MapMarkers
             regions={loadedRegions}
             isMapReady={isMapReady}
-            currentZoom={currentZoom}
-            shouldShowMarker={shouldShowMarker}
             onMarkerPress={(recipes, regionName) => {
               setSelectedRecipes(recipes);
               setSelectedRegionName(regionName);

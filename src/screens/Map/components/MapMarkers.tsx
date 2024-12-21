@@ -5,28 +5,11 @@ import { Recipe, Region } from '../../../types';
 interface Props {
   regions: Region[];
   isMapReady: boolean;
-  currentZoom: number;
-  shouldShowMarker: (regionId: string, zoom: number) => boolean;
   onMarkerPress: (recipes: Recipe[], regionName: string) => void;
 }
 
 export const MapMarkers = memo(
-  ({
-    regions,
-    isMapReady,
-    currentZoom,
-    shouldShowMarker,
-    onMarkerPress,
-  }: Props) => {
-    // Chỉ log trong development và khi thực sự cần thiết
-    // if (__DEV__) {
-    //   console.log('MapMarkers render:', {
-    //     regionsCount: regions.length,
-    //     isMapReady,
-    //     currentZoom,
-    //   });
-    // }
-
+  ({ regions, isMapReady, onMarkerPress }: Props) => {
     if (!isMapReady || !regions || regions.length === 0) {
       return null;
     }
@@ -38,10 +21,6 @@ export const MapMarkers = memo(
             console.warn('Region không hợp lệ:', region);
             return null;
           }
-
-          const shouldShow = shouldShowMarker(region.id, currentZoom);
-
-          if (!shouldShow) return null;
 
           return (
             <Marker
@@ -62,7 +41,6 @@ export const MapMarkers = memo(
   (prevProps, nextProps) => {
     return (
       prevProps.isMapReady === nextProps.isMapReady &&
-      prevProps.currentZoom === nextProps.currentZoom &&
       prevProps.regions.length === nextProps.regions.length
     );
   }
