@@ -68,7 +68,6 @@ export default function MenuScreen() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [quickFilterSettings, setQuickFilterSettings] =
     useState<QuickFilterSettings>({
-      showFavorites: true,
       showRegions: true,
       showCategories: false,
       showDifficulty: false,
@@ -169,45 +168,20 @@ export default function MenuScreen() {
         style={styles.quickFiltersContainer}
         contentContainerStyle={styles.quickFiltersContent}
       >
-        <TouchableOpacity
-          style={[
-            styles.quickFilterButton,
-            filterOptions.showFavorites && styles.quickFilterButtonActive,
-          ]}
-          onPress={() =>
+        <RegionFilter
+          regions={regions}
+          selectedRegion={filterOptions.region}
+          onSelectRegion={(region) =>
+            setFilterOptions((prev) => ({ ...prev, region }))
+          }
+          showFavorites={filterOptions.showFavorites}
+          onToggleFavorites={() =>
             setFilterOptions((prev) => ({
               ...prev,
               showFavorites: !prev.showFavorites,
             }))
           }
-        >
-          <Ionicons
-            name={filterOptions.showFavorites ? 'heart' : 'heart-outline'}
-            size={20}
-            color={
-              filterOptions.showFavorites
-                ? theme.colors.primary.contrast
-                : theme.colors.error.main
-            }
-          />
-        </TouchableOpacity>
-
-        {quickFilterSettings.showRegions && (
-          <RegionFilter
-            regions={regions}
-            selectedRegion={filterOptions.region}
-            onSelectRegion={(region) =>
-              setFilterOptions((prev) => ({ ...prev, region }))
-            }
-            showFavorites={filterOptions.showFavorites}
-            onToggleFavorites={() =>
-              setFilterOptions((prev) => ({
-                ...prev,
-                showFavorites: !prev.showFavorites,
-              }))
-            }
-          />
-        )}
+        />
       </ScrollView>
     );
   };

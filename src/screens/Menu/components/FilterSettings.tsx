@@ -5,7 +5,6 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export interface QuickFilterSettings {
-  showFavorites: boolean;
   showRegions: boolean;
   showCategories: boolean;
   showDifficulty: boolean;
@@ -74,7 +73,6 @@ export const FilterSettings = ({ settings, onSettingsChange }: Props) => {
         Bộ lọc nhanh
       </Typography>
       <View style={styles.settingsGrid}>
-        {renderSettingItem('showFavorites', 'Yêu thích', 'heart', true)}
         {renderSettingItem('showRegions', 'Vùng miền', 'map')}
         {renderSettingItem('showCategories', 'Loại món', 'restaurant')}
         {renderSettingItem('showDifficulty', 'Độ khó', 'star')}
