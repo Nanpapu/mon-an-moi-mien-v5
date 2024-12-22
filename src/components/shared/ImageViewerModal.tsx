@@ -1,9 +1,15 @@
-import React from 'react';
-import { Modal, TouchableOpacity, View } from 'react-native';
-import { Image } from 'expo-image';
+import React, { useEffect } from 'react';
+import {
+  Modal,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  BackHandler,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { createStyles } from './ImageViewerModal.styles';
-import { useTheme } from '../../theme/ThemeContext';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import { Theme, useTheme } from '../../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {
   visible: boolean;
@@ -13,23 +19,78 @@ interface Props {
 
 export const ImageViewerModal = ({ visible, imageUrl, onClose }: Props) => {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const insets = useSafeAreaInsets();
+  const styles = createStyles(theme, insets);
+
+  useEffect(() => {
+    if (visible) {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          onClose();
+          return true;
+        }
+      );
+
+      return () => backHandler.remove();
+    }
+  }, [visible, onClose]);
 
   return (
-    <Modal visible={visible} transparent animationType="fade">
-      <View style={[styles.container, { backgroundColor: 'rgba(0,0,0,0.9)' }]}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View style={styles.container}>
+        {/* Nút đóng */}
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Ionicons name="close" size={24} style={styles.closeIcon} />
+          <Ionicons name="close" size={28} color="#FFFFFF" />
         </TouchableOpacity>
+
+        {/* Component ImageZoom cho phép zoom và pan */}
         <View style={styles.imageContainer}>
-          <Image
-            source={imageUrl || require('../../../assets/default-avatar.png')}
-            style={styles.image}
-            contentFit="contain"
-            transition={200}
-          />
+          {imageUrl && (
+            <ImageViewer
+              imageUrls={[{ url: imageUrl }]}
+              backgroundColor="transparent"
+              saveToLocalByLongPress={false}
+              // enableImageZoom={true}
+              style={styles.image}
+            />
+          )}
         </View>
       </View>
     </Modal>
   );
 };
+
+const createStyles = (theme: Theme, insets: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    closeButton: {
+      position: 'absolute',
+      top: insets.top + theme.spacing.md,
+      right: theme.spacing.md,
+      zIndex: 1,
+      padding: theme.spacing.sm,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      borderRadius: theme.spacing.lg,
+    },
+    imageContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+    },
+  });
