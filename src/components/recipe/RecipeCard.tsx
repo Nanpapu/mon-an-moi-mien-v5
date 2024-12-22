@@ -54,7 +54,6 @@ export function RecipeCard({
     if (recipe.category === 'vegetarian') {
       return {
         icon: 'leaf-outline' as const,
-        secondaryIcon: 'nutrition-outline' as const,
         color: '#4CAF50',
         text: 'Chay',
         bgColor: 'rgba(76, 175, 80, 0.9)',
@@ -62,7 +61,6 @@ export function RecipeCard({
     }
     return {
       icon: 'restaurant-outline' as const,
-      secondaryIcon: 'flame-outline' as const,
       color: '#FF5722',
       text: 'Mặn',
       bgColor: 'rgba(255, 87, 34, 0.9)',
@@ -92,13 +90,6 @@ export function RecipeCard({
           <Typography style={styles.categoryText}>
             {getCategoryInfo().text}
           </Typography>
-          <View style={styles.categoryIcon}>
-            <Ionicons
-              name={getCategoryInfo().secondaryIcon}
-              size={14}
-              color="#FFFFFF"
-            />
-          </View>
         </View>
       </TouchableOpacity>
 
