@@ -69,6 +69,70 @@ export interface Ingredient {
 
   /** URL hình ảnh nguyên liệu */
   image?: string;
+
+  /** Phân loại nguyên liệu theo chế độ ăn */
+  dietaryInfo?: {
+    /** Có phải nguyên liệu chay không */
+    isVegetarian: boolean;
+    /** Có phải nguyên liệu thuần chay không */
+    isVegan: boolean;
+    /** Các hạn chế về chế độ ăn */
+    restrictions?: {
+      containsGluten?: boolean; // Chứa gluten (chất đạm trong lúa mì)
+      containsSoy?: boolean; // Chứa đậu nành
+      containsLactose?: boolean; // Chứa lactose (đường sữa)
+      containsPeanuts?: boolean; // Chứa đậu phộng/lạc
+      containsSeafood?: boolean; // Chứa hải sản
+      isHalal?: boolean; // Phù hợp với tiêu chuẩn Halal (đạo Hồi)
+      isKosher?: boolean; // Phù hợp với tiêu chuẩn Kosher (Do Thái)
+    };
+  };
+
+  /** Mùa vụ của nguyên liệu */
+  seasonality?: {
+    /** Các tháng trong năm nguyên liệu có sẵn */
+    availableMonths: number[];
+    /** Thời điểm nguyên liệu ngon nhất */
+    peakMonths?: number[];
+  };
+
+  /** Cách sơ chế nguyên liệu */
+  preparationMethod?: {
+    /** Mô tả cách sơ chế */
+    description: string;
+    /** Thời gian sơ chế (phút) */
+    duration?: number;
+    /** Các bước sơ chế chi tiết */
+    steps?: string[];
+  };
+
+  /** Điều kiện bảo quản */
+  storageConditions?: {
+    /** Nhiệt độ bảo quản (°C) */
+    temperature?: {
+      min: number;
+      max: number;
+    };
+    /** Độ ẩm bảo quản (%) */
+    humidity?: {
+      min: number;
+      max: number;
+    };
+    /** Thời gian bảo quản tối đa (ngày) */
+    maxStorageDays: number;
+    /** Ghi chú về bảo quản */
+    notes?: string[];
+  };
+
+  /** Thông tin về tính bền vững */
+  sustainabilityInfo?: {
+    /** Dấu chân carbon (CO2e/kg) */
+    carbonFootprint?: number;
+    /** Nguồn gốc */
+    origin?: string;
+    /** Chứng nhận bền vững */
+    certifications?: string[];
+  };
 }
 
 /**
@@ -258,6 +322,32 @@ export interface Recipe extends BaseRecipe {
     date: Date;
     changes: string[];
   }[];
+
+  /** Phân loại món ăn theo chế độ ăn */
+  dietaryType: {
+    /** Món chay hay mặn */
+    type: 'vegetarian' | 'vegan' | 'non-vegetarian';
+    /** Ghi chú về chế độ ăn */
+    note?: string;
+  };
+
+  /** Các hạn chế về chế độ ăn */
+  dietaryRestrictions?: {
+    /** Không chứa gluten */
+    glutenFree?: boolean;
+    /** Không chứa đậu nành */
+    soyFree?: boolean;
+    /** Không chứa lactose */
+    lactoseFree?: boolean;
+    /** Không chứa đậu phộng */
+    peanutFree?: boolean;
+    /** Không chứa h��i sản */
+    seafoodFree?: boolean;
+    /** Halal */
+    halal?: boolean;
+    /** Kosher */
+    kosher?: boolean;
+  };
 }
 
 /**

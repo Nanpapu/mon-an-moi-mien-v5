@@ -53,7 +53,7 @@ export const RecipeIngredients = ({
   const groupedIngredients = useMemo(() => {
     return ingredients.reduce(
       (groups, ingredient) => {
-        const type = ingredient.type || 'other';
+        const type = ingredient.category || 'other';
         if (!groups[type]) {
           groups[type] = [];
         }
