@@ -22,11 +22,10 @@ import { useToast } from '../../../hooks/useToast';
 
 export function ImportButton() {
   const { theme } = useTheme();
-  // State quản lý trạng thái import
   const [isImporting, setIsImporting] = useState(false);
   const { showToast } = useToast();
 
-  // Hiển thị dialog xác nhận để người dùng xác nhận lần đầu
+  // Dialog xác nhận đầu tiên
   const showFirstConfirmation = () => {
     Alert.alert(
       'Cảnh báo Reset Database',
@@ -42,7 +41,7 @@ export function ImportButton() {
     );
   };
 
-  // Hiển thị dialog xác nhận để người dùng xác nhận lần cuối
+  // Dialog xác nhận lần cuối
   const showSecondConfirmation = () => {
     Alert.alert(
       'Xác nhận lần cuối',
@@ -58,7 +57,7 @@ export function ImportButton() {
     );
   };
 
-  // Xử lý import dữ liệu vào database
+  // Xử lý import dữ liệu
   const handleImportData = async () => {
     setIsImporting(true);
     try {
@@ -89,17 +88,40 @@ export function ImportButton() {
         for (const recipe of regionRecipes) {
           newRecipeIds.add(recipe.id);
 
-          // Tạo recipe document với các trường mới
-          const recipeRef = doc(db, COLLECTIONS.RECIPES, recipe.id);
-          batch.set(recipeRef, {
+          // Chuẩn bị dữ liệu recipe với các trường mới
+          const recipeData = {
             ...recipe,
             regionId: region.id,
             cookingTime: recipe.cookingTime || 0,
             difficulty: recipe.difficulty || 0,
             servings: recipe.servings || 0,
+            category: recipe.category || 'non-vegetarian', // Thêm phân loại chay/mặn
+            ingredients: recipe.ingredients.map((ingredient) => ({
+              ...ingredient,
+              type: ingredient.type || 'other', // Đảm bảo có type cho ingredient
+            })),
+            instructions: {
+              preparation: recipe.instructions.preparation || [],
+              processing: recipe.instructions.processing || [],
+              marinating: recipe.instructions.marinating || [],
+              broth: recipe.instructions.broth || [],
+              sauce: recipe.instructions.sauce || [],
+              cooking: recipe.instructions.cooking || [],
+              steaming: recipe.instructions.steaming || [],
+              filling: recipe.instructions.filling || [],
+              dough: recipe.instructions.dough || [],
+              assembly: recipe.instructions.assembly || [],
+              serving: recipe.instructions.serving || [],
+              tips: recipe.instructions.tips || [],
+              storage: recipe.instructions.storage || [],
+            },
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
-          });
+          };
+
+          // Tạo recipe document
+          const recipeRef = doc(db, COLLECTIONS.RECIPES, recipe.id);
+          batch.set(recipeRef, recipeData);
 
           // Chỉ tạo mới recipeStats nếu chưa tồn tại
           if (!existingStatsIds.has(recipe.id)) {
