@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '../../types';
 import { createStyles } from './RecipeCard.styles';
 import { useTheme } from '../../theme/ThemeContext';
 import { ImageViewerModal } from '../shared';
 import { ImageCacheService } from '../../services/imageCacheService';
+import { Typography } from '../shared';
 import {
   InstructionsSection,
   RecipeHeader,
@@ -48,6 +50,25 @@ export function RecipeCard({
     loadImage();
   }, [recipe.image]);
 
+  const getCategoryInfo = () => {
+    if (recipe.category === 'vegetarian') {
+      return {
+        icon: 'leaf-outline' as const,
+        secondaryIcon: 'nutrition-outline' as const,
+        color: '#4CAF50',
+        text: 'Chay',
+        bgColor: 'rgba(76, 175, 80, 0.9)',
+      };
+    }
+    return {
+      icon: 'restaurant-outline' as const,
+      secondaryIcon: 'flame-outline' as const,
+      color: '#FF5722',
+      text: 'Mặn',
+      bgColor: 'rgba(255, 87, 34, 0.9)',
+    };
+  };
+
   return (
     <View style={styles.card}>
       <TouchableOpacity onPress={() => setShowImageViewer(true)}>
@@ -58,6 +79,27 @@ export function RecipeCard({
           transition={200}
           cachePolicy="memory-disk"
         />
+
+        <View
+          style={[
+            styles.categoryBadge,
+            { backgroundColor: getCategoryInfo().bgColor },
+          ]}
+        >
+          <View style={styles.categoryIcon}>
+            <Ionicons name={getCategoryInfo().icon} size={16} color="#FFFFFF" />
+          </View>
+          <Typography style={styles.categoryText}>
+            {getCategoryInfo().text}
+          </Typography>
+          <View style={styles.categoryIcon}>
+            <Ionicons
+              name={getCategoryInfo().secondaryIcon}
+              size={14}
+              color="#FFFFFF"
+            />
+          </View>
+        </View>
       </TouchableOpacity>
 
       <ImageViewerModal
@@ -85,7 +127,11 @@ export function RecipeCard({
               instructions={recipe.instructions}
               defaultExpanded={mode === 'detailed'}
             />
-            {showReviews && <RecipeReviews recipe={recipe} />}
+            {showReviews && (
+              <View style={styles.reviewsContainer}>
+                <RecipeReviews recipe={recipe} />
+              </View>
+            )}
           </View>
         )}
 
