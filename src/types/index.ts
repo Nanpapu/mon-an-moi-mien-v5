@@ -5,6 +5,130 @@
 import { Timestamp } from 'firebase/firestore';
 
 /**
+ * Enum cho độ khó của công thức
+ */
+export enum RecipeDifficulty {
+  EASY = 1,
+  MEDIUM = 2,
+  HARD = 3,
+  EXPERT = 4,
+  MASTER = 5,
+}
+
+/**
+ * Enum cho độ phức tạp của công thức
+ */
+export enum RecipeComplexity {
+  SIMPLE = 1, // 1-3 bước
+  NORMAL = 2, // 4-6 bước
+  COMPLEX = 3, // 7-10 bước
+  VERY_COMPLEX = 4, // >10 bước
+}
+
+/**
+ * Enum cho ngân sách của công thức
+ */
+export enum RecipeBudget {
+  CHEAP = 1, // <100k VND
+  MODERATE = 2, // 100k-300k VND
+  EXPENSIVE = 3, // >300k VND
+}
+
+/**
+ * Enum cho mùa
+ */
+export enum Season {
+  SPRING = 'spring',
+  SUMMER = 'summer',
+  AUTUMN = 'autumn',
+  WINTER = 'winter',
+}
+
+/**
+ * Enum cho loại món ăn
+ */
+export enum RecipeType {
+  APPETIZER = 'appetizer',
+  MAIN = 'main',
+  DESSERT = 'dessert',
+  DRINK = 'drink',
+  SNACK = 'snack',
+}
+
+/**
+ * Enum cho phương pháp nấu chính
+ */
+export enum CookingMethod {
+  STIR_FRY = 'stir-fry',
+  STEAM = 'steam',
+  BOIL = 'boil',
+  GRILL = 'grill',
+  BAKE = 'bake',
+  DEEP_FRY = 'deep-fry',
+  BRAISE = 'braise',
+  ROAST = 'roast',
+  SIMMER = 'simmer',
+}
+
+/**
+ * Interface cho thông tin dinh dưỡng
+ */
+export interface NutritionInfo {
+  /** Calories */
+  calories?: number;
+  /** Protein (g) */
+  protein?: number;
+  /** Chất béo (g) */
+  fat?: number;
+  /** Carbohydrate (g) */
+  carbs?: number;
+  /** Chất xơ (g) */
+  fiber?: number;
+  /** Đường (g) */
+  sugar?: number;
+}
+
+/**
+ * Interface cho thông tin chế độ ăn
+ */
+export interface DietaryInfo {
+  /** Loại chế độ ăn */
+  type: 'vegetarian' | 'vegan' | 'non-vegetarian';
+  /** Ghi chú về chế độ ăn */
+  note?: string;
+  /** Các hạn chế về chế độ ăn */
+  restrictions?: {
+    glutenFree?: boolean;
+    soyFree?: boolean;
+    lactoseFree?: boolean;
+    peanutFree?: boolean;
+    seafoodFree?: boolean;
+    halal?: boolean;
+    kosher?: boolean;
+  };
+}
+
+/**
+ * Interface cho thông tin bảo quản
+ */
+export interface StorageInfo {
+  /** Nhiệt độ bảo quản (°C) */
+  temperature?: {
+    min: number;
+    max: number;
+  };
+  /** Độ ẩm bảo quản (%) */
+  humidity?: {
+    min: number;
+    max: number;
+  };
+  /** Thời gian bảo quản tối đa (ngày) */
+  maxStorageDays: number;
+  /** Ghi chú về bảo quản */
+  notes?: string[];
+}
+
+/**
  * Định nghĩa các loại nguyên liệu chính
  */
 export type IngredientCategory =
@@ -21,118 +145,52 @@ export type IngredientCategory =
   | 'other'; // khác
 
 /**
- * Interface cho nguyên liệu
- * @interface Ingredient
+ * Interface cho nguyên liệu đã được tối ưu
  */
 export interface Ingredient {
-  /** ID định danh duy nhất của nguyên liệu */
   id: string;
-
-  /** Tên nguyên liệu */
   name: string;
-
-  /** Số lượng */
   amount: number;
-
-  /** Đơn vị tính */
   unit: string;
-
-  /** Phân loại nguyên liệu */
   category: IngredientCategory;
-
-  /** Mức độ quan trọng của nguyên liệu (1-3)
-   * 1: Bắt buộc phải có
-   * 2: Nên có
-   * 3: Có thể thay thế hoặc bỏ qua
-   */
   importance: 1 | 2 | 3;
-
-  /** Các nguyên liệu có thể thay thế */
   substitutes?: string[];
-
-  /** Giá trị dinh dưỡng cho lượng nguyên liệu này (tính theo 100g) */
-  nutrition?: {
-    calories?: number; // Calories
-    protein?: number; // Protein (g)
-    fat?: number; // Chất béo (g)
-    carbs?: number; // Carbohydrate (g)
-  };
-
-  /** Ghi chú về cách chọn, sơ chế nguyên liệu */
+  nutrition?: NutritionInfo;
   note?: string;
-
-  /** Cờ đánh dấu nguyên liệu có phải là dị ứng phổ biến không */
   isAllergen?: boolean;
-
-  /** Giá thành tham khảo (VND) */
   estimatedPrice?: number;
-
-  /** URL hình ảnh nguyên liệu */
   image?: string;
-
-  /** Phân loại nguyên liệu theo chế độ ăn */
-  dietaryInfo?: {
-    /** Có phải nguyên liệu chay không */
-    isVegetarian: boolean;
-    /** Có phải nguyên liệu thuần chay không */
-    isVegan: boolean;
-    /** Các hạn chế về chế độ ăn */
-    restrictions?: {
-      containsGluten?: boolean; // Chứa gluten (chất đạm trong lúa mì)
-      containsSoy?: boolean; // Chứa đậu nành
-      containsLactose?: boolean; // Chứa lactose (đường sữa)
-      containsPeanuts?: boolean; // Chứa đậu phộng/lạc
-      containsSeafood?: boolean; // Chứa hải sản
-      isHalal?: boolean; // Phù hợp với tiêu chuẩn Halal (đạo Hồi)
-      isKosher?: boolean; // Phù hợp với tiêu chuẩn Kosher (Do Thái)
-    };
-  };
-
-  /** Mùa vụ của nguyên liệu */
+  dietaryInfo?: DietaryInfo;
   seasonality?: {
-    /** Các tháng trong năm nguyên liệu có sẵn */
     availableMonths: number[];
-    /** Thời điểm nguyên liệu ngon nhất */
     peakMonths?: number[];
   };
-
-  /** Cách sơ chế nguyên liệu */
   preparationMethod?: {
-    /** Mô tả cách sơ chế */
     description: string;
-    /** Thời gian sơ chế (phút) */
     duration?: number;
-    /** Các bước sơ chế chi tiết */
     steps?: string[];
   };
+  storageConditions?: StorageInfo;
+}
 
-  /** Điều kiện bảo quản */
-  storageConditions?: {
-    /** Nhiệt độ bảo quản (°C) */
-    temperature?: {
-      min: number;
-      max: number;
-    };
-    /** Độ ẩm bảo quản (%) */
-    humidity?: {
-      min: number;
-      max: number;
-    };
-    /** Thời gian bảo quản tối đa (ngày) */
-    maxStorageDays: number;
-    /** Ghi chú về bảo quản */
-    notes?: string[];
-  };
+/**
+ * Interface cho vấn đề thường gặp
+ */
+export interface CommonProblem {
+  problem: string;
+  causes: string[];
+  solutions: string[];
+}
 
-  /** Thông tin về tính bền vững */
-  sustainabilityInfo?: {
-    /** Dấu chân carbon (CO2e/kg) */
-    carbonFootprint?: number;
-    /** Nguồn gốc */
-    origin?: string;
-    /** Chứng nhận bền vững */
-    certifications?: string[];
-  };
+/**
+ * Interface cho phương pháp thay thế
+ */
+export interface AlternativeMethod {
+  description: string;
+  steps: string[];
+  pros: string[];
+  cons: string[];
+  requiredTools?: string[];
 }
 
 /**
@@ -191,48 +249,19 @@ export interface Step {
 }
 
 /**
- * Các bước thực hiện được phân loại theo giai đoạn
- * @interface Instructions
+ * Interface cho hướng dẫn đã được tối ưu
  */
 export interface Instructions {
-  /** Các bước chuẩn bị nguyên liệu */
   preparation: Step[];
-
-  /** Các bước sơ chế (làm sạch, thái, cắt...) */
   processing?: Step[];
-
-  /** Các bước ướp gia vị */
   marinating?: Step[];
-
-  /** Các bước nấu nước dùng/xốt */
-  broth?: Step[];
-
-  /** Các bước làm nước chấm/sốt */
-  sauce?: Step[];
-
-  /** Các bước nướng/chiên/xào */
   cooking?: Step[];
-
-  /** Các bước hấp/luộc */
-  steaming?: Step[];
-
-  /** Các bước làm nhân (cho bánh, nem...) */
-  filling?: Step[];
-
-  /** Các bước làm vỏ/bột (cho bánh) */
-  dough?: Step[];
-
-  /** Các bước hoàn thiện món ăn */
   assembly: Step[];
-
-  /** Cách thưởng thức */
   serving: Step[];
-
-  /** Các mẹo và lưu ý quan trọng - bắt buộc để đảm bảo chất lượng */
   tips: string[];
-
-  /** Cách bảo quản - bắt buộc để hướng dẫn người dùng */
   storage: string[];
+  commonProblems?: CommonProblem[];
+  alternativeMethods?: AlternativeMethod[];
 }
 
 /**
@@ -255,99 +284,43 @@ export interface BaseRecipe {
 }
 
 /**
- * Công thức nấu ăn đầy đủ, kế thừa từ BaseRecipe
- * @interface Recipe
- * @extends {BaseRecipe}
+ * Interface cho phiên bản công thức
+ */
+export interface RecipeVersion {
+  version: string;
+  updatedAt: Date;
+  updatedBy?: string;
+  changes: string[];
+  reason?: string;
+}
+
+/**
+ * Interface cho công thức nấu ăn đã được tối ưu
  */
 export interface Recipe extends BaseRecipe {
-  /** Thời gian nấu (phút) */
   cookingTime?: number;
-
-  /** Thời gian chuẩn bị (phút) */
   prepTime?: number;
-
-  /** Thời gian chờ (phút) - VD: thời gian ướp, thời gian chờ nở bột... */
   waitTime?: number;
-
-  /** Độ khó (1-5) */
-  difficulty?: number;
-
-  /** Số người ăn */
+  difficulty: RecipeDifficulty;
+  complexity: RecipeComplexity;
+  budget: RecipeBudget;
   servings?: number;
-
-  /** Loại món ăn */
-  type?: 'appetizer' | 'main' | 'dessert' | 'drink' | 'snack';
-
-  /** Phương pháp nấu chính */
-  cookingMethod?: 'stir-fry' | 'steam' | 'boil' | 'grill' | 'bake' | 'deep-fry';
-
-  /** Các tag để phân loại và tìm kiếm */
+  type: RecipeType;
+  cookingMethod: CookingMethod;
   tags?: string[];
-
-  /** Giá thành ước tính cho một phần ăn (VND) */
   estimatedCostPerServing?: number;
-
-  /** Thông tin dinh dưỡng cho một phần ăn */
-  nutritionPerServing?: {
-    calories?: number;
-    protein?: number;
-    fat?: number;
-    carbs?: number;
-    fiber?: number;
-    sugar?: number;
-  };
-
-  /** Các biến thể của công thức (VD: phiên bản chay, ít cay...) */
+  nutritionPerServing?: NutritionInfo;
   variations?: {
     name: string;
     description: string;
     ingredientModifications: string[];
   }[];
-
-  /** Các món ăn kèm phù hợp */
   suggestedSideDishes?: string[];
-
-  /** Các đồ uống phù hợp */
   suggestedDrinks?: string[];
-
-  /** Mùa phù hợp để nấu món này */
-  seasons?: ('spring' | 'summer' | 'autumn' | 'winter')[];
-
-  /** Dịp phù hợp để nấu món này */
+  seasons?: Season[];
   occasions?: string[];
-
-  /** Lịch sử cập nhật công thức */
-  history?: {
-    version: string;
-    date: Date;
-    changes: string[];
-  }[];
-
-  /** Phân loại món ăn theo chế độ ăn */
-  dietaryType: {
-    /** Món chay hay mặn */
-    type: 'vegetarian' | 'vegan' | 'non-vegetarian';
-    /** Ghi chú về chế độ ăn */
-    note?: string;
-  };
-
-  /** Các hạn chế về chế độ ăn */
-  dietaryRestrictions?: {
-    /** Không chứa gluten */
-    glutenFree?: boolean;
-    /** Không chứa đậu nành */
-    soyFree?: boolean;
-    /** Không chứa lactose */
-    lactoseFree?: boolean;
-    /** Không chứa đậu phộng */
-    peanutFree?: boolean;
-    /** Không chứa h��i sản */
-    seafoodFree?: boolean;
-    /** Halal */
-    halal?: boolean;
-    /** Kosher */
-    kosher?: boolean;
-  };
+  versions?: RecipeVersion[];
+  dietaryInfo: DietaryInfo;
 }
 
 /**
@@ -487,43 +460,5 @@ export interface CookingTechnique {
   commonMistakes: {
     mistake: string;
     solution: string;
-  }[];
-}
-
-/**
- * Thông tin về một phiên bản của công thức
- * @interface RecipeVersion
- */
-export interface RecipeVersion {
-  /** ID định danh duy nhất của phiên bản */
-  id: string;
-
-  /** ID của công thức gốc */
-  originalRecipeId: string;
-
-  /** Số phiên bản */
-  version: string;
-
-  /** Ngày tạo phiên bản */
-  createdAt: Date;
-
-  /** Người tạo phiên bản */
-  createdBy: string;
-
-  /** Mô tả các thay đổi */
-  changes: string[];
-
-  /** Các nguyên liệu đã thay đổi */
-  modifiedIngredients: {
-    ingredientId: string;
-    oldValue: Partial<Ingredient>;
-    newValue: Partial<Ingredient>;
-  }[];
-
-  /** Các bước đã thay đổi */
-  modifiedSteps: {
-    stepId: string;
-    oldValue: Partial<Step>;
-    newValue: Partial<Step>;
   }[];
 }
