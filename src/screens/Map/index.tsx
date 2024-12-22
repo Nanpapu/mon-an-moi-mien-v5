@@ -31,6 +31,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [selectedRegionName, setSelectedRegionName] = useState<string>('');
   const [isRandomRecipe, setIsRandomRecipe] = useState(false);
+  const [mapInitialized, setMapInitialized] = useState(false);
 
   const mapRef = useRef<MapView>(null);
   const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
@@ -50,7 +51,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsMapReady(true);
-    }, 1000);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -187,23 +188,28 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         style={{ flex: 1 }}
         initialRegion={region}
         onRegionChange={(newRegion) => {
-          setRegion(newRegion);
-          const newZoom = calculateZoom(newRegion.latitudeDelta);
-          setCurrentZoom(newZoom);
+          if (mapInitialized) {
+            setRegion(newRegion);
+            const newZoom = calculateZoom(newRegion.latitudeDelta);
+            setCurrentZoom(newZoom);
+          }
         }}
         onMapReady={() => {
           console.log('Map is ready');
           setIsMapReady(true);
           setIsMapLoading(false);
+          setMapInitialized(true);
+
+          mapRef.current?.animateToRegion(region, 100);
         }}
         onLayout={() => {
           console.log('Map layout complete');
         }}
       >
-        {!isMapLoading && (
+        {!isMapLoading && isMapReady && mapInitialized && (
           <MapMarkers
             regions={loadedRegions}
-            isMapReady={isMapReady}
+            isMapReady={true}
             currentZoom={currentZoom}
             shouldShowMarker={shouldShowMarker}
             onMarkerPress={(recipes, regionName) => {

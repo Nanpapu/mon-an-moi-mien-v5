@@ -34,17 +34,8 @@ export const useMapData = () => {
         return isValid;
       });
 
-      for (const region of validRegions) {
-        setLoadedRegions((prev) => {
-          if (prev.some((r) => r.id === region.id)) {
-            return prev;
-          }
-          return [...prev, region];
-        });
-        await new Promise((resolve) => setTimeout(resolve, 50));
-      }
-
       setRegions(validRegions);
+      setLoadedRegions(validRegions);
     } catch (error) {
       console.error('Lỗi khi tải dữ liệu:', error);
       showToast('error', 'Không thể tải dữ liệu vùng miền');

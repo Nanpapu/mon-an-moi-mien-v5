@@ -10,10 +10,10 @@ const VIETNAM_REGION = {
 
 // Điều chỉnh lại các mức zoom phù hợp hơn
 const ZOOM_LEVELS = {
-  COUNTRY: 4,  // Zoom xa hơn để dễ nhìn toàn Việt Nam
-  REGION: 6,   // Mức zoom vùng miền
-  CITY: 7,     // Mức zoom tỉnh/thành phố
-  DISTRICT: 8    // Mức zoom chi tiết
+  COUNTRY: 4, // Zoom xa hơn để dễ nhìn toàn Việt Nam
+  REGION: 5, // Mức zoom vùng miền
+  CITY: 6, // Mức zoom tỉnh/thành phố
+  DISTRICT: 7, // Mức zoom chi tiết
 };
 
 // Thêm nhiều thành phố hơn để dễ tìm
@@ -23,11 +23,15 @@ const MAJOR_CITIES = [
   '79', // TP.HCM
   '46', // Huế
   '92', // Cần Thơ
-  '95'  // Bạc Liêu
+  '95', // Bạc Liêu
 ];
 
 export const useMapInteraction = () => {
-  const [currentZoom, setCurrentZoom] = useState(10);
+  // Khởi tạo zoom ban đầu dựa trên VIETNAM_REGION
+  const initialZoom = Math.round(
+    Math.log(360 / VIETNAM_REGION.latitudeDelta) / Math.LN2
+  );
+  const [currentZoom, setCurrentZoom] = useState(initialZoom);
   const [region, setRegion] = useState(VIETNAM_REGION);
 
   // Tính toán mức zoom dựa trên latitudeDelta
@@ -58,6 +62,12 @@ export const useMapInteraction = () => {
     mapRef.current?.animateToRegion(VIETNAM_REGION, 1000);
   };
 
+  // Thêm function mới
+  const resetToVietnam = () => {
+    setRegion(VIETNAM_REGION);
+    setCurrentZoom(initialZoom);
+  };
+
   return {
     currentZoom,
     region,
@@ -66,7 +76,8 @@ export const useMapInteraction = () => {
     shouldShowMarker,
     setCurrentZoom,
     viewVietnam,
+    resetToVietnam,
     VIETNAM_REGION,
-    ZOOM_LEVELS
+    ZOOM_LEVELS,
   };
 };
