@@ -9,22 +9,28 @@ export const banhCungBacLieu: Recipe = {
   cookingTime: 60,
   difficulty: 3,
   servings: 4,
+  category: 'non-vegetarian',
   ingredients: [
     {
       name: 'Tôm tươi',
       amount: 300,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'seafood/shrimp',
       note: 'Tôm sú hoặc tôm thẻ, bóc vỏ, giữ lại đuôi',
     },
     {
       name: 'Thịt heo xay',
       amount: 200,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'meat/pork',
+      note: 'Thịt nạc, băm nhuyễn',
     },
     {
       name: 'Đậu xanh cà vỏ',
       amount: 200,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'other',
+      note: 'Đậu xanh đã xát vỏ, ngâm mềm',
     },
     {
       name: 'Bột gạo',
@@ -76,67 +82,105 @@ export const banhCungBacLieu: Recipe = {
   ],
   instructions: {
     preparation: [
-      'Đậu xanh:',
-      '- Ngâm đậu xanh 4 tiếng hoặc qua đêm',
-      '- Đãi sạch, để ráo',
-      '- Xay nhuyễn thành bột mịn',
-
-      'Tôm tươi:',
-      '- Bóc vỏ, giữ lại đuôi',
-      '- Rửa sạch, để ráo',
-      '- Ướp với 1/2 muỗng cà phê tiêu và 1/2 muỗng canh nước mắm',
-
-      'Gia vị:',
-      '- Hành tím, tỏi bóc vỏ',
-      '- Băm nhuyễn một nửa số hành tím và tỏi',
-      '- Phần còn lại thái lát mỏng',
+      {
+        title: 'Sơ chế đậu xanh',
+        details: [
+          'Ngâm đậu xanh trong nước lạnh 4 tiếng hoặc qua đêm',
+          'Đãi sạch vỏ đậu và rửa lại với nước',
+          'Để ráo nước hoàn toàn',
+          'Xay nhuyễn thành bột mịn bằng máy xay',
+          'Để riêng trong tô',
+        ],
+      },
+      {
+        title: 'Sơ chế tôm',
+        details: [
+          'Bóc vỏ tôm nhưng giữ lại phần đuôi',
+          'Rửa sạch với nước muối loãng',
+          'Để ráo nước trên rổ',
+          'Ướp tôm với 1/2 muỗng cà phê tiêu và 1/2 muỗng canh nước mắm',
+          'Để tôm thấm gia vị 15 phút',
+        ],
+      },
+      {
+        title: 'Sơ chế gia vị',
+        details: [
+          'Bóc vỏ hành tím và tỏi',
+          'Băm nhuyễn một nửa số hành tím và tỏi',
+          'Thái lát mỏng phần hành tím và tỏi còn lại',
+          'Để riêng phần băm và phần thái',
+        ],
+      },
     ],
     processing: [
-      'Làm bột:',
-      '- Trộn bột gạo với bột năng',
-      '- Thêm 400ml nước ấm',
-      '- Khuấy đều thành hỗn hợp sệt',
-      '- Để nghỉ 30 phút',
-
-      'Làm nhân:',
-      '- Trộn thịt xay với hành tỏi băm',
-      '- Thêm 1 muỗng canh nước mắm, 1/2 muỗng cà phê tiêu',
-      '- Trộn đều và ướp 15 phút',
+      {
+        title: 'Làm bột bánh',
+        details: [
+          'Trộn đều bột gạo với bột năng trong tô lớn',
+          'Thêm từ từ 400ml nước ấm (40°C) vào hỗn hợp bột',
+          'Khuấy đều tay theo một chiều đến khi hỗn hợp sệt mịn',
+          'Để bột nghỉ 30 phút cho bột nở nhẹ',
+          'Kiểm tra độ sệt, nếu quá đặc thì thêm chút nước ấm',
+        ],
+      },
+      {
+        title: 'Làm nhân bánh',
+        details: [
+          'Trộn thịt xay với hành tỏi băm nhuyễn',
+          'Nêm 1 muỗng canh nước mắm, 1/2 muỗng cà phê tiêu',
+          'Trộn đều và ướp 15 phút cho thịt thấm gia vị',
+          'Nếm thử và điều chỉnh gia vị nếu cần',
+        ],
+      },
     ],
     cooking: [
-      'Chiên bánh:',
-      '- Đun nóng dầu trong chảo sâu lòng',
-      '- Múc bột vào khuôn bánh cống',
-      '- Đặt tôm vào giữa',
-      '- Phủ một lớp bột đậu xanh và thịt lên trên',
-      '- Chiên với lửa vừa đến khi vàng giòn (khoảng 5-7 phút)',
-      '- Vớt ra để ráo dầu trên giấy thấm',
+      {
+        title: 'Chiên bánh',
+        details: [
+          'Đun nóng dầu trong chảo sâu lòng đến 180°C',
+          'Làm nóng khuôn bánh cống trong dầu',
+          'Múc bột vào khuôn đến 2/3 độ cao',
+          'Đặt tôm vào giữa, đầu tôm hướng lên',
+          'Phủ một lớp bột đậu xanh và thịt lên trên',
+          'Chiên với lửa vừa khoảng 5-7 phút đến khi vàng đều',
+          'Vớt ra để ráo dầu trên giấy thấm',
+        ],
+      },
     ],
     sauce: [
-      'Pha nước mắm chua ngọt:',
-      '- 3 muỗng canh nước mắm',
-      '- 3 muỗng canh đường',
-      '- 2 muỗng canh nước cốt chanh',
-      '- 1 muỗng canh ớt băm',
-      '- 2 tép tỏi băm',
-      'Khuấy đều cho đường tan hết',
+      {
+        title: 'Pha nước mắm chấm',
+        details: [
+          'Cho 3 muỗng canh nước mắm vào tô',
+          'Thêm 3 muỗng canh đường',
+          'Thêm 2 muỗng canh nước cốt chanh',
+          'Cho 1 muỗng canh ớt băm và 2 tép tỏi băm',
+          'Khuấy đều cho đường tan hoàn toàn',
+          'Nếm thử và điều chỉnh vị chua ngọt theo ý thích',
+        ],
+      },
     ],
     assembly: [
-      'Lắp ráp bánh:',
-      '- Chuẩn bị khuôn bánh cống nóng',
-      '- Múc bột vào khuôn theo thứ tự: bột gạo, tôm, bột đậu xanh, thịt',
-      '- Đảm bảo các lớp được xếp đều và đẹp mắt',
+      {
+        title: 'Trình bày',
+        details: [
+          'Xếp bánh cống ra đĩa có lót giấy thấm dầu',
+          'Bày rau sống và các loại rau thơm xung quanh',
+          'Cắt dưa leo thành lát mỏng vừa ăn',
+          'Đặt chén nước mắm pha chua ngọt bên cạnh',
+        ],
+      },
     ],
     serving: [
-      'Dọn bánh nóng kèm:',
-      '- Rau sống các loại',
-      '- Dưa leo thái lát',
-      '- Nước mắm chua ngọt',
-
-      'Cách ăn:',
-      '- Chấm bánh với nước mắm',
-      '- Ăn kèm rau sống và dưa leo',
-      '- Dùng nóng để bánh giòn ngon',
+      {
+        title: 'Cách thưởng thức',
+        details: [
+          'Dùng bánh nóng giòn',
+          'Chấm bánh với nước mắm pha',
+          'Ăn kèm với rau sống và dưa leo',
+          'Có thể cuốn bánh với rau trong bánh tráng',
+        ],
+      },
     ],
     tips: [
       'Bột phải được để nghỉ đủ thời gian để bánh giòn',

@@ -9,73 +9,144 @@ export const banhCong: Recipe = {
   cookingTime: 60,
   difficulty: 3,
   servings: 4,
+  category: 'non-vegetarian',
   ingredients: [
     {
       name: 'Tôm tươi cỡ vừa',
       amount: 300,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'seafood/shrimp',
+      note: 'Tôm size 30-35 con/kg',
     },
     {
       name: 'Thịt heo băm',
       amount: 200,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'meat/pork',
+      note: 'Thịt nạc, băm nhuyễn',
     },
     {
       name: 'Đậu xanh đã xát vỏ',
       amount: 200,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'other',
+      note: 'Đậu xanh cà vỏ',
     },
     {
       name: 'Bột gạo',
       amount: 300,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'grain/flour',
+      note: 'Bột gạo mịn',
     },
     {
       name: 'Hành tím',
       amount: 100,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'spice/fresh',
     },
     {
       name: 'Tiêu',
       amount: 5,
       unit: UNITS.WEIGHT.GRAM,
+      type: 'spice/dried',
     },
     {
       name: 'Nước mắm',
       amount: 30,
       unit: UNITS.VOLUME.MILLILITER,
+      type: 'spice/sauce',
+    },
+    {
+      name: 'Rau xà lách',
+      amount: 200,
+      unit: UNITS.WEIGHT.GRAM,
+      type: 'vegetable/leafy',
+    },
+    {
+      name: 'Rau thơm các loại',
+      amount: 100,
+      unit: UNITS.WEIGHT.GRAM,
+      type: 'vegetable/leafy',
+      note: 'Rau quế, húng quế, ngò gai',
+    },
+    {
+      name: 'Dưa leo',
+      amount: 200,
+      unit: UNITS.WEIGHT.GRAM,
+      type: 'vegetable/fruit',
     },
   ],
   instructions: {
     preparation: [
-      'Tôm bóc vỏ, giữ đầu',
-      'Đậu xanh ngâm 4 tiếng, xay nhuyễn',
-      'Hành tím băm nhuyễn',
+      {
+        title: 'Sơ chế nguyên liệu',
+        details: [
+          'Tôm bóc vỏ, giữ đầu và đuôi, rút chỉ đen',
+          'Rửa sạch tôm với nước muối loãng',
+          'Để ráo nước và ướp tôm với: 1/2 muỗng cà phê tiêu + 1/2 muỗng cà phê bột ngọt',
+          'Ngâm đậu xanh trong nước ấm 4 tiếng cho mềm',
+          'Xay đậu xanh thật nhuyễn mịn',
+          'Băm nhuyễn hành tím',
+          'Rửa sạch các loại rau ăn kèm, để ráo nước',
+        ],
+      },
+      {
+        title: 'Chuẩn bị bột',
+        details: [
+          'Cho bột gạo vào tô lớn',
+          'Thêm từ từ 250ml nước ấm (40°C) vào bột, vừa đổ vừa khuấy đều',
+          'Đánh bột theo một chiều đến khi mịn và không còn vón cục',
+          'Thêm 1/2 muỗng cà phê muối vào bột',
+          'Để bột nghỉ 30 phút cho bột nở',
+        ],
+      },
     ],
     processing: [
-      'Trộn bột gạo với nước ấm tạo hỗn hợp sệt',
-      'Ướp thịt băm với hành tím, tiêu, nước mắm',
-      'Trộn đều đậu xanh xay với thịt băm đã ướp',
+      {
+        title: 'Làm nhân bánh',
+        details: [
+          'Ướp thịt băm với: 1 muỗng canh nước mắm + 1/2 muỗng cà phê tiêu + hành tím băm',
+          'Để thịt ướp 15-20 phút cho ngấm gia vị',
+          'Trộn đều đậu xanh xay với thịt băm đã ướp',
+          'Nêm nếm lại cho vừa ăn',
+        ],
+      },
     ],
     cooking: [
-      'Đổ bột vào khuôn bánh cống',
-      'Đặt tôm lên trên, đầu tôm hướng lên',
-      'Chiên trong dầu nóng với lửa vừa đến khi vàng giòn',
+      {
+        title: 'Chiên bánh',
+        details: [
+          'Làm nóng dầu trong chảo sâu lòng đến 180°C',
+          'Làm nóng khuôn bánh cống trong dầu',
+          'Đổ bột vào khuôn đến 2/3 khuôn',
+          'Đặt tôm lên trên, đầu tôm hướng lên, ấn nhẹ vào bột',
+          'Chiên với lửa vừa khoảng 3-4 phút mỗi mặt đến khi vàng giòn',
+          'Vớt bánh ra để ráo dầu trên giấy thấm dầu',
+        ],
+      },
     ],
-    // Thêm phần assembly bắt buộc
     assembly: [
-      'Chuẩn bị đĩa bánh:',
-      '- Xếp bánh cống ra đĩa có lót giấy thấm dầu',
-      '- Bày rau sống và các loại rau thơm xung quanh',
-      '- Đặt chén nước mắm pha bên cạnh',
+      {
+        title: 'Trình bày',
+        details: [
+          'Xếp bánh cống ra đĩa có lót giấy thấm dầu',
+          'Bày rau sống và các loại rau thơm xung quanh',
+          'Cắt dưa leo thành lát mỏng',
+          'Chuẩn bị nước mắm pha chua ngọt đi kèm',
+        ],
+      },
     ],
     serving: [
-      'Nhúng bánh tráng qua nước ấm nhanh',
-      'Đặt bánh tráng lên đĩa',
-      'Xếp xà lách, rau thơm lên trước',
-      'Thêm thịt heo thái và dưa leo',
-      'Cuốn chặt tay, không để rau thò ra ngoài',
-      'Chấm với nước mắm pha',
+      {
+        title: 'Thưởng thức',
+        details: [
+          'Ăn kèm với rau sống và nước mắm pha',
+          'Có thể cuốn bánh với bánh tráng',
+          'Thêm ớt tươi tùy khẩu vị',
+          'Dùng nóng để bánh giữ được độ giòn',
+        ],
+      },
     ],
     tips: [
       'Bột phải được đánh cho thật mịn và để nghỉ 30 phút trước khi chiên',
@@ -88,10 +159,9 @@ export const banhCong: Recipe = {
     storage: [
       'Bột sống có thể bảo quản trong tủ lạnh đến 24 giờ',
       'Bánh đã chiên nên ăn nóng ngay để giữ độ giòn',
-      'Nếu cần bảo quản bánh đã chiên, để nguội hoàn toàn rồi cho vào hộp kín, hâm nóng lại bằng lò vi sóng',
+      'Nếu cần bảo quản bánh đã chiên, để nguội hoàn toàn rồi cho vào hộp kín',
       'Nhân đậu xanh và thịt đã trộn có thể bảo quản trong tủ lạnh đến 24 giờ',
       'Nước mắm pha có thể bảo quản trong tủ lạnh đến 1 tuần',
-      'Đồ chua bảo quản trong tủ lạnh đến 2 tuần',
     ],
   },
 };

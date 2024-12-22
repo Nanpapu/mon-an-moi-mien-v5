@@ -5,6 +5,50 @@
 import { Timestamp } from 'firebase/firestore';
 
 /**
+ * Phân loại nguyên liệu
+ * @type IngredientType
+ */
+export type IngredientType =
+  // Thịt và các chế phẩm từ thịt
+  | 'meat/pork' // thịt heo
+  | 'meat/beef' // thịt bò
+  | 'meat/chicken' // thịt gà
+  | 'meat/duck' // thịt vịt
+  | 'meat/processed' // thịt chế biến (chả, giò, xúc xích...)
+
+  // Hải sản và thủy hải sản
+  | 'seafood/fish' // cá các loại
+  | 'seafood/shrimp' // tôm các loại
+  | 'seafood/crab' // cua, ghẹ
+  | 'seafood/squid' // mực
+  | 'seafood/shellfish' // nghêu, sò, ốc
+  | 'seafood/dried' // hải sản khô
+
+  // Rau củ quả
+  | 'vegetable/leafy' // rau ăn lá
+  | 'vegetable/root' // củ các loại
+  | 'vegetable/mushroom' // nấm các loại
+  | 'vegetable/fruit' // rau ăn quả
+  | 'vegetable/sprout' // giá, mầm
+
+  // Gia vị
+  | 'spice/fresh' // gia vị tươi (sả, gừng, nghệ...)
+  | 'spice/dried' // gia vị khô (tiêu, đinh hương...)
+  | 'spice/sauce' // nước chấm, xốt
+  | 'spice/powder' // bột gia vị
+
+  // Ngũ cốc và tinh bột
+  | 'grain/rice' // gạo các loại
+  | 'grain/noodle' // bún, phở, mì
+  | 'grain/flour' // bột các loại
+
+  // Khác
+  | 'other/egg' // trứng
+  | 'other/tofu' // đậu phụ
+  | 'other/dried' // thực phẩm khô
+  | 'other'; // khác
+
+/**
  * Interface cho nguyên liệu
  * @interface Ingredient
  */
@@ -17,7 +61,19 @@ export interface Ingredient {
   unit: string;
   /** Ghi chú */
   note?: string;
-  type?: 'meat' | 'seafood' | 'vegetable' | 'spice' | 'other';
+  /** Phân loại nguyên liệu */
+  type?: IngredientType;
+}
+
+/**
+ * Một bước trong quy trình nấu
+ * @interface Step
+ */
+export interface Step {
+  /** Tên của bước */
+  title: string;
+  /** Các thao tác chi tiết trong bước */
+  details: string[];
 }
 
 /**
@@ -26,42 +82,30 @@ export interface Ingredient {
  */
 export interface Instructions {
   /** Các bước chuẩn bị nguyên liệu */
-  preparation: string[];
-
-  /** Các bước sơ chế (làm sạch, thái, cắt...) */
-  processing?: string[];
-
+  preparation: Step[];
+  /** Các bước sơ chế */
+  processing?: Step[];
   /** Các bước ướp gia vị */
-  marinating?: string[];
-
+  marinating?: Step[];
   /** Các bước nấu nước dùng/xốt */
-  broth?: string[];
-
+  broth?: Step[];
   /** Các bước làm nước chấm/sốt */
-  sauce?: string[];
-
+  sauce?: Step[];
   /** Các bước nướng/chiên/xào */
-  cooking?: string[];
-
+  cooking?: Step[];
   /** Các bước hấp/luộc */
-  steaming?: string[];
-
-  /** Các bước làm nhân (cho bánh, nem...) */
-  filling?: string[];
-
-  /** Các bước làm vỏ/bột (cho bánh) */
-  dough?: string[];
-
+  steaming?: Step[];
+  /** Các bước làm nhân */
+  filling?: Step[];
+  /** Các bước làm vỏ/bột */
+  dough?: Step[];
   /** Các bước hoàn thiện món ăn */
-  assembly: string[];
-
+  assembly: Step[];
   /** Cách thưởng thức */
-  serving: string[];
-
-  /** Các mẹo và lưu ý quan trọng - bắt buộc để đảm bảo chất lượng */
+  serving: Step[];
+  /** Các mẹo và lưu ý quan trọng */
   tips: string[];
-
-  /** Cách bảo quản - bắt buộc để hướng dẫn người dùng */
+  /** Cách bảo quản */
   storage: string[];
 }
 
@@ -85,9 +129,13 @@ export interface BaseRecipe {
 }
 
 /**
- * Công thức nấu ăn đầy đủ, kế thừa từ BaseRecipe
+ * Phân loại món ăn (chay/mặn)
+ */
+export type DishCategory = 'vegetarian' | 'non-vegetarian';
+
+/**
+ * Thông tin công thức nấu ăn
  * @interface Recipe
- * @extends {BaseRecipe}
  */
 export interface Recipe extends BaseRecipe {
   /** Thời gian nấu (phút) */
@@ -96,6 +144,8 @@ export interface Recipe extends BaseRecipe {
   difficulty?: number;
   /** Số người ăn */
   servings?: number;
+  /** Phân loại món chay/mặn */
+  category: DishCategory;
 }
 
 /**

@@ -9,100 +9,137 @@ export const comLamThaiNguyen: Recipe = {
   cookingTime: 60,
   difficulty: 2,
   servings: 4,
+  category: 'vegetarian',
   ingredients: [
     {
       name: 'Gạo nếp',
       amount: 500,
       unit: UNITS.WEIGHT.GRAM,
       note: 'Gạo nếp cái hoa vàng hoặc nếp Thái',
+      type: 'grain/rice',
     },
     {
       name: 'Ống tre non',
       amount: 4,
       unit: UNITS.QUANTITY.PIECE,
       note: 'Dài khoảng 30-35cm, đường kính 5-6cm',
+      type: 'other',
     },
     {
       name: 'Lá dong',
       amount: 8,
       unit: UNITS.QUANTITY.LEAF,
       note: 'Rửa sạch, lau khô',
+      type: 'vegetable/leafy',
     },
     {
       name: 'Muối',
       amount: 1,
       unit: UNITS.VOLUME.TEASPOON,
+      type: 'spice/powder',
     },
     {
       name: 'Nước suối',
       amount: 600,
       unit: UNITS.VOLUME.MILLILITER,
       note: 'Nước sạch hoặc nước suối',
+      type: 'other',
     },
     {
       name: 'Vừng (mè) trắng',
       amount: 50,
       unit: UNITS.WEIGHT.GRAM,
       note: 'Rang vàng',
+      type: 'spice/dried',
     },
     {
       name: 'Muối vừng',
       amount: 100,
       unit: UNITS.WEIGHT.GRAM,
       note: 'Để chấm khi ăn',
+      type: 'spice/powder',
     },
   ],
   instructions: {
     preparation: [
-      'Chuẩn bị ống tre:',
-      '- Chọn ống tre non, tươi',
-      '- Cắt thành các ống dài 30-35cm',
-      '- Cạo sạch lớp măng bên ngoài',
-      '- Rửa sạch, để ráo',
-
-      'Chuẩn bị lá dong:',
-      '- Rửa sạch lá dong',
-      '- Lau khô',
-      '- Cắt theo kích thước vừa với ống tre',
-
-      'Chuẩn bị gạo:',
-      '- Vo gạo nếp thật sạch',
-      '- Ngâm trong nước 4-6 tiếng hoặc qua đêm',
-      '- Vớt ra để ráo',
+      {
+        title: 'Chuẩn bị ống tre',
+        details: [
+          'Chọn ống tre non, tươi',
+          'Cắt thành các ống dài 30-35cm',
+          'Cạo sạch lớp măng bên ngoài',
+          'Rửa sạch, để ráo',
+        ],
+      },
+      {
+        title: 'Chuẩn bị lá dong',
+        details: [
+          'Rửa sạch lá dong',
+          'Lau khô',
+          'Cắt theo kích thước vừa với ống tre',
+        ],
+      },
+      {
+        title: 'Chuẩn bị gạo',
+        details: [
+          'Vo gạo nếp thật sạch',
+          'Ngâm trong nước 4-6 tiếng hoặc qua đêm',
+          'Vớt ra để ráo',
+        ],
+      },
     ],
     processing: [
-      'Làm muối vừng:',
-      '- Rang vừng trắng đến vàng thơm',
-      '- Giã nhuyễn vừng với muối theo tỷ lệ 2:1',
-      '- Để riêng để chấm khi ăn',
+      {
+        title: 'Làm muối vừng',
+        details: [
+          'Rang vừng trắng đến vàng thơm',
+          'Giã nhuyễn vừng với muối theo tỷ lệ 2:1',
+          'Để riêng để chấm khi ăn',
+        ],
+      },
     ],
     assembly: [
-      'Đóng cơm vào ống:',
-      '- Lót lá dong vào trong ống tre',
-      '- Cho gạo đã ngâm vào ống (khoảng 2/3 ống)',
-      '- Đổ nước vào (nước ngập hơn mặt gạo 1cm)',
-      '- Thêm 1/4 muỗng cà phê muối vào mỗi ống',
-      '- Nút kín hai đầu ống bằng lá dong',
+      {
+        title: 'Đóng cơm vào ống',
+        details: [
+          'Lót lá dong vào trong ống tre',
+          'Cho gạo đã ngâm vào ống (khoảng 2/3 ống)',
+          'Đổ nước vào (nước ngập hơn mặt gạo 1cm)',
+          'Thêm 1/4 muỗng cà phê muối vào mỗi ống',
+          'Nút kín hai đầu ống bằng lá dong',
+        ],
+      },
     ],
     cooking: [
-      'Nướng cơm lam:',
-      '- Chuẩn bị bếp than hồng',
-      '- Xếp các ống tre nghiêng 45 độ',
-      '- Nướng đều các mặt khoảng 45-50 phút',
-      '- Thỉnh thoảng xoay ống để cơm chín đều',
-      '- Kiểm tra độ chín bằng cách ấn vào ống tre (nếu mềm là đã chín)',
+      {
+        title: 'Nướng cơm lam',
+        details: [
+          'Chuẩn bị bếp than hồng',
+          'Xếp các ống tre nghiêng 45 độ',
+          'Nướng đều các mặt khoảng 45-50 phút',
+          'Thỉnh thoảng xoay ống để cơm chín đều',
+          'Kiểm tra độ chín bằng cách ấn vào ống tre (nếu mềm là đã chín)',
+        ],
+      },
     ],
     serving: [
-      'Thưởng thức:',
-      '- Để nguội khoảng 10 phút',
-      '- Chẻ ống tre theo chiều dọc',
-      '- Lột lá dong ra',
-      '- Cắt cơm thành khoanh tròn dày 2-3cm',
-
-      'Dùng kèm:',
-      '- Muối vừng',
-      '- Có thể ăn kèm gà nướng hoặc thịt nướng',
-      '- Uống với trà xanh Thái Nguyên',
+      {
+        title: 'Thưởng thức',
+        details: [
+          'Để nguội khoảng 10 phút',
+          'Chẻ ống tre theo chiều dọc',
+          'Lột lá dong ra',
+          'Cắt cơm thành khoanh tròn dày 2-3cm',
+        ],
+      },
+      {
+        title: 'Dùng kèm',
+        details: [
+          'Muối vừng',
+          'Có thể ăn kèm gà nướng hoặc thịt nướng',
+          'Uống với trà xanh Thái Nguyên',
+        ],
+      },
     ],
     tips: [
       'Chọn ống tre non để cơm có hương vị thơm đặc trưng',
