@@ -33,6 +33,7 @@ interface Props {
   selectedRecipes?: Set<string>;
   onLongPress?: (recipeId: string) => void;
   onToggleSelect?: (recipeId: string) => void;
+  isAuthenticated: boolean;
 }
 
 export const RecipeList = ({
@@ -49,6 +50,7 @@ export const RecipeList = ({
   selectedRecipes = new Set(),
   onLongPress,
   onToggleSelect,
+  isAuthenticated,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -62,12 +64,13 @@ export const RecipeList = ({
     setSelectedRecipe(recipe);
   };
 
-  if (!isLoading && filteredRecipes.length === 0) {
+  if (!isAuthenticated || (!isLoading && filteredRecipes.length === 0)) {
     return (
       <EmptyState
         hasRecipes={savedRecipes.length > 0}
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
+        isAuthenticated={isAuthenticated}
       />
     );
   }

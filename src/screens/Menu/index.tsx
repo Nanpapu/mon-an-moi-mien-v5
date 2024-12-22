@@ -126,7 +126,7 @@ export default function MenuScreen() {
               showToast('success', 'Đã xóa các công thức đã chọn');
               handleExitSelectionMode();
             } catch (error) {
-              console.error('Lỗi khi xóa c��ng thức:', error);
+              console.error('Lỗi khi xóa công thức:', error);
               showToast('error', 'Không thể xóa một số công thức');
             } finally {
               setIsLoading(false);
@@ -144,6 +144,29 @@ export default function MenuScreen() {
         backgroundColor: theme.colors.background.default,
       }}
     >
+      {user && (
+        <>
+          <MenuSearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Tìm theo tên món hoặc nguyên liệu..."
+            recentSearches={recentSearches}
+            onSaveRecentSearch={handleSaveSearch}
+            onSubmitEditing={() => handleSaveSearch(searchQuery)}
+          />
+
+          <View style={styles.headerControls}>
+            <RegionFilter
+              regions={regions}
+              selectedRegion={selectedRegion}
+              onSelectRegion={setSelectedRegion}
+              showFavorites={showFavorites}
+              onToggleFavorites={() => setShowFavorites(!showFavorites)}
+            />
+          </View>
+        </>
+      )}
+
       {isSelectionMode && (
         <View style={styles.selectionHeader}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -185,25 +208,6 @@ export default function MenuScreen() {
         </View>
       )}
 
-      <MenuSearchBar
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholder="Tìm theo tên món hoặc nguyên liệu..."
-        recentSearches={recentSearches}
-        onSaveRecentSearch={handleSaveSearch}
-        onSubmitEditing={() => handleSaveSearch(searchQuery)}
-      />
-
-      <View style={styles.headerControls}>
-        <RegionFilter
-          regions={regions}
-          selectedRegion={selectedRegion}
-          onSelectRegion={setSelectedRegion}
-          showFavorites={showFavorites}
-          onToggleFavorites={() => setShowFavorites(!showFavorites)}
-        />
-      </View>
-
       {isLoading ? (
         <Loading text="Đang tải..." />
       ) : (
@@ -222,13 +226,16 @@ export default function MenuScreen() {
             selectedRecipes={selectedRecipes}
             onLongPress={handleLongPress}
             onToggleSelect={handleToggleSelect}
+            isAuthenticated={!!user}
           />
-          <ZoomControls
-            onZoomIn={zoomIn}
-            onZoomOut={zoomOut}
-            canZoomIn={canZoomIn}
-            canZoomOut={canZoomOut}
-          />
+          {user && (
+            <ZoomControls
+              onZoomIn={zoomIn}
+              onZoomOut={zoomOut}
+              canZoomIn={canZoomIn}
+              canZoomOut={canZoomOut}
+            />
+          )}
         </>
       )}
     </View>
