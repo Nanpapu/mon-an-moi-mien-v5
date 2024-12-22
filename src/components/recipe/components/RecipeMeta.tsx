@@ -5,6 +5,7 @@ import { Recipe } from '../../../types';
 import { createStyles } from './RecipeMeta.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
+import { PriceEstimationService } from '../../../services/priceEstimationService';
 
 interface Props {
   recipe: Recipe;
@@ -14,6 +15,10 @@ interface Props {
 export const RecipeMeta = ({ recipe }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const priceInfo = PriceEstimationService.calculateRecipePrice(
+    recipe.ingredients
+  );
 
   return (
     <View style={styles.recipeMetaContainer}>
@@ -60,6 +65,37 @@ export const RecipeMeta = ({ recipe }: Props) => {
         <Typography style={styles.metaLabel}>Khẩu phần</Typography>
         <Typography style={styles.metaValue}>
           {recipe.servings ? `${recipe.servings} người` : 'N/A'}
+        </Typography>
+      </View>
+
+      <View style={styles.metaDivider} />
+
+      <View style={styles.metaItem}>
+        <View style={styles.metaIcon}>
+          <Ionicons
+            name="wallet-outline"
+            size={16}
+            color={theme.colors.text.secondary}
+          />
+        </View>
+        <Typography style={styles.metaLabel}>Chi phí ước tính</Typography>
+        <Typography style={styles.metaValue}>
+          {`${(priceInfo.priceRange.min / 1000).toFixed(0)}-${(priceInfo.priceRange.max / 1000).toFixed(0)}k`}
+        </Typography>
+        <Typography
+          style={[
+            styles.priceLevel,
+            {
+              color:
+                priceInfo.priceLevel === 'Rẻ'
+                  ? theme.colors.success.main
+                  : priceInfo.priceLevel === 'Trung bình'
+                    ? theme.colors.warning.main
+                    : theme.colors.error.main,
+            },
+          ]}
+        >
+          {priceInfo.priceLevel}
         </Typography>
       </View>
     </View>

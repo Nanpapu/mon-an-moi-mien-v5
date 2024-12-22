@@ -45,4 +45,10 @@ export const createStyles = (theme: Theme) =>
       marginHorizontal: 2,
       alignSelf: 'center',
     },
+    priceLevel: {
+      ...theme.typography.caption,
+      fontSize: 9,
+      fontWeight: '600',
+      marginTop: 1,
+    },
   });
