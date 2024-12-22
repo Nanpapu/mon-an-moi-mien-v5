@@ -48,12 +48,7 @@ export function RecipeCard({
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('Image pressed');
-          setShowImageViewer(true);
-        }}
-      >
+      <TouchableOpacity onPress={() => setShowImageViewer(true)}>
         <Image
           source={imageUrl || require('../../../assets/default-avatar.png')}
           style={styles.image}
@@ -76,20 +71,35 @@ export function RecipeCard({
           onToggleDetails={() => setShowDetails(!showDetails)}
         />
 
-        <RecipeMeta recipe={recipe} />
+        <View style={styles.metaContainer}>
+          <RecipeMeta recipe={recipe} />
+        </View>
 
         {showDetails && (
           <View style={styles.details}>
             <RecipeIngredients ingredients={recipe.ingredients} />
-            <InstructionsSection instructions={recipe.instructions} />
+            <InstructionsSection
+              instructions={recipe.instructions}
+              defaultExpanded={false}
+            />
           </View>
         )}
 
         {showActions && (
-          <RecipeActions recipe={recipe} onSave={onSave} onDelete={onDelete} />
+          <View style={styles.actionsContainer}>
+            <RecipeActions
+              recipe={recipe}
+              onSave={onSave}
+              onDelete={onDelete}
+            />
+          </View>
         )}
 
-        {showReviews && <RecipeReviews recipe={recipe} />}
+        {showReviews && (
+          <View style={styles.reviewsContainer}>
+            <RecipeReviews recipe={recipe} />
+          </View>
+        )}
       </View>
     </View>
   );
