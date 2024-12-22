@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RegionFilter } from './RegionFilter';
 import { AdvancedFilters } from './AdvancedFilters';
+import { FilterSettings, QuickFilterSettings } from './FilterSettings';
 
 interface Props {
   visible: boolean;
@@ -20,6 +21,8 @@ interface Props {
   filterOptions: FilterOptions;
   onFilterChange: (newOptions: FilterOptions) => void;
   regions: string[];
+  quickFilterSettings: QuickFilterSettings;
+  onQuickFilterSettingsChange: (settings: QuickFilterSettings) => void;
 }
 
 export const FilterModal = ({
@@ -28,6 +31,8 @@ export const FilterModal = ({
   filterOptions,
   onFilterChange,
   regions,
+  quickFilterSettings,
+  onQuickFilterSettingsChange,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -69,6 +74,13 @@ export const FilterModal = ({
 
         {/* Filter Content */}
         <ScrollView style={styles.content}>
+          <View style={styles.section}>
+            <FilterSettings
+              settings={quickFilterSettings}
+              onSettingsChange={onQuickFilterSettingsChange}
+            />
+          </View>
+
           <View style={styles.section}>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Vùng miền

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading } from '../../components/shared';
 import { MenuSearchBar } from './components/MenuSearchBar';
@@ -19,6 +25,7 @@ import { SearchHistoryService } from '../../services/searchHistoryService';
 import { useAuth } from '../../context/AuthContext';
 import { AdvancedFilters } from './components/AdvancedFilters';
 import { FilterModal } from './components/FilterModal';
+import { QuickFilterSettings } from './components/FilterSettings';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -59,6 +66,13 @@ export default function MenuScreen() {
   );
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [quickFilterSettings, setQuickFilterSettings] =
+    useState<QuickFilterSettings>({
+      showFavorites: true,
+      showRegions: true,
+      showCategories: false,
+      showDifficulty: false,
+    });
 
   const activeFiltersCount = [
     filterOptions.region,
@@ -145,6 +159,59 @@ export default function MenuScreen() {
     );
   };
 
+  const QuickFilters = () => {
+    if (!user) return null;
+
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.quickFiltersContainer}
+        contentContainerStyle={styles.quickFiltersContent}
+      >
+        <TouchableOpacity
+          style={[
+            styles.quickFilterButton,
+            filterOptions.showFavorites && styles.quickFilterButtonActive,
+          ]}
+          onPress={() =>
+            setFilterOptions((prev) => ({
+              ...prev,
+              showFavorites: !prev.showFavorites,
+            }))
+          }
+        >
+          <Ionicons
+            name={filterOptions.showFavorites ? 'heart' : 'heart-outline'}
+            size={20}
+            color={
+              filterOptions.showFavorites
+                ? theme.colors.primary.contrast
+                : theme.colors.error.main
+            }
+          />
+        </TouchableOpacity>
+
+        {quickFilterSettings.showRegions && (
+          <RegionFilter
+            regions={regions}
+            selectedRegion={filterOptions.region}
+            onSelectRegion={(region) =>
+              setFilterOptions((prev) => ({ ...prev, region }))
+            }
+            showFavorites={filterOptions.showFavorites}
+            onToggleFavorites={() =>
+              setFilterOptions((prev) => ({
+                ...prev,
+                showFavorites: !prev.showFavorites,
+              }))
+            }
+          />
+        )}
+      </ScrollView>
+    );
+  };
+
   return (
     <View
       style={{
@@ -188,6 +255,7 @@ export default function MenuScreen() {
               )}
             </TouchableOpacity>
           </View>
+          <QuickFilters />
 
           <FilterModal
             visible={showFilterModal}
@@ -195,6 +263,8 @@ export default function MenuScreen() {
             filterOptions={filterOptions}
             onFilterChange={setFilterOptions}
             regions={regions}
+            quickFilterSettings={quickFilterSettings}
+            onQuickFilterSettingsChange={setQuickFilterSettings}
           />
         </>
       )}

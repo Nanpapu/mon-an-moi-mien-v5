@@ -185,5 +185,26 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     searchBarContainer: {
       flex: 1,
     },
+    quickFiltersContainer: {
+      maxHeight: 50,
+      flexDirection: 'row',
+      paddingHorizontal: theme.spacing.md,
+    },
+    quickFiltersContent: {
+      flexDirection: 'row',
+      gap: theme.spacing.sm,
+      paddingVertical: theme.spacing.sm,
+    },
+    quickFilterButton: {
+      padding: theme.spacing.sm,
+      backgroundColor: theme.colors.background.paper,
+      borderRadius: theme.spacing.lg,
+      borderWidth: 1,
+      borderColor: theme.colors.error.main,
+      ...theme.shadows.sm,
+    },
+    quickFilterButtonActive: {
+      backgroundColor: theme.colors.error.main,
+    },
   });
 };
