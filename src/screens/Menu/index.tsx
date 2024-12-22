@@ -17,6 +17,8 @@ import { useToast } from '../../hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchHistoryService } from '../../services/searchHistoryService';
 import { useAuth } from '../../context/AuthContext';
+import { AdvancedFilters } from './components/AdvancedFilters';
+import { FilterModal } from './components/FilterModal';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -35,15 +37,11 @@ export default function MenuScreen() {
   } = useMenuData();
 
   const {
-    searchQuery,
-    setSearchQuery,
-    selectedRegion,
-    setSelectedRegion,
-    showFavorites,
-    setShowFavorites,
     filteredRecipes,
     regions,
     refreshFavorites,
+    filterOptions,
+    setFilterOptions,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -60,6 +58,16 @@ export default function MenuScreen() {
     new Set()
   );
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
+  const activeFiltersCount = [
+    filterOptions.region,
+    filterOptions.category,
+    filterOptions.difficulty,
+    filterOptions.cookingTime.min || filterOptions.cookingTime.max,
+    filterOptions.servings.min || filterOptions.servings.max,
+    filterOptions.mainIngredientTypes.length > 0,
+  ].filter(Boolean).length;
 
   useEffect(() => {
     loadSearchHistory();
@@ -146,24 +154,48 @@ export default function MenuScreen() {
     >
       {user && (
         <>
-          <MenuSearchBar
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholder="Tìm theo tên món hoặc nguyên liệu..."
-            recentSearches={recentSearches}
-            onSaveRecentSearch={handleSaveSearch}
-            onSubmitEditing={() => handleSaveSearch(searchQuery)}
-          />
-
           <View style={styles.headerControls}>
-            <RegionFilter
-              regions={regions}
-              selectedRegion={selectedRegion}
-              onSelectRegion={setSelectedRegion}
-              showFavorites={showFavorites}
-              onToggleFavorites={() => setShowFavorites(!showFavorites)}
-            />
+            <View style={styles.searchBarContainer}>
+              <MenuSearchBar
+                value={filterOptions.searchQuery}
+                onChangeText={(text) =>
+                  setFilterOptions((prev) => ({ ...prev, searchQuery: text }))
+                }
+                placeholder="Tìm theo tên món hoặc nguyên liệu..."
+                recentSearches={recentSearches}
+                onSaveRecentSearch={handleSaveSearch}
+                onSubmitEditing={() =>
+                  handleSaveSearch(filterOptions.searchQuery)
+                }
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => setShowFilterModal(true)}
+            >
+              <Ionicons
+                name="options-outline"
+                size={24}
+                color={theme.colors.text.primary}
+              />
+              {activeFiltersCount > 0 && (
+                <View style={styles.filterBadge}>
+                  <Typography variant="caption" style={styles.filterBadgeText}>
+                    {activeFiltersCount}
+                  </Typography>
+                </View>
+              )}
+            </TouchableOpacity>
           </View>
+
+          <FilterModal
+            visible={showFilterModal}
+            onClose={() => setShowFilterModal(false)}
+            filterOptions={filterOptions}
+            onFilterChange={setFilterOptions}
+            regions={regions}
+          />
         </>
       )}
 

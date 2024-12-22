@@ -15,12 +15,16 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       minHeight: 50,
     },
     filterButton: {
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.sm,
-      borderRadius: theme.spacing.md,
+      padding: theme.spacing.xs,
       backgroundColor: theme.colors.background.paper,
-      marginRight: theme.spacing.sm,
-      alignSelf: 'center',
+      borderRadius: theme.spacing.lg,
+      ...theme.shadows.sm,
+      width: 40,
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: theme.colors.primary.main,
     },
     filterButtonActive: {
       backgroundColor: theme.colors.primary.main,
@@ -65,10 +69,10 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     },
     headerControls: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: theme.spacing.md,
-      paddingBottom: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.sm,
+      paddingVertical: theme.spacing.xs,
+      gap: theme.spacing.xs,
     },
     zoomControls: {
       flexDirection: 'row',
@@ -160,6 +164,25 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     },
     modalTitle: {
       fontSize: 20,
+      flex: 1,
+    },
+    filterBadge: {
+      position: 'absolute',
+      top: -8,
+      right: -8,
+      backgroundColor: theme.colors.primary.main,
+      borderRadius: 10,
+      width: 18,
+      height: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    filterBadgeText: {
+      color: theme.colors.primary.contrast,
+      fontSize: 10,
+      fontWeight: 'bold',
+    },
+    searchBarContainer: {
       flex: 1,
     },
   });
