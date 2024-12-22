@@ -143,42 +143,54 @@ export const InstructionsSection = ({
       {instructions.tips?.length > 0 && (
         <View style={styles.tipsContainer}>
           <View style={styles.sectionHeader}>
-            <Ionicons
-              name="bulb-outline"
-              size={20}
-              color={theme.colors.warning.main}
-              style={styles.sectionIcon}
-            />
+            <View style={styles.tipIconContainer}>
+              <Ionicons
+                name="bulb-outline"
+                size={16}
+                color={theme.colors.background.paper}
+              />
+            </View>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Mẹo và lưu ý quan trọng
             </Typography>
           </View>
-          {instructions.tips.map((tip, index) => (
-            <Typography key={index} style={styles.tipText} variant="body2">
-              • {tip}
-            </Typography>
-          ))}
+          <View style={styles.tipsContent}>
+            {instructions.tips.map((tip, index) => (
+              <View key={index} style={styles.tipItem}>
+                <View style={styles.tipBullet} />
+                <Typography style={styles.tipText} variant="body2">
+                  {tip}
+                </Typography>
+              </View>
+            ))}
+          </View>
         </View>
       )}
 
       {instructions.storage?.length > 0 && (
         <View style={styles.storageContainer}>
           <View style={styles.sectionHeader}>
-            <Ionicons
-              name="file-tray-outline"
-              size={20}
-              color={theme.colors.info.main}
-              style={styles.sectionIcon}
-            />
+            <View style={styles.storageIconContainer}>
+              <Ionicons
+                name="file-tray-outline"
+                size={16}
+                color={theme.colors.background.paper}
+              />
+            </View>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Cách bảo quản
             </Typography>
           </View>
-          {instructions.storage.map((item, index) => (
-            <Typography key={index} style={styles.storageText} variant="body2">
-              • {item}
-            </Typography>
-          ))}
+          <View style={styles.tipsContent}>
+            {instructions.storage.map((item, index) => (
+              <View key={index} style={styles.tipItem}>
+                <View style={styles.storageBullet} />
+                <Typography style={styles.storageText} variant="body2">
+                  {item}
+                </Typography>
+              </View>
+            ))}
+          </View>
         </View>
       )}
     </>
