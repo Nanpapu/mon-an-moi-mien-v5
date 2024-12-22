@@ -8,11 +8,9 @@ import {
 } from 'react-native';
 import { Recipe } from '../../../types';
 import { RecipeGridItem } from './RecipeGridItem';
-import { RecipeDetailModal } from './RecipeDetailModal';
 import { EmptyState } from './EmptyState';
 import { createStyles } from '../styles';
 import { useTheme } from '../../../theme/ThemeContext';
-import { useGridZoom } from '../hooks/useGridZoom';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecipes } from '../../../context/RecipeContext';
 import { RecipeCard } from '../../../components/recipe/RecipeCard';
