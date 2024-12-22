@@ -93,7 +93,11 @@ export const FilterModal = ({
                 });
               }}
             >
-              <Typography variant="body2" color="error">
+              <Typography
+                variant="body2"
+                color="error"
+                style={styles.resetButtonText}
+              >
                 Đặt lại
               </Typography>
             </TouchableOpacity>
@@ -233,6 +237,10 @@ const createStyles = (theme: any) =>
       fontWeight: '600',
     },
     resetButton: {
-      padding: theme.spacing.xs,
+      padding: theme.spacing.sm,
+    },
+    resetButtonText: {
+      fontSize: 16,
+      fontWeight: '700',
     },
   });
