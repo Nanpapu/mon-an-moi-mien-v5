@@ -78,7 +78,13 @@ export const RecipeDetail = ({
 
         {/* Phần nguyên liệu */}
         <View style={styles.detailSection}>
-          <RecipeIngredients ingredients={recipe.ingredients} />
+          <RecipeIngredients
+            ingredients={recipe.ingredients}
+            onIngredientPress={(ingredient) => {
+              // Xử lý khi click vào nguyên liệu (nếu cần)
+              console.log('Ingredient pressed:', ingredient);
+            }}
+          />
         </View>
 
         {/* Phần hướng dẫn */}
