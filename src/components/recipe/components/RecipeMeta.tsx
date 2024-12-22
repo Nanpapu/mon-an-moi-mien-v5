@@ -86,12 +86,20 @@ export const RecipeMeta = ({ recipe }: Props) => {
           style={[
             styles.priceLevel,
             {
-              color:
+              backgroundColor:
                 priceInfo.priceLevel === 'Rẻ'
                   ? theme.colors.success.main
                   : priceInfo.priceLevel === 'Trung bình'
                     ? theme.colors.warning.main
                     : theme.colors.error.main,
+              color: '#FFFFFF',
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              borderRadius: 4,
+              fontWeight: '600',
+              textShadowColor: 'rgba(0, 0, 0, 0.2)',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: 1,
             },
           ]}
         >
