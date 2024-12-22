@@ -10,6 +10,7 @@ interface Props {
   recipe: Recipe;
   showDetails: boolean;
   onToggleDetails: () => void;
+  mode?: 'compact' | 'detailed';
 }
 
 // Component hiển thị phần header của công thức
@@ -17,6 +18,7 @@ export const RecipeHeader = ({
   recipe,
   showDetails,
   onToggleDetails,
+  mode = 'compact',
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -32,16 +34,21 @@ export const RecipeHeader = ({
         </Typography>
       </View>
 
-      <TouchableOpacity
-        style={[styles.expandButton, showDetails && styles.expandButtonRotate]}
-        onPress={onToggleDetails}
-      >
-        <Ionicons
-          name="chevron-up"
-          size={24}
-          color={theme.colors.text.primary}
-        />
-      </TouchableOpacity>
+      {mode === 'compact' && (
+        <TouchableOpacity
+          style={[
+            styles.expandButton,
+            showDetails && styles.expandButtonRotate,
+          ]}
+          onPress={onToggleDetails}
+        >
+          <Ionicons
+            name="chevron-up"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

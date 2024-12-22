@@ -70,9 +70,8 @@ export function RecipeCard({
         <RecipeHeader
           recipe={recipe}
           showDetails={showDetails}
-          onToggleDetails={() =>
-            mode === 'compact' && setShowDetails(!showDetails)
-          }
+          onToggleDetails={() => setShowDetails(!showDetails)}
+          mode={mode}
         />
 
         <View style={styles.metaContainer}>
