@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Recipe } from '../../types';
 import { createStyles } from './RecipeCard.styles';
 import { useTheme } from '../../theme/ThemeContext';
+import { ImageViewerModal } from '../shared';
 import { ImageCacheService } from '../../services/imageCacheService';
 import {
   InstructionsSection,
@@ -33,6 +34,7 @@ export function RecipeCard({
   const styles = createStyles(theme);
   const [showDetails, setShowDetails] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [showImageViewer, setShowImageViewer] = useState(false);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -46,12 +48,25 @@ export function RecipeCard({
 
   return (
     <View style={styles.card}>
-      <Image
-        source={imageUrl || require('../../../assets/default-avatar.png')}
-        style={styles.image}
-        contentFit="cover"
-        transition={200}
-        cachePolicy="memory-disk"
+      <TouchableOpacity
+        onPress={() => {
+          console.log('Image pressed');
+          setShowImageViewer(true);
+        }}
+      >
+        <Image
+          source={imageUrl || require('../../../assets/default-avatar.png')}
+          style={styles.image}
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
+        />
+      </TouchableOpacity>
+
+      <ImageViewerModal
+        visible={showImageViewer}
+        imageUrl={imageUrl}
+        onClose={() => setShowImageViewer(false)}
       />
 
       <View style={styles.content}>
