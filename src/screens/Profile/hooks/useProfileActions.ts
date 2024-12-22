@@ -120,12 +120,14 @@ export const useProfileActions = (user: User | null) => {
             result.assets[0].uri
           );
           if (downloadURL) {
+            if (user.photoURL) {
+              await UserService.deleteOldAvatar(user.photoURL);
+            }
             await updateProfile(auth.currentUser!, {
               photoURL: downloadURL,
             });
             setPhotoURL(downloadURL);
             if (auth.currentUser) {
-              const updatedUser = { ...auth.currentUser };
               auth.currentUser.reload();
             }
             showToast('success', 'Đã cập nhật ảnh đại diện');

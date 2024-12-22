@@ -196,12 +196,33 @@ export const UserService = {
       throw error;
     }
   },
+
+  /**
+   * Xóa avatar cũ của user
+   */
+  deleteOldAvatar: async (oldPhotoURL: string) => {
+    try {
+      if (!oldPhotoURL || !oldPhotoURL.includes('firebasestorage')) {
+        return;
+      }
+
+      // Lấy path từ URL
+      const photoPath = oldPhotoURL.split('avatars%2F')[1].split('?')[0];
+      const oldAvatarRef = ref(storage, `avatars/${photoPath}`);
+
+      await deleteObject(oldAvatarRef);
+      return true;
+    } catch (error) {
+      console.error('Lỗi khi xóa avatar cũ:', error);
+      return false;
+    }
+  },
 };
 
 /**
  * Ẩn một phần email
  * @param {string} email - Email cần ẩn
- * @returns {string} Email đ�� được ẩn một phần
+ * @returns {string} Email được ẩn một phần
  */
 const maskEmail = (email: string) => {
   const [username, domain] = email.split('@');
