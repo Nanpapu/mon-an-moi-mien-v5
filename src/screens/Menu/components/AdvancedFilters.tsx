@@ -1,16 +1,25 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
-import { FilterOptions, COOKING_TIME_RANGES, SERVINGS_RANGES } from '../types';
-import { DishCategory, IngredientType } from '../../../types';
+import {
+  FilterOptions,
+  COOKING_TIME_RANGES,
+  SERVINGS_RANGES,
+  DishCategory,
+} from '../types';
 
 interface Props {
   filterOptions: FilterOptions;
-  onFilterChange: (newOptions: FilterOptions) => void;
+  onFilterChange: (options: FilterOptions) => void;
+  regions: string[];
 }
 
-export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
+export const AdvancedFilters = ({
+  filterOptions,
+  onFilterChange,
+  regions,
+}: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -31,57 +40,44 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
   const handleCookingTimeChange = (min: number | null, max: number | null) => {
     onFilterChange({
       ...filterOptions,
-      cookingTime: { min, max },
+      cookingTime: {
+        min: filterOptions.cookingTime.min === min ? null : min,
+        max: filterOptions.cookingTime.max === max ? null : max,
+      },
     });
   };
 
   const handleServingsChange = (min: number | null, max: number | null) => {
     onFilterChange({
       ...filterOptions,
-      servings: { min, max },
-    });
-  };
-
-  const handleIngredientTypeChange = (type: IngredientType) => {
-    const types = [...filterOptions.mainIngredientTypes];
-    const index = types.indexOf(type);
-
-    if (index >= 0) {
-      types.splice(index, 1);
-    } else {
-      types.push(type);
-    }
-
-    onFilterChange({
-      ...filterOptions,
-      mainIngredientTypes: types,
+      servings: {
+        min: filterOptions.servings.min === min ? null : min,
+        max: filterOptions.servings.max === max ? null : max,
+      },
     });
   };
 
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.container}
-    >
-      {/* Lọc theo loại món */}
+    <View style={styles.container}>
+      {/* Loại món */}
       <View style={styles.filterGroup}>
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Loại món
         </Typography>
-        <View style={styles.buttonGroup}>
+        <View style={styles.chipContainer}>
           <TouchableOpacity
             style={[
-              styles.filterButton,
-              filterOptions.category === 'vegetarian' && styles.activeButton,
+              styles.chip,
+              filterOptions.category === 'vegetarian' && styles.activeChip,
             ]}
             onPress={() => handleCategoryChange('vegetarian')}
           >
             <Typography
               variant="body2"
               style={[
-                styles.buttonText,
-                filterOptions.category === 'vegetarian' && styles.activeText,
+                styles.chipText,
+                filterOptions.category === 'vegetarian' &&
+                  styles.activeChipText,
               ]}
             >
               Chay
@@ -89,18 +85,17 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[
-              styles.filterButton,
-              filterOptions.category === 'non-vegetarian' &&
-                styles.activeButton,
+              styles.chip,
+              filterOptions.category === 'non-vegetarian' && styles.activeChip,
             ]}
             onPress={() => handleCategoryChange('non-vegetarian')}
           >
             <Typography
               variant="body2"
               style={[
-                styles.buttonText,
+                styles.chipText,
                 filterOptions.category === 'non-vegetarian' &&
-                  styles.activeText,
+                  styles.activeChipText,
               ]}
             >
               Mặn
@@ -109,26 +104,26 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
         </View>
       </View>
 
-      {/* Lọc theo độ khó */}
+      {/* Độ khó */}
       <View style={styles.filterGroup}>
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Độ khó
         </Typography>
-        <View style={styles.buttonGroup}>
+        <View style={styles.chipContainer}>
           {[1, 2, 3, 4, 5].map((level) => (
             <TouchableOpacity
               key={level}
               style={[
-                styles.filterButton,
-                filterOptions.difficulty === level && styles.activeButton,
+                styles.chip,
+                filterOptions.difficulty === level && styles.activeChip,
               ]}
               onPress={() => handleDifficultyChange(level)}
             >
               <Typography
                 variant="body2"
                 style={[
-                  styles.buttonText,
-                  filterOptions.difficulty === level && styles.activeText,
+                  styles.chipText,
+                  filterOptions.difficulty === level && styles.activeChipText,
                 ]}
               >
                 {level}
@@ -138,30 +133,30 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
         </View>
       </View>
 
-      {/* Lọc theo thời gian nấu */}
+      {/* Thời gian nấu */}
       <View style={styles.filterGroup}>
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Thời gian
         </Typography>
-        <View style={styles.buttonGroup}>
+        <View style={styles.chipContainer}>
           {COOKING_TIME_RANGES.map((range) => (
             <TouchableOpacity
               key={range.label}
               style={[
-                styles.filterButton,
+                styles.chip,
                 filterOptions.cookingTime.min === range.min &&
                   filterOptions.cookingTime.max === range.max &&
-                  styles.activeButton,
+                  styles.activeChip,
               ]}
               onPress={() => handleCookingTimeChange(range.min, range.max)}
             >
               <Typography
                 variant="body2"
                 style={[
-                  styles.buttonText,
+                  styles.chipText,
                   filterOptions.cookingTime.min === range.min &&
                     filterOptions.cookingTime.max === range.max &&
-                    styles.activeText,
+                    styles.activeChipText,
                 ]}
               >
                 {range.label}
@@ -171,30 +166,30 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
         </View>
       </View>
 
-      {/* Lọc theo số người ăn */}
+      {/* Số người ăn */}
       <View style={styles.filterGroup}>
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Số người
         </Typography>
-        <View style={styles.buttonGroup}>
+        <View style={styles.chipContainer}>
           {SERVINGS_RANGES.map((range) => (
             <TouchableOpacity
               key={range.label}
               style={[
-                styles.filterButton,
+                styles.chip,
                 filterOptions.servings.min === range.min &&
                   filterOptions.servings.max === range.max &&
-                  styles.activeButton,
+                  styles.activeChip,
               ]}
               onPress={() => handleServingsChange(range.min, range.max)}
             >
               <Typography
                 variant="body2"
                 style={[
-                  styles.buttonText,
+                  styles.chipText,
                   filterOptions.servings.min === range.min &&
                     filterOptions.servings.max === range.max &&
-                    styles.activeText,
+                    styles.activeChipText,
                 ]}
               >
                 {range.label}
@@ -203,44 +198,42 @@ export const AdvancedFilters = ({ filterOptions, onFilterChange }: Props) => {
           ))}
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const createStyles = (theme: any) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: theme.spacing.md,
       gap: theme.spacing.lg,
     },
     filterGroup: {
-      marginRight: theme.spacing.lg,
+      gap: theme.spacing.sm,
     },
     groupTitle: {
       marginBottom: theme.spacing.xs,
-      color: theme.colors.text.secondary,
     },
-    buttonGroup: {
+    chipContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: theme.spacing.xs,
+      gap: theme.spacing.sm,
     },
-    filterButton: {
+    chip: {
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
-      borderRadius: theme.spacing.sm,
+      borderRadius: theme.spacing.lg,
       backgroundColor: theme.colors.background.paper,
       borderWidth: 1,
       borderColor: theme.colors.divider,
     },
-    activeButton: {
+    activeChip: {
       backgroundColor: theme.colors.primary.main,
       borderColor: theme.colors.primary.main,
     },
-    buttonText: {
+    chipText: {
       color: theme.colors.text.primary,
     },
-    activeText: {
+    activeChipText: {
       color: theme.colors.primary.contrast,
     },
   });

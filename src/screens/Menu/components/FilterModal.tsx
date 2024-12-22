@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Modal,
@@ -19,7 +19,8 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   filterOptions: FilterOptions;
-  onFilterChange: (newOptions: FilterOptions) => void;
+  onFilterChange: (options: FilterOptions) => void;
+  onApply: (options: FilterOptions) => void;
   regions: string[];
   quickFilterSettings: QuickFilterSettings;
   onQuickFilterSettingsChange: (settings: QuickFilterSettings) => void;
@@ -30,6 +31,7 @@ export const FilterModal = ({
   onClose,
   filterOptions,
   onFilterChange,
+  onApply,
   regions,
   quickFilterSettings,
   onQuickFilterSettingsChange,
@@ -38,14 +40,23 @@ export const FilterModal = ({
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme);
 
+  const [tempFilterOptions, setTempFilterOptions] =
+    useState<FilterOptions>(filterOptions);
+
   const activeFiltersCount = [
-    filterOptions.region,
-    filterOptions.category,
-    filterOptions.difficulty,
-    filterOptions.cookingTime.min || filterOptions.cookingTime.max,
-    filterOptions.servings.min || filterOptions.servings.max,
-    filterOptions.mainIngredientTypes.length > 0,
+    tempFilterOptions.region,
+    tempFilterOptions.category,
+    tempFilterOptions.difficulty,
+    tempFilterOptions.cookingTime.min || tempFilterOptions.cookingTime.max,
+    tempFilterOptions.servings.min || tempFilterOptions.servings.max,
+    tempFilterOptions.mainIngredientTypes.length > 0,
+    tempFilterOptions.showFavorites,
   ].filter(Boolean).length;
+
+  const handleApply = () => {
+    onApply(tempFilterOptions);
+    onClose();
+  };
 
   return (
     <Modal
@@ -55,24 +66,49 @@ export const FilterModal = ({
       onRequestClose={onClose}
     >
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        {/* Header */}
+        {/* Header mới với thiết kế tối giản */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons
-              name="close"
-              size={24}
-              color={theme.colors.text.primary}
-            />
-          </TouchableOpacity>
-          <Typography variant="h2" style={styles.title}>
-            Bộ lọc
-          </Typography>
-          <Typography variant="body2" color="secondary">
+          <View style={styles.headerTop}>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons
+                name="close"
+                size={24}
+                color={theme.colors.text.primary}
+              />
+            </TouchableOpacity>
+            <Typography variant="h2" style={styles.title}>
+              Bộ lọc
+            </Typography>
+            <TouchableOpacity
+              style={styles.resetButton}
+              onPress={() => {
+                setTempFilterOptions({
+                  ...tempFilterOptions,
+                  region: null,
+                  category: null,
+                  difficulty: null,
+                  cookingTime: { min: null, max: null },
+                  servings: { min: null, max: null },
+                  mainIngredientTypes: [],
+                });
+              }}
+            >
+              <Typography variant="body2" color="error">
+                Đặt lại
+              </Typography>
+            </TouchableOpacity>
+          </View>
+
+          <Typography
+            variant="body2"
+            color="secondary"
+            style={styles.filterCount}
+          >
             {activeFiltersCount} bộ lọc đang áp dụng
           </Typography>
         </View>
 
-        {/* Filter Content */}
+        {/* Content */}
         <ScrollView style={styles.content}>
           <View style={styles.section}>
             <FilterSettings
@@ -87,58 +123,37 @@ export const FilterModal = ({
             </Typography>
             <RegionFilter
               regions={regions}
-              selectedRegion={filterOptions.region}
+              selectedRegion={tempFilterOptions.region}
               onSelectRegion={(region) =>
-                onFilterChange({ ...filterOptions, region })
+                setTempFilterOptions({ ...tempFilterOptions, region })
               }
-              showFavorites={filterOptions.showFavorites}
+              showFavorites={tempFilterOptions.showFavorites}
               onToggleFavorites={() =>
-                onFilterChange({
-                  ...filterOptions,
-                  showFavorites: !filterOptions.showFavorites,
+                setTempFilterOptions({
+                  ...tempFilterOptions,
+                  showFavorites: !tempFilterOptions.showFavorites,
                 })
               }
             />
           </View>
 
-          <View style={styles.section}>
+          <View style={[styles.section, styles.lastSection]}>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Bộ lọc nâng cao
             </Typography>
             <AdvancedFilters
-              filterOptions={filterOptions}
-              onFilterChange={onFilterChange}
+              filterOptions={tempFilterOptions}
+              onFilterChange={setTempFilterOptions}
+              regions={regions}
             />
           </View>
         </ScrollView>
 
-        {/* Footer */}
+        {/* Footer mới với nút áp dụng to hơn */}
         <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.resetButton}
-            onPress={() => {
-              onFilterChange({
-                ...filterOptions,
-                region: null,
-                category: null,
-                difficulty: null,
-                cookingTime: { min: null, max: null },
-                servings: { min: null, max: null },
-                mainIngredientTypes: [],
-              });
-            }}
-          >
-            <Typography variant="body2" color="error">
-              Đặt lại
-            </Typography>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.applyButton} onPress={onClose}>
-            <Typography
-              variant="body2"
-              style={{ color: theme.colors.primary.contrast }}
-            >
-              Áp dụng ({activeFiltersCount})
+          <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
+            <Typography variant="body2" style={styles.applyButtonText}>
+              Áp dụng {activeFiltersCount > 0 ? `(${activeFiltersCount})` : ''}
             </Typography>
           </TouchableOpacity>
         </View>
@@ -159,45 +174,65 @@ const createStyles = (theme: any) =>
       borderBottomColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
     },
+    headerTop: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: theme.spacing.xs,
+    },
     closeButton: {
-      padding: theme.spacing.sm,
-      marginBottom: theme.spacing.sm,
+      padding: theme.spacing.xs,
     },
     title: {
-      marginBottom: theme.spacing.xs,
+      flex: 1,
+      textAlign: 'center',
+      fontSize: 20,
+      fontWeight: '600',
+    },
+    filterCount: {
+      textAlign: 'left',
+      marginTop: theme.spacing.xs,
+      marginLeft: theme.spacing.xs,
     },
     content: {
       flex: 1,
     },
     section: {
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
+      backgroundColor: theme.colors.background.paper,
+    },
+    lastSection: {
+      borderBottomWidth: 0,
+      paddingBottom: theme.spacing.xl * 2,
     },
     sectionTitle: {
       marginBottom: theme.spacing.md,
+      fontSize: 18,
+      fontWeight: '600',
     },
     footer: {
-      flexDirection: 'row',
       padding: theme.spacing.md,
+      paddingBottom: theme.spacing.lg,
       borderTopWidth: 1,
       borderTopColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
-      gap: theme.spacing.md,
-    },
-    resetButton: {
-      flex: 1,
-      padding: theme.spacing.md,
-      alignItems: 'center',
-      borderWidth: 1,
-      borderColor: theme.colors.error.main,
-      borderRadius: theme.spacing.md,
     },
     applyButton: {
-      flex: 2,
-      padding: theme.spacing.md,
-      alignItems: 'center',
       backgroundColor: theme.colors.primary.main,
-      borderRadius: theme.spacing.md,
+      padding: theme.spacing.md,
+      borderRadius: theme.spacing.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...theme.shadows.md,
+    },
+    applyButtonText: {
+      color: theme.colors.primary.contrast,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    resetButton: {
+      padding: theme.spacing.xs,
     },
   });

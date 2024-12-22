@@ -23,9 +23,9 @@ import { useToast } from '../../hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchHistoryService } from '../../services/searchHistoryService';
 import { useAuth } from '../../context/AuthContext';
-import { AdvancedFilters } from './components/AdvancedFilters';
 import { FilterModal } from './components/FilterModal';
 import { QuickFilterSettings } from './components/FilterSettings';
+import { FilterOptions } from './types';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -72,6 +72,8 @@ export default function MenuScreen() {
       showCategories: false,
       showDifficulty: false,
     });
+  const [tempFilterOptions, setTempFilterOptions] =
+    useState<FilterOptions>(filterOptions);
 
   const activeFiltersCount = [
     filterOptions.region,
@@ -186,6 +188,16 @@ export default function MenuScreen() {
     );
   };
 
+  const handleCloseFilterModal = () => {
+    setTempFilterOptions(filterOptions);
+    setShowFilterModal(false);
+  };
+
+  const handleApplyFilter = (newFilterOptions: FilterOptions) => {
+    setFilterOptions(newFilterOptions);
+    setShowFilterModal(false);
+  };
+
   return (
     <View
       style={{
@@ -230,9 +242,10 @@ export default function MenuScreen() {
 
           <FilterModal
             visible={showFilterModal}
-            onClose={() => setShowFilterModal(false)}
-            filterOptions={filterOptions}
-            onFilterChange={setFilterOptions}
+            onClose={handleCloseFilterModal}
+            filterOptions={tempFilterOptions}
+            onFilterChange={setTempFilterOptions}
+            onApply={handleApplyFilter}
             regions={regions}
             quickFilterSettings={quickFilterSettings}
             onQuickFilterSettingsChange={setQuickFilterSettings}
