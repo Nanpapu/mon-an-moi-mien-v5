@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe, Review } from '../../../types';
-import { createStyles } from '../RecipeCard.styles';
+import { createStyles } from './RecipeReviews.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { ReviewModal, ReviewsList } from '../../reviews';
@@ -79,7 +79,7 @@ export const RecipeReviews = ({ recipe }: Props) => {
       const reviewsList = await ReviewService.getRecipeReviews(recipe.id);
       setAllReviews(reviewsList);
     } catch (error) {
-      console.error('Lỗi khi t��i đánh giá:', error);
+      console.error('Lỗi khi tải đánh giá:', error);
     }
   };
 

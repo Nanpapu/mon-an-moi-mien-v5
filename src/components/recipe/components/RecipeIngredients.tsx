@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Ingredient } from '../../../types';
-import { createStyles } from '../RecipeCard.styles';
+import { createStyles } from './RecipeIngredients.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 

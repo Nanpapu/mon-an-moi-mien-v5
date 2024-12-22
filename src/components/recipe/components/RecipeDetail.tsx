@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Recipe } from '../../../types';
-import { createStyles } from '../RecipeCard.styles';
+import { createStyles } from './RecipeDetail.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import {
   RecipeHeader,
