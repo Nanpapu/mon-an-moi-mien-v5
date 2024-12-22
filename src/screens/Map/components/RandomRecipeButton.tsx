@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Easing,
+  View,
+} from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
@@ -34,6 +40,7 @@ export function RandomRecipeButton({
   const spinValue = useRef(new Animated.Value(0)).current;
   // State quản lý trạng thái scale
   const scaleValue = useRef(new Animated.Value(1)).current;
+  const [isPressed, setIsPressed] = useState(false);
 
   // Reset animation khi isAnimating thay đổi
   useEffect(() => {
@@ -108,40 +115,61 @@ export function RandomRecipeButton({
   };
 
   return (
-    <Tooltip text="Khám phá ngẫu nhiên một công thức nấu ăn">
-      <TouchableOpacity
-        style={[
-          styles.button,
-          {
-            backgroundColor: theme.colors.background.paper,
-            opacity: disabled || isAnimating ? 0.6 : 1,
-            ...theme.shadows.sm,
-          },
-        ]}
-        onPress={handleRandomRecipe}
-        disabled={disabled || isLoading || isAnimating}
-      >
+    <View style={[styles.buttonContainer, { pointerEvents: 'box-none' }]}>
+      <Tooltip text="Khám phá ngẫu nhiên một công thức nấu ăn">
         <Animated.View
-          style={{
-            transform: [{ rotate: spin }, { scale: scaleValue }],
-          }}
+          style={[
+            styles.button,
+            {
+              backgroundColor: theme.colors.background.paper,
+              opacity: disabled || isAnimating ? 0.6 : 1,
+              ...theme.shadows.sm,
+            },
+          ]}
         >
-          <Ionicons name="dice" size={24} color={theme.colors.primary.main} />
+          <TouchableOpacity
+            onPress={handleRandomRecipe}
+            disabled={disabled || isLoading || isAnimating}
+            style={styles.touchable}
+          >
+            <Animated.View
+              style={{
+                transform: [{ rotate: spin }, { scale: scaleValue }],
+              }}
+            >
+              <Ionicons
+                name="dice"
+                size={24}
+                color={theme.colors.primary.main}
+              />
+            </Animated.View>
+          </TouchableOpacity>
         </Animated.View>
-      </TouchableOpacity>
-    </Tooltip>
+      </Tooltip>
+    </View>
   );
 }
 
 // Styles cho button
 const styles = StyleSheet.create({
-  button: {
+  buttonContainer: {
     position: 'absolute',
-    bottom: 20, // Đưa xuống sát bottom
-    left: 16, // Đặt bên trái màn hình
+    bottom: 20,
+    left: 16,
     width: 48,
     height: 48,
+    zIndex: 1,
+  },
+  button: {
+    width: '100%',
+    height: '100%',
     borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  touchable: {
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
