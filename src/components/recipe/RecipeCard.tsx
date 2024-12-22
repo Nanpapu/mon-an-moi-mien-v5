@@ -111,6 +111,21 @@ export function RecipeCard({
           <RecipeMeta recipe={recipe} />
         </View>
 
+        {showActions && (
+          <View
+            style={[
+              styles.actionsContainer,
+              { marginBottom: theme.spacing.md },
+            ]}
+          >
+            <RecipeActions
+              recipe={recipe}
+              onSave={onSave}
+              onDelete={onDelete}
+            />
+          </View>
+        )}
+
         {showDetails && (
           <View style={styles.details}>
             <RecipeIngredients ingredients={recipe.ingredients} />
@@ -123,16 +138,6 @@ export function RecipeCard({
                 <RecipeReviews recipe={recipe} />
               </View>
             )}
-          </View>
-        )}
-
-        {showActions && (
-          <View style={styles.actionsContainer}>
-            <RecipeActions
-              recipe={recipe}
-              onSave={onSave}
-              onDelete={onDelete}
-            />
           </View>
         )}
       </View>
