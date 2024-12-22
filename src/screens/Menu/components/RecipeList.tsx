@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, View, RefreshControl } from 'react-native';
+import {
+  ScrollView,
+  View,
+  RefreshControl,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import { Recipe } from '../../../types';
 import { RecipeGridItem } from './RecipeGridItem';
 import { RecipeDetailModal } from './RecipeDetailModal';
@@ -9,6 +15,9 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { useGridZoom } from '../hooks/useGridZoom';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecipes } from '../../../context/RecipeContext';
+import { RecipeCard } from '../../../components/recipe/RecipeCard';
+import { Ionicons } from '@expo/vector-icons';
+import { Typography } from '../../../components/shared/Typography';
 
 interface Props {
   isLoading: boolean;
@@ -90,18 +99,41 @@ export const RecipeList = ({
         </View>
       </ScrollView>
 
-      {!isSelectionMode && (
-        <RecipeDetailModal
+      {!isSelectionMode && selectedRecipe && (
+        <Modal
           visible={!!selectedRecipe}
-          recipe={selectedRecipe}
-          onClose={() => {
-            setSelectedRecipe(null);
-            refreshSavedRecipes(); // Refresh sau khi đóng
-          }}
-          onDelete={onDeleteRecipe}
-          // onSave={handleSaveRecipe}
-          showReviews={true}
-        />
+          animationType="slide"
+          presentationStyle="fullScreen"
+          onRequestClose={() => setSelectedRecipe(null)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <TouchableOpacity
+                onPress={() => setSelectedRecipe(null)}
+                style={styles.backButton}
+              >
+                <Ionicons
+                  name="arrow-back"
+                  size={24}
+                  color={theme.colors.text.primary}
+                />
+              </TouchableOpacity>
+              <Typography variant="h2" style={styles.modalTitle}>
+                {selectedRecipe.name}
+              </Typography>
+            </View>
+
+            <ScrollView style={{ flex: 1 }}>
+              <RecipeCard
+                recipe={selectedRecipe}
+                mode="detailed"
+                showActions={true}
+                showReviews={true}
+                onDelete={onDeleteRecipe}
+              />
+            </ScrollView>
+          </View>
+        </Modal>
       )}
     </>
   );

@@ -139,5 +139,28 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       padding: 4,
       ...theme.shadows.sm,
     },
+    // Thêm vào object StyleSheet.create
+    modalContainer: {
+      flex: 1,
+      backgroundColor: theme.colors.background.default,
+      paddingTop: insets.top,
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: theme.spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.divider,
+      backgroundColor: theme.colors.background.paper,
+      ...theme.shadows.sm,
+    },
+    backButton: {
+      padding: theme.spacing.sm,
+      marginRight: theme.spacing.sm,
+    },
+    modalTitle: {
+      fontSize: 20,
+      flex: 1,
+    },
   });
 };

@@ -21,6 +21,7 @@ interface Props {
   onDelete?: (recipe: Recipe) => void;
   showActions?: boolean;
   showReviews?: boolean;
+  mode?: 'compact' | 'detailed';
 }
 
 export function RecipeCard({
@@ -29,10 +30,11 @@ export function RecipeCard({
   onDelete,
   showActions = false,
   showReviews = false,
+  mode = 'compact',
 }: Props) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(mode === 'detailed');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [showImageViewer, setShowImageViewer] = useState(false);
 
@@ -68,7 +70,9 @@ export function RecipeCard({
         <RecipeHeader
           recipe={recipe}
           showDetails={showDetails}
-          onToggleDetails={() => setShowDetails(!showDetails)}
+          onToggleDetails={() =>
+            mode === 'compact' && setShowDetails(!showDetails)
+          }
         />
 
         <View style={styles.metaContainer}>
@@ -80,8 +84,9 @@ export function RecipeCard({
             <RecipeIngredients ingredients={recipe.ingredients} />
             <InstructionsSection
               instructions={recipe.instructions}
-              defaultExpanded={false}
+              defaultExpanded={mode === 'detailed'}
             />
+            {showReviews && <RecipeReviews recipe={recipe} />}
           </View>
         )}
 
@@ -92,12 +97,6 @@ export function RecipeCard({
               onSave={onSave}
               onDelete={onDelete}
             />
-          </View>
-        )}
-
-        {showReviews && (
-          <View style={styles.reviewsContainer}>
-            <RecipeReviews recipe={recipe} />
           </View>
         )}
       </View>
