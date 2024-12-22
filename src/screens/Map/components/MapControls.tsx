@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,12 +6,13 @@ import {
   Animated,
   Platform,
   TextInput,
+  Dimensions,
+  Easing,
 } from 'react-native';
 import { RandomRecipeButton } from './RandomRecipeButton';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
-import { SearchBar } from './SearchBar';
 
 interface Props {
   onRefresh: () => Promise<void>;
@@ -39,9 +40,24 @@ export function MapControls({
   const reloadTop = useRef(new Animated.Value(20)).current;
   const spinValue = useRef(new Animated.Value(0)).current;
 
-  const expandedWidth = Platform.OS === 'ios' ? 358 : 328;
+  useEffect(() => {
+    if (isRefreshing) {
+      Animated.loop(
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+    } else {
+      spinValue.setValue(0);
+    }
+  }, [isRefreshing]);
 
   const toggleSearch = () => {
+    const screenWidth = Dimensions.get('window').width;
+    const expandedWidth = screenWidth - 32;
     const toValue = showSearch ? 48 : expandedWidth;
     const newTop = showSearch ? 20 : 80;
 
@@ -61,28 +77,6 @@ export function MapControls({
     ]).start();
   };
 
-  const handleSubmit = () => {
-    if (searchQuery.trim()) {
-      onSearch(searchQuery);
-      setSearchQuery('');
-      toggleSearch();
-    }
-  };
-
-  React.useEffect(() => {
-    if (isRefreshing) {
-      Animated.loop(
-        Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        })
-      ).start();
-    } else {
-      spinValue.setValue(0);
-    }
-  }, [isRefreshing]);
-
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
@@ -90,7 +84,50 @@ export function MapControls({
 
   return (
     <>
-      <SearchBar onSearch={onSearch} />
+      <Animated.View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: theme.colors.background.paper,
+            width: searchWidth,
+            ...theme.shadows.sm,
+          },
+        ]}
+      >
+        {!showSearch ? (
+          <TouchableOpacity onPress={toggleSearch} style={styles.searchIcon}>
+            <Ionicons
+              name="search"
+              size={24}
+              color={theme.colors.text.secondary}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.searchInputWrapper}>
+            <TouchableOpacity onPress={toggleSearch} style={styles.searchIcon}>
+              <Ionicons
+                name="arrow-back"
+                size={24}
+                color={theme.colors.text.secondary}
+              />
+            </TouchableOpacity>
+            <View style={styles.searchBarWrapper}>
+              <TextInput
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                placeholder="Tìm kiếm địa điểm..."
+                placeholderTextColor={theme.colors.text.secondary}
+                style={[styles.input, { color: theme.colors.text.primary }]}
+                onSubmitEditing={() => {
+                  onSearch(searchQuery);
+                  setSearchQuery('');
+                  toggleSearch();
+                }}
+              />
+            </View>
+          </View>
+        )}
+      </Animated.View>
 
       <Animated.View
         style={[
