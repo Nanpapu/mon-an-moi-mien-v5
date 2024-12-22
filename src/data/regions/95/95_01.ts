@@ -1,7 +1,7 @@
 import { Recipe } from '../../../types';
 import { UNITS } from '../../../constants/units';
 
-export const banhCungBacLieu: Recipe = {
+export const banhCongBacLieu: Recipe = {
   id: '95_01',
   name: 'Bánh Cống Bạc Liêu',
   region: 'Miền Nam',
@@ -200,4 +200,4 @@ export const banhCungBacLieu: Recipe = {
     ],
   },
 };
-export default banhCungBacLieu;
+export default banhCongBacLieu;

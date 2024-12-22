@@ -5,8 +5,8 @@ export const region: Region = {
   id: '75',
   name: 'Đồng Nai',
   coordinate: {
-    latitude: 21.0285,
-    longitude: 105.8542,
+    latitude: 10.9374,
+    longitude: 106.8837,
   },
   recipes: [banhBeoBienHoa],
 };

@@ -5,8 +5,8 @@ export const region: Region = {
   id: '19',
   name: 'Thái Nguyên',
   coordinate: {
-    latitude: 9.294,
-    longitude: 105.7216,
+    latitude: 21.5942,
+    longitude: 105.8248,
   },
   recipes: [comLamThaiNguyen],
 };

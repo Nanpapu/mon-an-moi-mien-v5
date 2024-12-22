@@ -1,5 +1,5 @@
 import { Region } from '../../../types';
-import { banhCungBacLieu } from './95_01';  
+import { banhCongBacLieu } from './95_01';  
 
 export const region: Region = {
   id: '95',
@@ -8,7 +8,7 @@ export const region: Region = {
     latitude: 9.294,
     longitude: 105.7216,
   },
-  recipes: [banhCungBacLieu],
+  recipes: [banhCongBacLieu],
 };
 
 export default region;
