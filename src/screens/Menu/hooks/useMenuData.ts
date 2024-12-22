@@ -4,12 +4,14 @@ import { Recipe } from '../../../types';
 import { removeRecipe, migrateSavedRecipes } from '../../../utils/storage';
 import { useRecipes } from '../../../context/RecipeContext';
 import { useToast } from '../../../hooks/useToast';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useMenuData = () => {
   const { savedRecipes, refreshSavedRecipes } = useRecipes();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
+  const { user } = useAuth();
 
   useEffect(() => {
     loadData();
@@ -18,8 +20,10 @@ export const useMenuData = () => {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      await migrateSavedRecipes();
-      await refreshSavedRecipes();
+      if (user) {
+        await migrateSavedRecipes(user.uid);
+        await refreshSavedRecipes();
+      }
     } catch (error) {
       console.error('Lỗi khi load dữ liệu:', error);
       showToast('error', 'Không thể tải dữ liệu');
@@ -29,6 +33,11 @@ export const useMenuData = () => {
   };
 
   const handleDeleteRecipe = async (recipe: Recipe) => {
+    if (!user) {
+      showToast('error', 'Bạn cần đăng nhập để xóa công thức');
+      return;
+    }
+
     try {
       Alert.alert(
         'Xác nhận xóa',
@@ -43,7 +52,7 @@ export const useMenuData = () => {
             style: 'destructive',
             onPress: async () => {
               setIsLoading(true);
-              const success = await removeRecipe(recipe.id);
+              const success = await removeRecipe(recipe.id, user.uid);
 
               if (success) {
                 await refreshSavedRecipes();
@@ -68,7 +77,8 @@ export const useMenuData = () => {
     isRefreshing,
     isLoading,
     setIsLoading,
-    refreshSavedRecipes,
     handleDeleteRecipe,
+    loadData,
+    refreshSavedRecipes,
   };
 };

@@ -17,6 +17,7 @@ import { RegionService } from '../../services/regionService';
 import { ViewVietnamButton } from './components/ViewVietnamButton';
 import { useToast } from '../../hooks/useToast';
 import { useRandomAnimation } from './hooks/useRandomAnimation';
+import { useAuth } from '../../context/AuthContext';
 
 export default function MapScreen({ navigation }: { navigation: any }) {
   const { theme } = useTheme();
@@ -48,6 +49,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const { showToast } = useToast();
   const { animateRandomSearch, cleanupAnimation } = useRandomAnimation(mapRef);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsMapReady(true);
@@ -74,17 +77,22 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   }, [navigation, isRandomAnimating, cleanupAnimation]);
 
   const handleSaveRecipe = async (recipe: Recipe) => {
+    if (!user) {
+      Alert.alert('Yêu cầu đăng nhập', 'Bạn cần đăng nhập để lưu công thức.', [
+        {
+          text: 'Để sau',
+          style: 'cancel',
+        },
+        {
+          text: 'Đăng nhập',
+          onPress: () => navigation.navigate('Cá nhân'),
+        },
+      ]);
+      return false;
+    }
+
     try {
-      const region = regions.find((r) =>
-        r.recipes.some((rcp) => rcp.id === recipe.id)
-      );
-      if (!region) {
-        throw new Error('Không tìm thấy vùng miền của công thức');
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const success = await saveRecipe(recipe, region);
+      const success = await saveRecipe(recipe, user.uid);
       if (success) {
         showToast('success', 'Đã lưu công thức');
       } else {

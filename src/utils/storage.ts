@@ -4,33 +4,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Recipe, Region } from '../types';
 
 // Khóa lưu trữ cho danh sách công thức
-const SAVED_RECIPES_KEY = '@saved_recipes';
+const SAVED_RECIPES_KEY = (userId: string) => `saved_recipes_${userId}`;
 
 // FUNCTIONS
 // Lưu một công thức mới vào storage
-export const saveRecipe = async (recipe: Recipe, region: Region) => {
+export const saveRecipe = async (
+  recipe: Recipe,
+  userId: string
+): Promise<boolean> => {
   try {
-    const savedRecipes = await getSavedRecipes();
+    const key = SAVED_RECIPES_KEY(userId);
+    const savedRecipesStr = await AsyncStorage.getItem(key);
+    let savedRecipes: Recipe[] = savedRecipesStr
+      ? JSON.parse(savedRecipesStr)
+      : [];
 
-    // Lấy regionId từ id của recipe (vd: "01_01" -> "01")
-    const regionId = region.id;
-
-    const updatedRecipe = {
-      ...recipe,
-      image: recipe.image.startsWith('http')
-        ? `recipes/images/${regionId}/${recipe.id}.jpg`
-        : recipe.image,
-    };
-
-    if (!savedRecipes.find((r) => r.id === recipe.id)) {
-      const newSavedRecipes = [...savedRecipes, updatedRecipe];
-      await AsyncStorage.setItem(
-        SAVED_RECIPES_KEY,
-        JSON.stringify(newSavedRecipes)
-      );
-      return true;
+    if (savedRecipes.some((r) => r.id === recipe.id)) {
+      return false;
     }
-    return false;
+
+    savedRecipes.push(recipe);
+    await AsyncStorage.setItem(key, JSON.stringify(savedRecipes));
+    return true;
   } catch (error) {
     console.error('Lỗi khi lưu công thức:', error);
     return false;
@@ -38,12 +33,11 @@ export const saveRecipe = async (recipe: Recipe, region: Region) => {
 };
 
 // Lấy danh sách tất cả công thức đã lưu
-export const getSavedRecipes = async (): Promise<Recipe[]> => {
+export const getSavedRecipes = async (userId: string): Promise<Recipe[]> => {
   try {
-    // Đọc dữ liệu từ storage
-    const savedRecipes = await AsyncStorage.getItem(SAVED_RECIPES_KEY);
-    // Chuyển đổi từ JSON string sang mảng object
-    return savedRecipes ? JSON.parse(savedRecipes) : [];
+    const key = SAVED_RECIPES_KEY(userId);
+    const savedRecipesStr = await AsyncStorage.getItem(key);
+    return savedRecipesStr ? JSON.parse(savedRecipesStr) : [];
   } catch (error) {
     console.error('Lỗi khi lấy công thức đã lưu:', error);
     return [];
@@ -51,25 +45,21 @@ export const getSavedRecipes = async (): Promise<Recipe[]> => {
 };
 
 // Xóa một công thức khỏi danh sách đã lưu
-export const removeRecipe = async (recipeId: string): Promise<boolean> => {
+export const removeRecipe = async (
+  recipeId: string,
+  userId: string
+): Promise<boolean> => {
   try {
-    // Lấy danh sách công thức hiện tại
-    const savedRecipesStr = await AsyncStorage.getItem(SAVED_RECIPES_KEY);
+    const key = SAVED_RECIPES_KEY(userId);
+    const savedRecipesStr = await AsyncStorage.getItem(key);
     if (!savedRecipesStr) return false;
 
     const savedRecipes: Recipe[] = JSON.parse(savedRecipesStr);
-
-    // Lọc bỏ công thức cần xóa
     const updatedRecipes = savedRecipes.filter(
       (recipe) => recipe.id !== recipeId
     );
 
-    // Lưu lại danh sách mới
-    await AsyncStorage.setItem(
-      SAVED_RECIPES_KEY,
-      JSON.stringify(updatedRecipes)
-    );
-
+    await AsyncStorage.setItem(key, JSON.stringify(updatedRecipes));
     return true;
   } catch (error) {
     console.error('Lỗi khi xóa công thức:', error);
@@ -77,9 +67,9 @@ export const removeRecipe = async (recipeId: string): Promise<boolean> => {
   }
 };
 
-export const migrateSavedRecipes = async () => {
+export const migrateSavedRecipes = async (userId: string) => {
   try {
-    const savedRecipes = await getSavedRecipes();
+    const savedRecipes = await getSavedRecipes(userId);
 
     const updatedRecipes = savedRecipes.map((recipe) => {
       const regionId = recipe.id.split('_')[0];
@@ -93,10 +83,9 @@ export const migrateSavedRecipes = async () => {
     });
 
     await AsyncStorage.setItem(
-      SAVED_RECIPES_KEY,
+      SAVED_RECIPES_KEY(userId),
       JSON.stringify(updatedRecipes)
     );
-
     return true;
   } catch (error) {
     console.error('Lỗi khi migrate dữ liệu:', error);

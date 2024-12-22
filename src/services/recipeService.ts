@@ -7,6 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { COLLECTIONS } from '../constants/collections';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Recipe, Region } from '../types';
 
 /**
  * Service quản lý công thức nấu ăn
@@ -22,20 +23,22 @@ export const RecipeService = {
   getRecipeById: async (recipeId: string) => {
     try {
       const cacheKey = `${CACHE_KEYS.RECIPES}${recipeId}`;
-      
+
       // Lấy recipe và stats
       const recipeDoc = await getDoc(doc(db, COLLECTIONS.RECIPES, recipeId));
-      const statsDoc = await getDoc(doc(db, COLLECTIONS.RECIPE_STATS, recipeId));
+      const statsDoc = await getDoc(
+        doc(db, COLLECTIONS.RECIPE_STATS, recipeId)
+      );
 
       if (!recipeDoc.exists()) return null;
 
-      const recipe = { 
-        id: recipeDoc.id, 
+      const recipe = {
+        id: recipeDoc.id,
         ...recipeDoc.data(),
         rating: statsDoc.exists() ? statsDoc.data().averageRating : 0,
-        totalReviews: statsDoc.exists() ? statsDoc.data().totalReviews : 0
+        totalReviews: statsDoc.exists() ? statsDoc.data().totalReviews : 0,
       };
-      
+
       // Luôn cập nhật cache mới nhất
       await CacheService.setCache(cacheKey, recipe);
       return recipe;
@@ -62,7 +65,9 @@ export const RecipeService = {
         return cachedRecipes;
       }
 
-      const savedRecipes = await AsyncStorage.getItem(`saved_recipes_${userId}`);
+      const savedRecipes = await AsyncStorage.getItem(
+        `saved_recipes_${userId}`
+      );
       if (savedRecipes) {
         const recipes = JSON.parse(savedRecipes);
         await CacheService.setCache(cacheKey, recipes);
@@ -82,5 +87,43 @@ export const RecipeService = {
 
   clearSavedRecipesCache: async (userId: string) => {
     await CacheService.clearCache(`${CACHE_KEYS.SAVED_RECIPES}${userId}`);
-  }
-}; 
+  },
+
+  /**
+   * Lưu công thức vào danh sách yêu thích của user
+   * @param recipe - Công thức cần lưu
+   * @param userId - ID của user đang đăng nhập
+   * @returns Promise<boolean> - true nếu lưu thành công
+   */
+  saveRecipe: async (recipe: Recipe, userId: string, region?: Region) => {
+    try {
+      const cacheKey = `${CACHE_KEYS.SAVED_RECIPES}${userId}`;
+      const savedRecipes = await AsyncStorage.getItem(
+        `saved_recipes_${userId}`
+      );
+      let recipes: Recipe[] = savedRecipes ? JSON.parse(savedRecipes) : [];
+
+      // Check if recipe already exists
+      if (recipes.some((r) => r.id === recipe.id)) {
+        return false;
+      }
+
+      // Add new recipe
+      recipes.push(recipe);
+
+      // Save to storage
+      await AsyncStorage.setItem(
+        `saved_recipes_${userId}`,
+        JSON.stringify(recipes)
+      );
+
+      // Update cache
+      await CacheService.setCache(cacheKey, recipes);
+
+      return true;
+    } catch (error) {
+      console.error('Lỗi khi lưu công thức:', error);
+      return false;
+    }
+  },
+};

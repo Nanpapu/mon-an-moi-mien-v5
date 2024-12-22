@@ -1,6 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Recipe } from '../types';
 import { getSavedRecipes } from '../utils/storage';
+import { useAuth } from './AuthContext';
 
 interface RecipeContextType {
   savedRecipes: Recipe[];
@@ -9,29 +10,30 @@ interface RecipeContextType {
 
 const RecipeContext = createContext<RecipeContextType | undefined>(undefined);
 
-export function RecipeProvider({ children }: { children: React.ReactNode }) {
+export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
+  const { user } = useAuth();
 
   const refreshSavedRecipes = async () => {
-    const recipes = await getSavedRecipes();
-    setSavedRecipes(recipes);
+    if (user) {
+      const recipes = await getSavedRecipes(user.uid);
+      setSavedRecipes(recipes);
+    } else {
+      setSavedRecipes([]); // Reset khi không có user
+    }
   };
-
-  useEffect(() => {
-    refreshSavedRecipes();
-  }, []);
 
   return (
     <RecipeContext.Provider value={{ savedRecipes, refreshSavedRecipes }}>
       {children}
     </RecipeContext.Provider>
   );
-}
+};
 
-export function useRecipes() {
+export const useRecipes = () => {
   const context = useContext(RecipeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useRecipes must be used within a RecipeProvider');
   }
   return context;
-} 
+};

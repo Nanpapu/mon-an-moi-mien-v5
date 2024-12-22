@@ -16,12 +16,14 @@ import { removeRecipe } from '../../utils/storage';
 import { useToast } from '../../hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchHistoryService } from '../../services/searchHistoryService';
+import { useAuth } from '../../context/AuthContext';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme, insets);
   const { showToast } = useToast();
+  const { user } = useAuth();
 
   const {
     savedRecipes,
@@ -98,6 +100,11 @@ export default function MenuScreen() {
   };
 
   const handleDeleteSelected = async () => {
+    if (!user) {
+      showToast('error', 'Bạn cần đăng nhập để xóa công thức');
+      return;
+    }
+
     Alert.alert(
       'Xác nhận xóa',
       `Bạn có chắc muốn xóa ${selectedRecipes.size} công thức đã chọn?`,
@@ -113,13 +120,13 @@ export default function MenuScreen() {
             setIsLoading(true);
             try {
               for (const recipeId of selectedRecipes) {
-                await removeRecipe(recipeId);
+                await removeRecipe(recipeId, user.uid);
               }
               await refreshSavedRecipes();
               showToast('success', 'Đã xóa các công thức đã chọn');
               handleExitSelectionMode();
             } catch (error) {
-              console.error('Lỗi khi xóa công thức:', error);
+              console.error('Lỗi khi xóa c��ng thức:', error);
               showToast('error', 'Không thể xóa một số công thức');
             } finally {
               setIsLoading(false);
