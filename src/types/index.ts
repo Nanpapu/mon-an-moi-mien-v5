@@ -17,6 +17,7 @@ export interface Ingredient {
   unit: string;
   /** Ghi chú */
   note?: string;
+  type?: 'meat' | 'seafood' | 'vegetable' | 'spice' | 'other';
 }
 
 /**
