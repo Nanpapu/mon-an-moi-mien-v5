@@ -35,16 +35,47 @@ export const MenuSearchBar = ({
 
   // Xử lý suggestions khi người dùng nhập
   useEffect(() => {
-    if (value.trim().length > 0 && recentSearches?.length && isFocused) {
-      const filtered = recentSearches
-        .filter((search) => search.toLowerCase().includes(value.toLowerCase()))
-        .slice(0, 5);
-      setSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
+    try {
+      // Kiểm tra value và recentSearches tồn tại
+      if (!value || !recentSearches) {
+        setShowSuggestions(false);
+        return;
+      }
+
+      const trimmedValue = value.trim();
+
+      if (trimmedValue.length > 0 && recentSearches.length > 0 && isFocused) {
+        const filtered = recentSearches
+          .filter((search) => {
+            if (!search) return false;
+            return search.toLowerCase().includes(trimmedValue.toLowerCase());
+          })
+          .slice(0, 5);
+
+        setSuggestions(filtered);
+        setShowSuggestions(true);
+      } else {
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      console.error('Lỗi khi xử lý suggestions:', error);
       setShowSuggestions(false);
     }
   }, [value, recentSearches, isFocused]);
+
+  // Thêm xử lý onSubmitEditing
+  const handleSubmitEditing = () => {
+    try {
+      if (value && value.trim()) {
+        onSubmitEditing?.();
+        if (onSaveRecentSearch) {
+          onSaveRecentSearch(value.trim());
+        }
+      }
+    } catch (error) {
+      console.error('Lỗi khi submit search:', error);
+    }
+  };
 
   return (
     <View
@@ -75,18 +106,22 @@ export const MenuSearchBar = ({
           {
             backgroundColor: theme.colors.background.paper,
             borderColor: theme.colors.divider,
+            height: 32,
+            textAlignVertical: 'center',
           },
         ]}
-        onSubmitEditing={onSubmitEditing}
+        onSubmitEditing={handleSubmitEditing}
         numberOfLines={1}
         maxLength={100}
         multiline={false}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        blurOnSubmit={true}
+        returnKeyType="search"
       />
 
       {/* Hiển thị nút xóa khi có text */}
-      {value.length > 0 && (
+      {value && value.trim().length > 0 && (
         <TouchableOpacity
           onPress={handleClear}
           hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}

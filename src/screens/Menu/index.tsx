@@ -200,14 +200,11 @@ export default function MenuScreen() {
               <MenuSearchBar
                 value={filterOptions.searchQuery}
                 onChangeText={(text) =>
-                  setFilterOptions((prev) => ({ ...prev, searchQuery: text }))
+                  setFilterOptions({ ...filterOptions, searchQuery: text })
                 }
-                placeholder="Tìm theo tên món hoặc nguyên liệu..."
-                recentSearches={recentSearches}
-                onSaveRecentSearch={handleSaveSearch}
-                onSubmitEditing={() =>
-                  handleSaveSearch(filterOptions.searchQuery)
-                }
+                placeholder="Tìm theo tên hoặc nguyên liệu..."
+                onSubmitEditing={() => {}}
+                recentSearches={[]}
               />
             </View>
 
