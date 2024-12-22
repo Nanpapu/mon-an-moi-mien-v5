@@ -18,6 +18,11 @@ import { ViewVietnamButton } from './components/ViewVietnamButton';
 import { useToast } from '../../hooks/useToast';
 import { useRandomAnimation } from './hooks/useRandomAnimation';
 import { useAuth } from '../../context/AuthContext';
+import {
+  MAP_LOAD_TIMEOUT,
+  RETRY_DELAY,
+  MAX_RETRIES,
+} from '../../constants/timeout';
 
 export default function MapScreen({ navigation }: { navigation: any }) {
   const { theme } = useTheme();
@@ -35,7 +40,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const [mapInitialized, setMapInitialized] = useState(false);
 
   const mapRef = useRef<MapView>(null);
-  const { regions, loadedRegions, isLoading, refreshRegions } = useMapData();
+  const { regions, loadedRegions, isLoading, refreshRegions, retryCount } =
+    useMapData();
   const {
     currentZoom,
     region,
@@ -183,7 +189,13 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   if (!regions || regions.length === 0) {
     return (
       <View style={styles.loadingContainer}>
-        <Loading text="Đang tải dữ liệu vùng miền..." />
+        <Loading
+          text={
+            retryCount > 0
+              ? `Đang tải lại lần ${retryCount}/${MAX_RETRIES}...`
+              : 'Đang tải dữ liệu vùng miền...'
+          }
+        />
       </View>
     );
   }
