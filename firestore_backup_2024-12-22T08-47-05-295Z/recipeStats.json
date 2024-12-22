@@ -1,0 +1,226 @@
+[
+  {
+    "id": "01_01",
+    "recipeId": "01_01",
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 31000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 31000000
+    },
+    "totalReviews": 2,
+    "averageRating": 5
+  },
+  {
+    "id": "01_02",
+    "recipeId": "01_02",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 31000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 31000000
+    }
+  },
+  {
+    "id": "01_03",
+    "recipeId": "01_03",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 32000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 32000000
+    }
+  },
+  {
+    "id": "19_01",
+    "recipeId": "19_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 40000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 40000000
+    }
+  },
+  {
+    "id": "36_01",
+    "recipeId": "36_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 39000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 39000000
+    }
+  },
+  {
+    "id": "46_01",
+    "recipeId": "46_01",
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    },
+    "totalReviews": 1,
+    "averageRating": 2
+  },
+  {
+    "id": "46_02",
+    "recipeId": "46_02",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    }
+  },
+  {
+    "id": "48_01",
+    "recipeId": "48_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 35000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 35000000
+    }
+  },
+  {
+    "id": "48_02",
+    "recipeId": "48_02",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 35000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 35000000
+    }
+  },
+  {
+    "id": "54_01",
+    "recipeId": "54_01",
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 39000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 39000000
+    },
+    "totalReviews": 1,
+    "averageRating": 5
+  },
+  {
+    "id": "75_01",
+    "recipeId": "75_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 38000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 38000000
+    }
+  },
+  {
+    "id": "79_01",
+    "recipeId": "79_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 36000000
+    }
+  },
+  {
+    "id": "79_02",
+    "recipeId": "79_02",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 37000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 37000000
+    }
+  },
+  {
+    "id": "92_01",
+    "recipeId": "92_01",
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 37000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 37000000
+    },
+    "totalReviews": 1,
+    "averageRating": 5
+  },
+  {
+    "id": "92_02",
+    "recipeId": "92_02",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 38000000
+    },
+    "updatedAt": {
+      "_seconds": 1734599219,
+      "_nanoseconds": 38000000
+    }
+  },
+  {
+    "id": "95_01",
+    "recipeId": "95_01",
+    "averageRating": 0,
+    "totalReviews": 0,
+    "createdAt": {
+      "_seconds": 1734391986,
+      "_nanoseconds": 359000000
+    },
+    "updatedAt": {
+      "_seconds": 1734391986,
+      "_nanoseconds": 359000000
+    }
+  }
+]

@@ -36,3 +36,6 @@ build/
 *.key
 *.mobileprovision
 *.orig.*
+
+# Backup
+service-account.json

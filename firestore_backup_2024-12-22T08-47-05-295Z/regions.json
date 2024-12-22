@@ -1,0 +1,82 @@
+[
+  {
+    "id": "01",
+    "name": "Hà Nội",
+    "coordinate": {
+      "latitude": 21.0285,
+      "longitude": 105.8542
+    }
+  },
+  {
+    "id": "19",
+    "name": "Thái Nguyên",
+    "coordinate": {
+      "latitude": 9.294,
+      "longitude": 105.7216
+    }
+  },
+  {
+    "id": "36",
+    "name": "Nam Định",
+    "coordinate": {
+      "latitude": 20.4333,
+      "longitude": 106.1667
+    }
+  },
+  {
+    "id": "46",
+    "name": "Thừa Thiên Huế",
+    "coordinate": {
+      "latitude": 16.4637,
+      "longitude": 107.5909
+    }
+  },
+  {
+    "id": "48",
+    "name": "Đà Nẵng",
+    "coordinate": {
+      "latitude": 16.0544,
+      "longitude": 108.2022
+    }
+  },
+  {
+    "id": "54",
+    "name": "Phú Yên",
+    "coordinate": {
+      "latitude": 13.1056,
+      "longitude": 109.2929
+    }
+  },
+  {
+    "id": "75",
+    "name": "Đồng Nai",
+    "coordinate": {
+      "latitude": 10.9574,
+      "longitude": 106.8426
+    }
+  },
+  {
+    "id": "79",
+    "name": "TP. Hồ Chí Minh",
+    "coordinate": {
+      "latitude": 10.7769,
+      "longitude": 106.7009
+    }
+  },
+  {
+    "id": "92",
+    "name": "Cần Thơ",
+    "coordinate": {
+      "latitude": 10.0452,
+      "longitude": 105.7469
+    }
+  },
+  {
+    "id": "95",
+    "name": "Bạc Liêu",
+    "coordinate": {
+      "latitude": 9.294,
+      "longitude": 105.7216
+    }
+  }
+]

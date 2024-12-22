@@ -1,0 +1,30 @@
+[
+  {
+    "id": "8xZKn3bDC1eG8w33V0L2nknHZz12",
+    "email": "21522134@gm.uit.edu.vn",
+    "createdAt": {
+      "_seconds": 1734507643,
+      "_nanoseconds": 631000000
+    },
+    "displayName": "HuyDepZai",
+    "photoURL": "https://firebasestorage.googleapis.com/v0/b/mon-an-moi-mien-v2.firebasestorage.app/o/avatars%2F8xZKn3bDC1eG8w33V0L2nknHZz12%2F1734539351056?alt=media&token=cdc31ed0-46d9-4fac-a61b-574bfeb91b48",
+    "avatarUpdatedAt": {
+      "_seconds": 1734539352,
+      "_nanoseconds": 560000000
+    }
+  },
+  {
+    "id": "BCp6ulKwfDQDk3tdIEtBvIiOVMn2",
+    "email": "21521059@gm.uit.edu.vn",
+    "createdAt": {
+      "_seconds": 1734182289,
+      "_nanoseconds": 715000000
+    },
+    "photoURL": "https://firebasestorage.googleapis.com/v0/b/mon-an-moi-mien-v2.firebasestorage.app/o/avatars%2FBCp6ulKwfDQDk3tdIEtBvIiOVMn2%2F1734686736533?alt=media&token=040c0168-e0cf-474c-9029-f4a6f654c7a7",
+    "avatarUpdatedAt": {
+      "_seconds": 1734686737,
+      "_nanoseconds": 623000000
+    },
+    "displayName": "Nanpa1234"
+  }
+]

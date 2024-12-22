@@ -1,0 +1,2419 @@
+[
+  {
+    "id": "01_01",
+    "name": "Phở Hà Nội",
+    "region": "Miền Bắc",
+    "image": "recipes/images/01/01_01.jpg",
+    "cookingTime": 480,
+    "difficulty": 4,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "Xương ống bò",
+        "amount": 2,
+        "unit": "kg"
+      },
+      {
+        "name": "Thịt bò phi lê (thăn, nạm hoặc gầu)",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Bánh phở tươi số 1",
+        "amount": 1.2,
+        "unit": "kg"
+      },
+      {
+        "name": "Hành tây",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Gừng già",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Hoa hồi",
+        "amount": 4,
+        "unit": "cái"
+      },
+      {
+        "name": "Quế cây",
+        "amount": 2,
+        "unit": "cây"
+      },
+      {
+        "name": "Thảo quả",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Đinh hương",
+        "amount": 5,
+        "unit": "cái"
+      },
+      {
+        "name": "Ngò gai",
+        "amount": 1,
+        "unit": "mớ"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Muối hạt",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Nước mắm ngon",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Đường phèn",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Bột ngọt (tuỳ thích)",
+        "amount": 1,
+        "unit": "muỗng cà phê"
+      },
+      {
+        "name": "Giá đỗ tươi",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Rau quế",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Chanh tươi",
+        "amount": 2,
+        "unit": "quả"
+      },
+      {
+        "name": "Ớt tươi",
+        "amount": 4,
+        "unit": "cái"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Xương bò rửa sạch với nước muối loãng, chần qua nước sôi 3 phút để loại bỏ bẩn và mùi hôi",
+        "Hành tây bóc vỏ, nướng trực tiếp trên lửa đến khi thơm và hơi cháy vỏ ngoài",
+        "Gừng rửa sạch, đập dập, nướng trực tiếp trên lửa cho thơm",
+        "Rang các gia vị (hoa hồi, quế, thảo quả, đinh hương) trên chảo khô với lửa nhỏ đến khi thơm (khoảng 2-3 phút), cho vào túi vải buộc kín",
+        "Thịt bò để đông lạnh 30 phút để dễ thái, thái thật mỏng theo thớ",
+        "Hành lá rửa sạch, thái nhỏ",
+        "Rửa sạch các loại rau ăn kèm, để ráo"
+      ],
+      "broth": [
+        "Đun sôi 5 lít nước trong nồi lớn, cho xương đã chần vào",
+        "Khi nước sôi lại, hạ lửa nhỏ vừa, cho túi gia vị, hành tây và gừng nướng vào",
+        "Ninh trong 5-6 tiếng, thường xuyên hớt bọt để nước dùng trong",
+        "Sau 4 tiếng, nêm nước mắm, muối, đường phèn. Nếm thử và điều chỉnh vị"
+      ],
+      "assembly": [
+        "Trần bánh phở qua nước sôi khoảng 10 giây",
+        "Xếp bánh phở vào tô, xếp thịt bò sống lên trên",
+        "Chan nước dùng đang sôi vào tô (nước phải thật sôi để chín thịt)",
+        "Rắc hành lá, ngò gai lên trên"
+      ],
+      "serving": [
+        "Dùng nóng, ăn kèm giá đỗ, rau quế, chanh, ớt tùy khẩu vị",
+        "Có thể thêm tương đen, tương ớt theo sở thích"
+      ],
+      "tips": [
+        "Nước dùng phải nấu với lửa liu riu để nước trong và ngọt",
+        "Xương phải chần qua nước sôi để nước dùng trong",
+        "Túi gia vị phải rang thơm trước khi cho vào nấu",
+        "Thịt bò phải thái mỏng và để đông lạnh trước khi thái",
+        "Bánh phở phải trụng vừa tới, không được để mềm",
+        "Hành tây và gừng phải nướng thơm để tạo hương vị đặc trưng"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Thịt bò sống phải bảo quản trong ngăn đông, dùng trong vòng 1 tuần",
+        "Bánh phở tươi nên mua mới và dùng trong ngày",
+        "Rau ăn kèm phải rửa sạch và để ráo trước khi cho vào tủ lạnh",
+        "Gia vị đã rang nên bảo quản trong hộp kín, tránh ẩm"
+      ]
+    },
+    "regionId": "01",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 865000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 865000000
+    }
+  },
+  {
+    "id": "01_02",
+    "name": "Bún Chả Hà Nội",
+    "region": "Miền Bắc",
+    "image": "recipes/images/01/01_02.jpg",
+    "cookingTime": 120,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Thịt ba chỉ",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Thịt nạc vai",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi băm",
+        "amount": 3,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Hành khô băm",
+        "amount": 3,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Mật ong",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Nước mắm ngon",
+        "amount": 3,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Dầu hào",
+        "amount": 1,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Tiêu xay",
+        "amount": 1,
+        "unit": "muỗng cà phê"
+      },
+      {
+        "name": "Nước mắm ngon (cho nước chấm)",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Đường",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nước cốt chanh",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Tỏi băm (cho nước chấm)",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Ớt tươi",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Nước ấm",
+        "amount": 200,
+        "unit": "ml"
+      },
+      {
+        "name": "Bún tươi",
+        "amount": 800,
+        "unit": "g"
+      },
+      {
+        "name": "Rau xà lách",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Húng quế",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Húng lủi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tía tô",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Kinh giới",
+        "amount": 50,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Thịt ba chỉ thái miếng vuông mỏng khoảng 3mm, thịt nạc vai thái miếng dày khoảng 1cm",
+        "Băm nhuyễn tỏi và hành khô",
+        "Trộn đều tỏi, hành băm, mật ong, nước mắm, dầu hào, tiêu với thịt",
+        "Ướp thịt ít nhất 1 tiếng, tốt nhất là qua đêm",
+        "Rửa sạch các loại rau, để ráo nước",
+        "Tỏi băm nhuyễn cho nước chấm",
+        "Ớt thái lát mỏng"
+      ],
+      "sauce": [
+        "Hòa tan đường với nước ấm",
+        "Thêm nước mắm, khuấy đều",
+        "Thêm nước cốt chanh, tỏi băm, ớt",
+        "Nếm thử và điều chỉnh vị chua ngọt mặn theo khẩu vị"
+      ],
+      "assembly": [
+        "Nướng thịt trên bếp than hoa hoặc bếp nướng điện đến khi vàng đều hai mặt",
+        "Cho thịt nướng vào bát, chan nước chấm vừa đủ ngập mặt thịt",
+        "Bày rau sống ra đĩa riêng",
+        "Bún tươi để riêng trong tô"
+      ],
+      "serving": [
+        "Mỗi người tự gắp bún, rau và thịt vào bát của mình",
+        "Chan thêm nước chấm tùy khẩu vị",
+        "Có thể ăn kèm nem cua bể hoặc nem rán"
+      ],
+      "tips": [
+        "Thịt phải ướp ít nhất 1 tiếng, tốt nhất là qua đêm để ngấm gia vị",
+        "Nướng thịt trên bếp than để có mùi thơm đặc trưng",
+        "Không nướng thịt quá khô, phải giữ độ mềm và mọng nước",
+        "Nước chấm phải cân bằng vị chua-ngọt-mặn",
+        "Rau sống phải đa dạng các loại để tạo hương vị phong phú",
+        "Bún phải được trụng qua nước sôi và để nguội trước khi ăn"
+      ],
+      "storage": [
+        "Thịt ướp có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Nước chấm pha sẵn có thể giữ trong tủ lạnh đến 1 tuần",
+        "Rau sống nên rửa sạch, để ráo và bọc trong khăn ẩm trước khi cho vào tủ lạnh",
+        "Bún nên mua mới và dùng trong ngày",
+        "Thịt đã nướng nên ăn hết trong bữa, không nên để qua ngày"
+      ]
+    },
+    "regionId": "01",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 868000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 868000000
+    }
+  },
+  {
+    "id": "01_03",
+    "name": "Chả Cá Lã Vọng",
+    "region": "Miền Bắc",
+    "image": "recipes/images/01/01_03.jpg",
+    "cookingTime": 60,
+    "difficulty": 4,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Cá lăng phi lê",
+        "amount": 800,
+        "unit": "g"
+      },
+      {
+        "name": "Nghệ củ tươi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Mẻ",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Thì là",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Gừng",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Mắm nêm",
+        "amount": 3,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Dầu ăn",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Bún tươi",
+        "amount": 800,
+        "unit": "g"
+      },
+      {
+        "name": "Đậu phộng rang",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Rau sống các loại (diếp cá, tía tô, kinh giới)",
+        "amount": 300,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Cá lăng phi lê cắt miếng vuông 4x4cm dày 2cm",
+        "Nghệ củ giã nhuyễn",
+        "Thì là và hành lá rửa sạch, cắt khúc 4-5cm",
+        "Gừng thái sợi mỏng",
+        "Đậu phộng rang giã dập",
+        "Rửa sạch các loại rau sống"
+      ],
+      "marinating": [
+        "Trộn cá với nghệ giã và mẻ",
+        "Ướp cá với 2 muỗng canh mắm nêm",
+        "Để cá ướp ít nhất 2 tiếng trong tủ lạnh"
+      ],
+      "cooking": [
+        "Đun nóng dầu trong chảo",
+        "Chiên sơ cá đến khi hơi vàng",
+        "Cho cá ra đĩa có lót giấy thấm dầu"
+      ],
+      "assembly": [
+        "Đặt chảo lên bếp than hoa hoặc bếp điện",
+        "Cho dầu vào chảo, đợi dầu nóng",
+        "Cho cá đã chiên sơ vào chảo",
+        "Rắc thì là và hành lá lên trên",
+        "Đảo đều cho đến khi cá vàng đều và thơm"
+      ],
+      "serving": [
+        "Bày bún ra bát",
+        "Đặt chả cá nóng lên trên",
+        "Rắc đậu phộng rang",
+        "Ăn kèm với rau sống và mắm nêm"
+      ],
+      "tips": [
+        "Chọn cá lăng tươi, thịt chắc",
+        "Nghệ tươi giã nhuyễn sẽ có màu đẹp hơn nghệ bột",
+        "Nên nướng trên bếp than để có mùi thơm đặc trưng",
+        "Rau thì là phải tươi và xanh mướt"
+      ],
+      "storage": [
+        "Cá đã ướp có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Nước mắm pha có thể giữ trong tủ lạnh đến 1 tuần",
+        "Rau sống nên rửa sạch và bọc trong khăn ẩm trước khi cho vào tủ lạnh"
+      ]
+    },
+    "regionId": "01",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 871000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 871000000
+    }
+  },
+  {
+    "id": "19_01",
+    "name": "Cơm Lam Thái Nguyên",
+    "region": "Miền Bắc",
+    "image": "recipes/images/19/19_01.jpg",
+    "cookingTime": 60,
+    "difficulty": 2,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Gạo nếp",
+        "amount": 500,
+        "unit": "g",
+        "note": "Gạo nếp cái hoa vàng hoặc nếp Thái"
+      },
+      {
+        "name": "Ống tre non",
+        "amount": 4,
+        "unit": "cái",
+        "note": "Dài khoảng 30-35cm, đường kính 5-6cm"
+      },
+      {
+        "name": "Lá dong",
+        "amount": 8,
+        "unit": "lá",
+        "note": "Rửa sạch, lau khô"
+      },
+      {
+        "name": "Muối",
+        "amount": 1,
+        "unit": "muỗng cà phê"
+      },
+      {
+        "name": "Nước suối",
+        "amount": 600,
+        "unit": "ml",
+        "note": "Nước sạch hoặc nước suối"
+      },
+      {
+        "name": "Vừng (mè) trắng",
+        "amount": 50,
+        "unit": "g",
+        "note": "Rang vàng"
+      },
+      {
+        "name": "Muối vừng",
+        "amount": 100,
+        "unit": "g",
+        "note": "Để chấm khi ăn"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Chuẩn bị ống tre:",
+        "- Chọn ống tre non, tươi",
+        "- Cắt thành các ống dài 30-35cm",
+        "- Cạo sạch lớp măng bên ngoài",
+        "- Rửa sạch, để ráo",
+        "Chuẩn bị lá dong:",
+        "- Rửa sạch lá dong",
+        "- Lau khô",
+        "- Cắt theo kích thước vừa với ống tre",
+        "Chuẩn bị gạo:",
+        "- Vo gạo nếp thật sạch",
+        "- Ngâm trong nước 4-6 tiếng hoặc qua đêm",
+        "- Vớt ra để ráo"
+      ],
+      "processing": [
+        "Làm muối vừng:",
+        "- Rang vừng trắng đến vàng thơm",
+        "- Giã nhuyễn vừng với muối theo tỷ lệ 2:1",
+        "- Để riêng để chấm khi ăn"
+      ],
+      "assembly": [
+        "Đóng cơm vào ống:",
+        "- Lót lá dong vào trong ống tre",
+        "- Cho gạo đã ngâm vào ống (khoảng 2/3 ống)",
+        "- Đổ nước vào (nước ngập hơn mặt gạo 1cm)",
+        "- Thêm 1/4 muỗng cà phê muối vào mỗi ống",
+        "- Nút kín hai đầu ống bằng lá dong"
+      ],
+      "cooking": [
+        "Nướng cơm lam:",
+        "- Chuẩn bị bếp than hồng",
+        "- Xếp các ống tre nghiêng 45 độ",
+        "- Nướng đều các mặt khoảng 45-50 phút",
+        "- Thỉnh thoảng xoay ống để cơm chín đều",
+        "- Kiểm tra độ chín bằng cách ấn vào ống tre (nếu mềm là đã chín)"
+      ],
+      "serving": [
+        "Thưởng thức:",
+        "- Để nguội khoảng 10 phút",
+        "- Chẻ ống tre theo chiều dọc",
+        "- Lột lá dong ra",
+        "- Cắt cơm thành khoanh tròn dày 2-3cm",
+        "Dùng kèm:",
+        "- Muối vừng",
+        "- Có thể ăn kèm gà nướng hoặc thịt nướng",
+        "- Uống với trà xanh Thái Nguyên"
+      ],
+      "tips": [
+        "Chọn ống tre non để cơm có hương vị thơm đặc trưng",
+        "Ngâm gạo đủ thời gian để cơm được dẻo",
+        "Không cho quá nhiều nước để cơm không bị nhão",
+        "Nướng bằng than hoa để có mùi thơm đặc trưng",
+        "Nút hai đầu ống phải thật kín để giữ độ ẩm",
+        "Nên ăn khi cơm còn ấm để cảm nhận hương vị tốt nhất"
+      ],
+      "storage": [
+        "Cơm lam nên ăn trong ngày nấu",
+        "Nếu cần bảo quản, để nguyên trong ống tre",
+        "Có thể giữ trong tủ lạnh đến 2 ngày",
+        "Hâm nóng bằng lò vi sóng hoặc nướng lại trước khi ăn",
+        "Muối vừng có thể bảo quản trong hộp kín đến 2 tuần"
+      ]
+    },
+    "regionId": "19",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 885000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 885000000
+    }
+  },
+  {
+    "id": "36_01",
+    "name": "Phở Bò Nam Định",
+    "region": "Miền Bắc",
+    "image": "recipes/images/36/36_01.jpg",
+    "cookingTime": 480,
+    "difficulty": 4,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "Xương ống bò",
+        "amount": 2,
+        "unit": "kg"
+      },
+      {
+        "name": "Thịt bò phi lê (thăn, nạm hoặc gầu)",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Bánh phở Nam Định",
+        "amount": 1.2,
+        "unit": "kg",
+        "note": "Bánh phở Nam Định mỏng và dai hơn bánh phở thông thường"
+      },
+      {
+        "name": "Hành tây",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Gừng già",
+        "amount": 150,
+        "unit": "g"
+      },
+      {
+        "name": "Hoa hồi",
+        "amount": 5,
+        "unit": "cái"
+      },
+      {
+        "name": "Quế cây",
+        "amount": 3,
+        "unit": "cây"
+      },
+      {
+        "name": "Thảo quả",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Đinh hương",
+        "amount": 6,
+        "unit": "cái"
+      },
+      {
+        "name": "Hành khô",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Rau mùi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Giá đỗ",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Chanh tươi",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Ớt tươi",
+        "amount": 5,
+        "unit": "cái"
+      },
+      {
+        "name": "Nước mắm ngon",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Muối",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Đường phèn",
+        "amount": 50,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Xương bò:",
+        "- Rửa sạch với nước muối loãng",
+        "- Chần qua nước sôi 3 phút để loại bỏ bẩn",
+        "- Rửa lại bằng nước lạnh",
+        "Thịt bò:",
+        "- Rửa sạch, để ráo",
+        "- Để đông lạnh 30 phút để dễ thái",
+        "- Thái lát mỏng 2mm theo chiều ngang thớ",
+        "Gia vị:",
+        "- Hành tây bóc vỏ, nướng trực tiếp trên lửa đến thơm",
+        "- Gừng rửa sạch, đập dập, nướng thơm",
+        "- Hành khô bóc vỏ, một nửa thái mỏng phi vàng, một nửa để nguyên",
+        "- Hành lá rửa sạch, thái nhỏ",
+        "- Rau mùi nhặt lá, rửa sạch",
+        "Gia vị khô:",
+        "- Rang hoa hồi, quế, thảo quả, đinh hương trên chảo khô với lửa nhỏ đến thơm (2-3 phút)",
+        "- Cho vào túi vải buộc kín"
+      ],
+      "broth": [
+        "Nấu nước dùng:",
+        "- Đun sôi 6 lít nước trong nồi lớn",
+        "- Cho xương đã chần vào nấu với lửa to",
+        "- Khi sôi, hạ lửa nhỏ, vớt bọt cho nước trong",
+        "- Cho hành tây và gừng nướng vào",
+        "- Thêm túi gia vị, hành khô nguyên củ",
+        "- Ninh liu riu 6-8 tiếng, thỉnh thoảng vớt bọt",
+        "Nêm nước dùng:",
+        "- Sau 6 tiếng, nêm 2 muỗng canh nước mắm",
+        "- Thêm đường phèn và muối",
+        "- Nếm thử và điều chỉnh vị đậm đà vừa ăn"
+      ],
+      "assembly": [
+        "Chuẩn bị bánh phở:",
+        "- Trụng bánh phở qua nước sôi 10-15 giây",
+        "- Vớt ra, để ráo",
+        "Sắp xếp tô phở:",
+        "- Xếp bánh phở vào tô",
+        "- Xếp thịt bò tái lên trên",
+        "- Rắc hành phi, hành lá",
+        "- Chan nước dùng sôi vào (phải thật sôi để chín thịt)"
+      ],
+      "serving": [
+        "Dọn kèm:",
+        "- Đĩa giá đỗ tươi",
+        "- Rau mùi",
+        "- Chanh tươi",
+        "- Ớt tươi thái lát",
+        "Hướng dẫn ăn:",
+        "- Thêm giá, rau theo khẩu vị",
+        "- Có thể thêm nước mắm, chanh, ớt tùy thích",
+        "- Ăn nóng để thưởng thức trọn vẹn hương vị"
+      ],
+      "tips": [
+        "Phải dùng bánh phở Nam Định chính gốc để có độ dai đặc trưng",
+        "Nước dùng phải nấu lâu với lửa nhỏ để ngọt tự nhiên",
+        "Xương phải được chần kỹ để nước dùng trong",
+        "Gia vị phải được rang thơm trước khi cho vào nấu",
+        "Thịt bò phải thái mỏng và để đông trước khi thái",
+        "Hành tây và gừng phải nướng thơm để tạo hương vị đặc trưng"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Thịt bò thái sẵn nên dùng trong ngày",
+        "Bánh phở nên mua mới và trụng khi ăn",
+        "Rau sống rửa sạch, để ráo, bọc khăn ẩm bảo quản tủ lạnh",
+        "Hành phi có thể bảo quản trong hộp kín đến 1 tuần"
+      ]
+    },
+    "regionId": "36",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 882000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 882000000
+    }
+  },
+  {
+    "id": "46_01",
+    "name": "Bún Bò Huế",
+    "region": "Miền Trung",
+    "image": "recipes/images/46/46_01.jpg",
+    "cookingTime": 120,
+    "difficulty": 4,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "Bắp bò",
+        "amount": 800,
+        "unit": "g"
+      },
+      {
+        "name": "Giò heo",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Bún tươi",
+        "amount": 1.2,
+        "unit": "kg"
+      },
+      {
+        "name": "Mắm ruốc Huế",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Sả",
+        "amount": 12,
+        "unit": "cây"
+      },
+      {
+        "name": "Gừng",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt sừng",
+        "amount": 5,
+        "unit": "cái"
+      },
+      {
+        "name": "Ớt bột",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Rau muống cọng",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Giá sống",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Rau răm",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Húng quế",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Chanh tươi",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Dầu ăn",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Muối",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Đường",
+        "amount": 30,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Bắp bò rửa sạch, để ráo, thái miếng vừa ăn (5x7cm)",
+        "Giò heo rửa sạch, chần qua nước sôi có gừng để khử mùi hôi",
+        "Sả:",
+        "- Rửa sạch, cắt bỏ rễ",
+        "- 6 cây đập dập để nấu nước dùng",
+        "- 6 cây băm nhuyễn để phi với mắm ruốc",
+        "Gừng:",
+        "- Gọt vỏ, rửa sạch",
+        "- 1/2 phần thái lát mỏng để nấu nước dùng",
+        "- 1/2 phần băm nhuyễn để ướp thịt",
+        "Tỏi và hành tím:",
+        "- Bóc vỏ, rửa sạch",
+        "- 2/3 phần băm nhuyễn",
+        "- 1/3 phần để nguyên",
+        "Rau muống cọng:",
+        "- Nhặt lấy phần cọng già, bỏ lá",
+        "- Rửa sạch, cắt khúc 5cm",
+        "Rau gia vị:",
+        "- Nhặt bỏ rễ và lá úa",
+        "- Rửa sạch, để ráo",
+        "- Hành lá thái nhỏ",
+        "- Rau răm và húng quế để nguyên lá"
+      ],
+      "marinating": [
+        "Ướp bắp bò:",
+        "- 2 muỗng canh gừng băm",
+        "- 2 muỗng canh tỏi băm",
+        "- 1 muỗng canh hành tím băm",
+        "- 1 muỗng canh muối",
+        "- 1 muỗng canh đường",
+        "Trộn đều và để thịt ướp 30 phút"
+      ],
+      "broth": [
+        "Nấu nước dùng:",
+        "- Đun sôi 4 lít nước",
+        "- Cho giò heo vào nấu với lửa vừa 30 phút",
+        "- Thêm bắp bò đã ướp vào nấu thêm 45 phút",
+        "- Cho sả đập dập, gừng thái lát vào",
+        "- Nấu liu riu thêm 15 phút",
+        "Phi mắm ruốc:",
+        "- Phi thơm 1/2 lượng tỏi hành băm với dầu",
+        "- Cho sả băm vào phi thơm",
+        "- Cho mắm ruốc vào, đảo đều với lửa nhỏ 5 phút",
+        "- Cho hỗn hợp vào nồi nước dùng",
+        "Nêm nếm:",
+        "- 2 muỗng canh đường",
+        "- 1 muỗng canh muối",
+        "- Nếm thử và điều chỉnh vị"
+      ],
+      "cooking": [
+        "Xử lý thịt:",
+        "- Vớt thịt ra, ngâm trong nước đá 10 phút",
+        "- Thái bắp bò thành lát mỏng 2-3mm",
+        "- Thái giò heo thành lát vừa ăn",
+        "Chuẩn bị ớt sa tế:",
+        "- Phi thơm phần tỏi hành còn lại",
+        "- Cho ớt bột vào phi với lửa nhỏ",
+        "- Thêm 2 muỗng canh dầu, đảo đều",
+        "Trụng rau muống:",
+        "- Đun sôi nước với chút muối",
+        "- Trụng rau muống 1 phút",
+        "- Vớt ra ngâm nước lạnh"
+      ],
+      "assembly": [
+        "Trụng bún:",
+        "- Đun sôi nước trong nồi lớn",
+        "- Cho bún vào trụng 10-15 giây",
+        "- Vớt ra, để ráo",
+        "Sắp xếp tô bún:",
+        "- Xếp bún vào tô",
+        "- Xếp thịt bò, giò heo lên trên",
+        "- Thêm rau muống cọng",
+        "- Chan nước dùng sôi vào"
+      ],
+      "serving": [
+        "Dọn kèm:",
+        "- Đĩa rau sống (giá, rau răm, húng quế)",
+        "- Chanh tươi",
+        "- Ớt sa tế",
+        "- Ớt tươi thái lát",
+        "Hướng dẫn ăn:",
+        "- Thêm rau sống tùy thích",
+        "- Nặn chanh",
+        "- Có thể thêm ớt sa tế để tăng độ cay",
+        "- Khuấy đều trước khi ăn"
+      ],
+      "tips": [
+        "Mắm ruốc phải là loại đặc sản Huế để có hương vị chuẩn",
+        "Phi mắm ruốc riêng để khử mùi tanh và tạo màu đẹp cho nước dùng",
+        "Nước dùng phải có màu đỏ đặc trưng từ mắm ruốc và ớt",
+        "Thịt bò phải được thái mỏng và cắt ngang thớ để dễ ăn",
+        "Giò heo phải được luộc vừa chín tới để giữ độ giòn",
+        "Sả phải được đập dập k��� để tinh dầu tỏa ra nhiều"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Thịt bò và giò heo đã thái nên bảo quản riêng, dùng trong vòng 2 ngày",
+        "Mắm ruốc đã phi có thể bảo quản trong tủ lạnh đến 2 tuần",
+        "Rau sống nên mua mới mỗi lần dùng",
+        "Ớt sa tế có thể bảo quản trong tủ lạnh đến 1 tuần",
+        "Khi hâm nóng lại, đun sôi nước dùng và cho thịt vào sau cùng"
+      ]
+    },
+    "regionId": "46",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 874000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 874000000
+    }
+  },
+  {
+    "id": "46_02",
+    "name": "Cơm Hến",
+    "region": "Miền Trung",
+    "image": "recipes/images/46/46_02.jpg",
+    "cookingTime": 60,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Hến tươi",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Cơm trắng",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Rau thơm các loại",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Đậu phộng rang",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Mắm ruốc Huế",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Tóp mỡ",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt tươi",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Hành phi",
+        "amount": 30,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Hến rửa sạch nhiều lần với nước",
+        "Ngâm hến trong nước có pha muối để hến nhả cát",
+        "Rau thơm nhặt rửa sạch, thái nhỏ",
+        "Ớt thái lát mỏng",
+        "Đậu phộng rang giã dập"
+      ],
+      "cooking": [
+        "Luộc hến với nước sôi đến khi vừa chín tới",
+        "Vớt hến ra, tách lấy phần thịt",
+        "Giữ lại nước luộc hến",
+        "Phi hành tỏi thơm vàng",
+        "Xào hến với hành phi và gia vị"
+      ],
+      "sauce": [
+        "Phi mắm ruốc với dầu ăn",
+        "Pha loãng với nước luộc hến",
+        "Nêm nếm vừa ăn"
+      ],
+      "assembly": [
+        "Xới cơm ra tô",
+        "Cho hến xào lên trên",
+        "Rưới nước mắm ruốc",
+        "Rắc đậu phộng, tóp mỡ, hành phi"
+      ],
+      "serving": [
+        "Thêm rau thơm các loại",
+        "Ăn kèm ớt tươi",
+        "Có thể chan thêm nước mắm ruốc tùy khẩu vị"
+      ],
+      "tips": [
+        "Hến phải được ngâm và rửa kỹ để loại bỏ hoàn toàn cát",
+        "Nước luộc hến có thể dùng để pha mắm ruốc, tạo vị đậm đà",
+        "Cơm nên dùng nguội để món ăn ngon hơn",
+        "Tóp mỡ phải giòn và được thái nhỏ vừa ăn",
+        "Rau thơm nên đa dạng các loại để tạo hương vị phong phú",
+        "Mắm ruốc phải được phi thơm để khử mùi tanh"
+      ],
+      "storage": [
+        "Hến đã xào có thể bảo quản trong tủ lạnh đến 2 ngày",
+        "Nước mắm ruốc pha có thể giữ trong tủ lạnh đến 1 tuần",
+        "Tóp mỡ để nơi khô ráo, có thể giữ được 3-4 ngày",
+        "Đậu phộng rang để trong hộp kín, tránh ẩm",
+        "Hành phi bảo quản trong hộp kín ở nhiệt độ phng đến 1 tuần",
+        "Rau thơm nên mua mới mỗi lần dùng"
+      ]
+    },
+    "regionId": "46",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 875000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 875000000
+    }
+  },
+  {
+    "id": "48_01",
+    "name": "Mì Quảng",
+    "region": "Miền Trung",
+    "image": "recipes/images/48/48_01.jpg",
+    "cookingTime": 90,
+    "difficulty": 4,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Mì Quảng (sợi to, vàng)",
+        "amount": 800,
+        "unit": "g"
+      },
+      {
+        "name": "Tôm sú",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Thịt heo ba chỉ",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Xương heo",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Củ nén",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nghệ củ",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Dầu điều màu",
+        "amount": 30,
+        "unit": "ml"
+      },
+      {
+        "name": "Đậu phộng rang",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Bánh tráng nướng",
+        "amount": 8,
+        "unit": "cái"
+      },
+      {
+        "name": "Rau húng quế",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Rau răm",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Giá sống",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Bắp chuối bào",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt sừng",
+        "amount": 4,
+        "unit": "cái"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Thịt ba chỉ rửa sạch, thái miếng vuông 2x2cm",
+        "Tôm bóc vỏ, giữ đuôi, rút chỉ đen",
+        "Củ nén bóc vỏ, rửa sạch, băm nhuyễn",
+        "Hành tím, tỏi bóc vỏ, băm nhuyễn",
+        "Nghệ củ gọt vỏ, giã nhuyễn",
+        "Đậu phộng rang chín, giã dập vừa",
+        "Rau sống nhặt, rửa sạch, để ráo",
+        "Bắp chuối bào mỏng, ngâm nước muối loãng",
+        "Ớt sừng thái lát mỏng"
+      ],
+      "broth": [
+        "Xương heo rửa sạch, chần qua nước sôi",
+        "Phi thơm 1/2 lượng hành tỏi với dầu điều",
+        "Cho xương vào nấu với 2 lít nước trong 1 tiếng",
+        "Thêm nghệ và củ nén vào phi thơm với dầu điều còn lại",
+        "Cho thịt ba chỉ vào xào săn với hỗn hợp nghệ",
+        "Cho tất cả vào nồi nước dùng",
+        "Nêm 2 muỗng canh nước mắm, 1 muỗng cà phê muối, 1 muỗng canh đường",
+        "Nấu liu riu thêm 30 phút để thịt mềm"
+      ],
+      "cooking": [
+        "Tôm ướp với 1 muỗng cà phê hành tỏi, 1/2 muỗng canh nước mắm trong 15 phút",
+        "Xào tôm với dầu điều cho săn và thơm (khoảng 2-3 phút)"
+      ],
+      "assembly": [
+        "Trụng mì qua nước sôi khoảng 10 giây",
+        "Xếp mì vào tô",
+        "Xếp thịt và tôm lên trên",
+        "Chan nước dùng vừa đủ ướt (khoảng 2-3 muỗng canh)",
+        "Rắc đậu phộng và hành phi lê lên trên"
+      ],
+      "serving": [
+        "Dọn kèm đĩa rau sống gồm húng quế, rau răm, giá, bắp chuối",
+        "Bánh tráng nướng giòn để bên cạnh",
+        "Ăn kèm ớt tươi tùy khẩu vị",
+        "Có thể thêm nước mắm, tương ớt tùy thích"
+      ],
+      "tips": [
+        "Nước dùng Mì Quảng phải đặc và ít, không nhiều như bún hay phở",
+        "Bánh tráng nướng phải giòn mới ngon",
+        "Có thể thêm trứng cút luộc hoặc chả để đa dạng món ăn"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Thịt và tôm đã chế biến nên bảo quản riêng, dùng trong vòng 24 giờ",
+        "Mì Quảng tươi nên mua mới và dùng trong ngày",
+        "Rau sống và bắp chuối bào phải rửa sạch, để ráo và bọc trong giấy ���m trước khi cho vào tủ lạnh",
+        "Đậu phộng rang và hành phi phải để nguội hoàn toàn trước khi bảo quản trong hộp kín",
+        "Bánh tráng nướng phải bảo quản trong hộp kín để giữ độ giòn"
+      ]
+    },
+    "regionId": "48",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 872000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 872000000
+    }
+  },
+  {
+    "id": "48_02",
+    "name": "Bánh Tráng Cuốn Thịt Heo",
+    "region": "Miền Trung",
+    "image": "recipes/images/48/48_02.jpg",
+    "cookingTime": 60,
+    "difficulty": 2,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Thịt heo ba chỉ",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Bánh tráng mỏng",
+        "amount": 20,
+        "unit": "cái"
+      },
+      {
+        "name": "Dưa leo",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Rau xà lách",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Húng lủi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tía tô",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Gừng",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt tươi",
+        "amount": 4,
+        "unit": "cái"
+      },
+      {
+        "name": "Đường",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Nước mắm",
+        "amount": 50,
+        "unit": "ml"
+      },
+      {
+        "name": "Chanh tươi",
+        "amount": 2,
+        "unit": "cái"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Thịt heo rửa sạch, để ráo",
+        "Dưa leo rửa sạch, gọt vỏ, thái sợi dài khoảng 5cm",
+        "Hành lá rửa sạch, thái nhỏ",
+        "Gừng gọt vỏ, thái sợi mỏng",
+        "Tỏi bóc vỏ, băm nhuyễn",
+        "Ớt rửa sạch, thái lát mỏng",
+        "Rau sống các loại nhặt, rửa sạch, để ráo",
+        "Chanh vắt lấy nước"
+      ],
+      "cooking": [
+        "Đun sôi nồi nước to",
+        "Cho gừng thái sợi và 1/2 hành lá vào nước",
+        "Thả thịt heo vào luộc với lửa vừa",
+        "Khi nước sôi lại, hạ lửa nhỏ luộc thêm 20 phút",
+        "Vớt thịt ra ngâm ngay vào thau nước lạnh (giữ độ giòn)",
+        "Để thịt nguội hoàn toàn (khoảng 15 phút)",
+        "Thái thịt mỏng vừa ăn (khoảng 2-3mm)"
+      ],
+      "sauce": [
+        "Pha 3 muỗng canh nước mắm với 2 muỗng canh đường",
+        "Thêm 4 muỗng canh nước cốt chanh",
+        "Cho tỏi băm và ớt thái lát vào",
+        "Khuấy đều đến khi đường tan hết",
+        "Nếm thử và điều chỉnh vị chua ngọt mặn theo ý thích"
+      ],
+      "assembly": [
+        "Nướng thịt trên bếp than hoa hoặc bếp nướng điện đến khi vàng đều hai mặt",
+        "Cho thịt nướng vào bát, chan nước chấm vừa đủ ngập mặt thịt",
+        "Bày rau sống ra đĩa riêng",
+        "Bún tươi để riêng trong tô"
+      ],
+      "serving": [
+        "Nhúng bánh tráng qua nước ấm nhanh",
+        "Đặt bánh tráng lên đĩa",
+        "Xếp xà lách, rau thơm lên trước",
+        "Thêm thịt heo thái và dưa leo",
+        "Cuốn chặt tay, không để rau thò ra ngoài",
+        "Chấm với nước mắm pha"
+      ],
+      "tips": [
+        "Không ngâm bánh tráng quá lâu sẽ bị nhũn",
+        "Nên thái thịt mỏng và theo chiều ngang thớ để thịt mềm",
+        "Có thể thêm đồ chua (củ cải, cà rốt) để đa dạng vị"
+      ],
+      "storage": [
+        "Thịt luộc còn dư có thể bảo quản trong tủ lạnh 2-3 ngày",
+        "Nước chấm có thể giữ trong tủ lạnh đến 1 tuần"
+      ]
+    },
+    "regionId": "48",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 873000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 873000000
+    }
+  },
+  {
+    "id": "54_01",
+    "name": "Mắt Cá Ngừ Đại Dương",
+    "region": "Miền Trung",
+    "image": "recipes/images/54/54_01.jpg",
+    "cookingTime": 90,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Mắt cá ngừ đại dương",
+        "amount": 1,
+        "unit": "cặp",
+        "note": "Khoảng 800g-1kg/cặp"
+      },
+      {
+        "name": "Sả",
+        "amount": 10,
+        "unit": "cây"
+      },
+      {
+        "name": "Gừng",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Nghệ tươi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt hiểm",
+        "amount": 10,
+        "unit": "cái"
+      },
+      {
+        "name": "Ớt sừng",
+        "amount": 4,
+        "unit": "cái"
+      },
+      {
+        "name": "Me chín",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Dứa",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Cà chua",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Đậu bắp",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Bạc hà",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Rau răm",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Hành lá",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nước mắm",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Muối",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Đường",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Tiêu đen",
+        "amount": 15,
+        "unit": "g"
+      },
+      {
+        "name": "Dầu ăn",
+        "amount": 50,
+        "unit": "ml"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Mắt cá ngừ:",
+        "- Rửa sạch với nước muối loãng",
+        "- Cắt bỏ phần màng đen bên ngoài",
+        "- Chặt thành miếng vừa ăn (khoảng 4-5cm)",
+        "- Ngâm trong nước lạnh với gừng để khử tanh",
+        "Gia vị:",
+        "- Sả: Cắt bỏ rễ, rửa sạch",
+        "  + 6 cây đập dập để nấu",
+        "  + 4 cây băm nhuyễn để ướp",
+        "- Gừng: Gọt vỏ, rửa sạch",
+        "  + 1/2 phần thái lát mỏng",
+        "  + 1/2 phần băm nhuyễn",
+        "- Nghệ tươi: Gọt vỏ, rửa sạch, băm nhuyễn",
+        "- Hành tím, tỏi: Bóc vỏ, băm nhuyễn",
+        "Rau củ:",
+        "- Dứa: Gọt vỏ, bỏ mắt, thái miếng vừa ăn",
+        "- Cà chua: Rửa sạch, cắt múi cau",
+        "- Đậu bắp: Rửa sạch, cắt khúc 3cm",
+        "- Bạc hà: Rửa sạch, cắt khúc 5cm",
+        "Rau gia vị:",
+        "- Rau răm: Nhặt lá, rửa sạch",
+        "- Hành lá: Rửa sạch, thái nhỏ",
+        "Me:",
+        "- Ngâm trong nước ấm 15 phút",
+        "- Dầm lấy nước cốt, bỏ hạt và xơ"
+      ],
+      "marinating": [
+        "Ướp mắt cá:",
+        "- 2 muỗng canh sả băm",
+        "- 2 muỗng canh gừng băm",
+        "- 2 muỗng canh nghệ băm",
+        "- 2 muỗng canh hành tỏi băm",
+        "- 1 muỗng canh nước mắm",
+        "- 1/2 muỗng cà phê tiêu",
+        "- 1/2 muỗng cà phê muối",
+        "Trộn đều và ướp 30 phút"
+      ],
+      "broth": [
+        "Nấu nước dùng:",
+        "- Đun sôi 2 lít nước",
+        "- Cho sả đập dập, gừng thái lát vào",
+        "- Nấu sôi 10 phút để lấy hương vị",
+        "Nấu canh chua:",
+        "- Cho mắt cá đã ướp vào nồi nước dùng",
+        "- Nấu với lửa vừa 15 phút",
+        "- Thêm dứa, nấu thêm 5 phút",
+        "- Cho cà chua vào, nấu 3 phút",
+        "- Thêm đậu bắp, nấu 2 phút",
+        "- Cho bạc hà vào cuối cùng",
+        "Nêm nếm:",
+        "- Thêm nước me",
+        "- 2 muỗng canh nước mắm",
+        "- 1 muỗng canh đường",
+        "- Nếm lại và điều chỉnh vị chua-cay-mặn"
+      ],
+      "serving": [
+        "Trình bày:",
+        "- Múc canh ra tô lớn",
+        "- Rắc hành lá, rau răm lên trên",
+        "- Thêm ớt tươi thái lát",
+        "Dùng nóng với:",
+        "- Cơm trắng nóng",
+        "- Nước mắm ớt",
+        "- Có thể thêm ớt tươi tùy khẩu vị"
+      ],
+      "tips": [
+        "Chọn mắt cá ngừ đại dương tươi, có màu hồng tự nhiên",
+        "Phải làm sạch kỹ phần màng đen để tránh vị đắng",
+        "Ướp mắt cá với nghệ để khử tanh và có màu đẹp",
+        "Nấu mắt cá vừa chín tới để thịt không bị dai",
+        "Cho các loại rau củ vào nồi theo độ cứng mềm",
+        "Nêm nếm cân bằng vị chua của me và dứa"
+      ],
+      "storage": [
+        "Canh nên dùng trong ngày để đảm bảo độ tươi ngon",
+        "Nếu cần bảo quản, để riêng phần nước và mắt cá",
+        "Mắt cá đã nấu có thể bảo quản trong tủ lạnh 1-2 ngày",
+        "Nước dùng có thể giữ trong tủ lạnh đến 2 ngày",
+        "Rau gia vị nên chuẩn bị mới mỗi lần dùng",
+        "Không nên trữ đông món này vì sẽ làm mất đi hương vị đặc trưng"
+      ]
+    },
+    "regionId": "54",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 881000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 881000000
+    }
+  },
+  {
+    "id": "75_01",
+    "name": "Bánh Bèo Biên Hòa",
+    "region": "Miền Nam",
+    "image": "recipes/images/75/75_01.jpg",
+    "ingredients": [
+      "Bột gạo",
+      "Tôm khô",
+      "Mỡ hành",
+      "Đậu xanh",
+      "Nước cốt dừa"
+    ],
+    "instructions": [
+      "Pha bột bánh bèo",
+      "Hấp bánh trong khuôn nhỏ",
+      "Làm nhân tôm khô",
+      "Rắc mỡ hành và ăn với nước mắm"
+    ],
+    "regionId": "75",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 881000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 881000000
+    }
+  },
+  {
+    "id": "79_01",
+    "name": "Cơm Tấm Sườn Bì Chả",
+    "region": "Miền Nam",
+    "image": "recipes/images/79/79_01.jpg",
+    "cookingTime": 90,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Sườn heo non",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Da heo (làm bì)",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Thịt heo xay (làm chả)",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Gạo tấm",
+        "amount": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nước mắm ngon",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Đường cát trắng",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Bột ngọt",
+        "amount": 10,
+        "unit": "g"
+      },
+      {
+        "name": "Tiêu đen",
+        "amount": 15,
+        "unit": "g"
+      },
+      {
+        "name": "Dầu hào",
+        "amount": 30,
+        "unit": "ml"
+      },
+      {
+        "name": "Mỡ heo (làm mỡ hành)",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Dưa leo",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Cà chua",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Đồ chua (cà rốt, củ cải)",
+        "amount": 200,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Sườn non rửa sạch, để ráo, chặt miếng vừa ăn (3x5cm)",
+        "Da heo cạo sạch, rửa kỹ v���i muối",
+        "Thịt xay ướp gia vị làm chả",
+        "Gạo tấm vo sạch, ngâm nước 30 phút",
+        "Hành tím, tỏi bóc vỏ, băm nhuyễn một phần, để nguyên một phần",
+        "Dưa leo, cà chua rửa sạch, thái lát mỏng"
+      ],
+      "marinating": [
+        "Sườn ướp với: 2 muỗng canh nước mắm, 1 muỗng canh đường, 1 muỗng cà phê bột ngọt, 1 muỗng cà phê tiêu, 2 muỗng canh hành tỏi băm, 1 muỗng canh dầu hào",
+        "Để sườn ướp ít nhất 2 tiếng hoặc qua đêm trong tủ lạnh",
+        "Thịt xay ướp với: 1 muỗng canh nước mắm, 1/2 muỗng cà phê đường, 1/2 muỗng cà phê tiêu, 2 muỗng canh hành tỏi băm",
+        "Trộn đều và để thịt ướp 30 phút"
+      ],
+      "cooking": [
+        "Nấu cơm tấm:",
+        "- Đổ nước vào nồi theo tỷ lệ 1:1.2 (gạo:nước)",
+        "- Nấu với lửa vừa đến khi cơm chín mềm",
+        "- Để cơm nghỉ 10 phút rồi xới lên cho tơi",
+        "Làm bì:",
+        "- Luộc da heo trong nước sôi có thêm chút muối khoảng 20 phút",
+        "- Vớt ra ngâm nước lạnh rồi thái sợi mỏng",
+        "- Trộn với mè rang, hành phi, nước mắm, đường, tiêu",
+        "Làm chả:",
+        "- Đánh thịt xay cho dai",
+        "- Cho vào khuôn lót lá chuối",
+        "- Hấp trong 20 phút",
+        "- Để nguội rồi thái lát mỏng",
+        "Nướng sườn:",
+        "- Làm nóng vỉ nướng than hoa",
+        "- Nướng sườn trên lửa vừa, thường xuyên phết dầu ăn",
+        "- Nướng đến khi sườn chín vàng đều hai mặt (khoảng 15-20 phút)",
+        "Làm mỡ hành:",
+        "- Phi hành tím với mỡ heo đến khi hành vàng thơm",
+        "- Tắt bếp để nguội"
+      ],
+      "sauce": [
+        "Pha nước mắm:",
+        "- 5 muỗng canh nước mắm",
+        "- 3 muỗng canh đường",
+        "- 4 muỗng canh nước ấm",
+        "- 2 muỗng canh chanh tươi",
+        "- 1 muỗng cà phê tỏi băm",
+        "- Ớt tươi thái lát",
+        "Khuấy đều đến khi đường tan hết"
+      ],
+      "assembly": [
+        "Nướng thịt trên bếp than hoa hoặc bếp nướng điện đến khi vàng đều hai mặt",
+        "Cho thịt nướng vào bát, chan nước chấm vừa đủ ngập mặt thịt",
+        "Bày rau sống ra đĩa riêng",
+        "Bún tươi để riêng trong tô"
+      ],
+      "serving": [
+        "Nhúng bánh tráng qua nước ấm nhanh",
+        "Đặt bánh tráng lên đĩa",
+        "Xếp xà lách, rau thơm lên trước",
+        "Thêm thịt heo thái và dưa leo",
+        "Cuốn chặt tay, không để rau thò ra ngoài",
+        "Chấm với nước mắm pha"
+      ],
+      "tips": [
+        "Sườn nên chọn phần non, có cả nạc và mỡ để khi nướng không bị khô",
+        "Nướng sườn bằng than hoa sẽ thơm hơn nướng bếp gas",
+        "Cơm tấm phải nấu vừa chín tới, không được nhão",
+        "Bì phải thái sợi mỏng đều và trộn với mè rang mới ngon",
+        "Chả phải đánh cho dai và hấp vừa tới để không bị khô",
+        "Mỡ hành phải được phi vàng đều và để nguội mới rưới lên cơm"
+      ],
+      "storage": [
+        "Sườn ướp có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Bì trộn có thể giữ trong tủ lạnh đến 3 ngày",
+        "Chả đã hấp chín để được 3-4 ngày trong tủ lạnh",
+        "Mỡ hành để trong lọ kín, bảo quản tủ lạnh đến 1 tuần",
+        "Nước mắm pha có thể giữ trong tủ lạnh đến 1 tuần",
+        "Đồ chua bảo quản trong tủ lạnh đến 2 tuần"
+      ]
+    },
+    "regionId": "79",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 876000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 876000000
+    }
+  },
+  {
+    "id": "79_02",
+    "name": "Hủ Tiếu Nam Vang",
+    "region": "Miền Nam",
+    "image": "recipes/images/79/79_02.jpg",
+    "cookingTime": 120,
+    "difficulty": 4,
+    "servings": 6,
+    "ingredients": [
+      {
+        "name": "Hủ tiếu tươi",
+        "amount": 1,
+        "unit": "kg"
+      },
+      {
+        "name": "Xương heo",
+        "amount": 1.5,
+        "unit": "kg"
+      },
+      {
+        "name": "Tôm sú",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Thịt nạc vai heo",
+        "amount": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Gan heo",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Cật heo",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Trứng cút",
+        "amount": 15,
+        "unit": "cái"
+      },
+      {
+        "name": "Tôm khô",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Mực khô",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nấm đông cô",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tây",
+        "amount": 2,
+        "unit": "cái"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Giá sống",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Hẹ",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Ngò gai",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Rau húng quế",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Chanh tươi",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Ớt sừng",
+        "amount": 4,
+        "unit": "cái"
+      },
+      {
+        "name": "Nước mắm",
+        "amount": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Muối",
+        "amount": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Đường phèn",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Tiêu đen",
+        "amount": 20,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Xương heo:",
+        "- Rửa sạch với nước muối",
+        "- Chần qua nước sôi để loại bỏ bẩn",
+        "- Rửa lại với nước lạnh",
+        "Thịt và nội tạng:",
+        "- Thịt nạc rửa sạch, thái miếng mỏng vừa ăn",
+        "- Gan heo rửa sạch, thái lát mỏng 2mm",
+        "- Cật heo rửa sạch, thái lát mỏng",
+        "Tôm sú:",
+        "- Bóc vỏ, giữ lại đuôi",
+        "- Rút chỉ đen",
+        "- Rửa sạch, để ráo",
+        "Hải sản khô:",
+        "- Tôm khô và mực khô ngâm nước ấm 30 phút",
+        "- Nấm đông cô ngâm nước ấm 20 phút",
+        "- Vớt ra, để ráo",
+        "Gia vị:",
+        "- Hành tây bóc vỏ, thái múi cau",
+        "- Hành tím, tỏi bóc vỏ",
+        "- 2/3 phần băm nhuyễn",
+        "- 1/3 phần để nguyên",
+        "Rau gia vị:",
+        "- Hẹ cắt khúc 5cm",
+        "- Ngò gai nhặt lá, rửa sạch",
+        "- Húng quế nhặt lá, rửa sạch",
+        "- Ớt sừng thái lát mỏng"
+      ],
+      "marinating": [
+        "Ướp thịt nạc:",
+        "- 1 muỗng canh hành tỏi băm",
+        "- 1 muỗng cà phê tiêu",
+        "- 1 muỗng cà phê muối",
+        "- 1/2 muỗng cà phê đường",
+        "Để thịt ướp 30 phút",
+        "Ướp tôm:",
+        "- 1 muỗng canh hành tỏi băm",
+        "- 1/2 muỗng cà phê tiêu",
+        "- 1/2 muỗng cà phê muối",
+        "Để tôm ướp 15 phút"
+      ],
+      "broth": [
+        "Nấu nước dùng:",
+        "- Đun sôi 3 lít nước",
+        "- Cho xương vào nấu với lửa vừa 1 giờ",
+        "- Thêm tôm khô, mực khô đã ngâm",
+        "- Nấu thêm 30 phút với lửa nhỏ",
+        "- Nêm: 2 muỗng canh nước mắm, 1 muỗng canh đường phèn, 1 muỗng cà phê muối",
+        "- Nấu liu riu thêm 15 phút",
+        "- Vớt bọt thường xuyên để nước dùng trong"
+      ],
+      "cooking": [
+        "Xào thịt:",
+        "- Phi thơm hành tỏi với dầu",
+        "- Xào thịt nạc đến khi chín tái",
+        "- Vớt ra để riêng",
+        "Chế biến gan, cật:",
+        "- Luộc nhanh trong nước sôi 1-2 phút",
+        "- Vớt ra ngâm nước lạnh",
+        "Chế biến tôm:",
+        "- Xào tôm với hành tỏi đến khi vừa chín",
+        "- Vớt ra để riêng",
+        "Luộc trứng cút:",
+        "- Luộc 3 phút trong nước sôi",
+        "- Ngâm nước lạnh, bóc vỏ"
+      ],
+      "assembly": [
+        "Chuẩn bị hủ tiếu:",
+        "- Đun sôi nước trong nồi lớn",
+        "- Trụng hủ tiếu 30 giây",
+        "- Vớt ra, tráng nước lạnh",
+        "Sắp xếp tô:",
+        "- Xếp hủ tiếu vào tô",
+        "- Xếp thịt, gan, cật, tôm",
+        "- Thêm trứng cút",
+        "- Rắc hành phi",
+        "- Chan nước dùng sôi vào"
+      ],
+      "serving": [
+        "Dọn kèm:",
+        "- Đĩa rau sống (giá, hẹ, ngò gai, húng quế)",
+        "- Chanh tươi",
+        "- Ớt tươi thái lát",
+        "Gia vị thêm:",
+        "- Tiêu xay",
+        "- Nước mắm",
+        "- Tương ớt",
+        "Hướng dẫn ăn:",
+        "- Thêm rau sống tùy thích",
+        "- Nặn chanh",
+        "- Có thể thêm ớt, tiêu theo khẩu vị"
+      ],
+      "tips": [
+        "Nước dùng phải nấu từ xương tươi và hải sản khô để có vị ngọt tự nhiên",
+        "Xương phải được chần qua và rửa sạch để nước dùng trong",
+        "Hủ tiếu phải trụng vừa tới, không được để mềm",
+        "Gan và cật chỉ luộc qua để giữ độ giòn",
+        "Tôm phải xào vừa chín để giữ độ ngọt và không bị dai",
+        "Nên để riêng nước dùng và hủ tiếu khi bảo quản"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Thịt, gan, cật đã chế biến nên bảo quản riêng, dùng trong vòng 24 giờ",
+        "Tôm đã xào nên dùng trong ngày",
+        "Hủ tiếu đã trụng không nên bảo quản, nên trụng mới mỗi lần ăn",
+        "Rau sống rửa sạch, để ráo, bọc khăn ẩm và bảo quản trong tủ lạnh",
+        "Gia vị phi thơm có thể bảo quản trong tủ lạnh đến 1 tuần"
+      ]
+    },
+    "regionId": "79",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 877000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 877000000
+    }
+  },
+  {
+    "id": "92_01",
+    "name": "Bún Cá Cần Thơ",
+    "region": "Miền Nam",
+    "image": "recipes/images/92/92_01.jpg",
+    "cookingTime": 90,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Cá lóc phi lê",
+        "amount": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Xương cá lóc",
+        "amount": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Bún tươi",
+        "amount": 1.2,
+        "unit": "kg"
+      },
+      {
+        "name": "Cà chua",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Dọc mùng",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Bạc hà",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Ớt sừng",
+        "amount": 3,
+        "unit": "cái"
+      },
+      {
+        "name": "Rau om",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Ngò gai",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Giá sống",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Bột chiên giòn",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Me chín",
+        "amount": 50,
+        "unit": "g"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Cá lóc phi lê cắt miếng vừa ăn khoảng 3x5cm",
+        "Xương cá lóc rửa sạch với muối, chần qua nước sôi",
+        "Cà chua cắt múi cau",
+        "Dọc mùng và bạc hà cắt khúc 5cm",
+        "Hành tỏi băm nhuyễn",
+        "Rau om, ngò gai nhặt rửa sạch",
+        "Me ngâm nước ấm, lọc lấy nước cốt"
+      ],
+      "broth": [
+        "Phi thơm hành tỏi",
+        "Cho xương cá vào nấu với 2.5 lít nước",
+        "Nấu liu riu 30 phút, hớt bọt thường xuyên",
+        "Thêm cà chua vào nấu cho nhừ",
+        "Nêm nước me, nước mắm, đường, muối vừa ăn",
+        "Cho dọc mùng, bạc hà vào nấu chín mềm"
+      ],
+      "cooking": [
+        "Ướp cá với hành tỏi băm, nước mắm, tiêu",
+        "Lăn cá qua bột chiên giòn",
+        "Chiên cá trong chảo dầu nóng già đến khi vàng giòn"
+      ],
+      "assembly": [
+        "Trụng bún chín tới",
+        "Xếp bún vào tô",
+        "Xếp cá chiên lên trên",
+        "Chan nước dùng nóng vào"
+      ],
+      "serving": [
+        "Rắc rau om, ngò gai lên trên",
+        "Ăn kèm giá sống, ớt tươi",
+        "Có thể thêm nước mắm, ớt tùy khẩu vị"
+      ],
+      "tips": [
+        "Cá phải được chiên vàng giòn bên ngoài nhưng vẫn mềm và ngọt bên trong",
+        "Nước dùng phải nấu từ xương cá để có vị ngọt tự nhiên",
+        "Bạc hà và dọc mùng phải được luộc riêng trước khi cho vào nước dùng để khử vị hăng",
+        "Nước me phải vừa đủ chua để cân bằng với vị béo của cá",
+        "Rau om và ngò gai phải được thái nhỏ và rắc lên trên cùng để giữ được hương thơm",
+        "Cá sau khi chiên nên để ráo dầu trên giấy thấm để món ăn không bị ngấy"
+      ],
+      "storage": [
+        "Nước dùng có thể bảo quản trong tủ lạnh đến 3 ngày",
+        "Cá đã chiên nên ăn ngay để giữ độ giòn, nếu cần bảo quản thì để riêng và hâm nóng lại bằng lò vi sóng",
+        "Bạc hà và dọc mùng đã luộc có thể bảo quản trong tủ lạnh 1-2 ngày",
+        "Rau sống phải được rửa sạch, để ráo và bọc trong khăn ẩm trước khi cho vào tủ lạnh",
+        "Nước me pha sẵn có thể bảo quản trong tủ lạnh đến 1 tuần",
+        "Ớt sa tế có thể bảo quản trong lọ kín đến 2 tuần trong tủ lạnh"
+      ]
+    },
+    "regionId": "92",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 879000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 879000000
+    }
+  },
+  {
+    "id": "92_02",
+    "name": "Bánh Cống",
+    "region": "Miền Nam",
+    "image": "recipes/images/92/92_02.jpg",
+    "cookingTime": 60,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Tôm tươi cỡ vừa",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Thịt heo băm",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Đậu xanh đã xát vỏ",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Bột gạo",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tiêu",
+        "amount": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Nước mắm",
+        "amount": 30,
+        "unit": "ml"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Tôm bóc vỏ, giữ đầu",
+        "Đậu xanh ngâm 4 tiếng, xay nhuyễn",
+        "Hành tím băm nhuyễn"
+      ],
+      "processing": [
+        "Trộn bột gạo với nước ấm tạo hỗn hợp sệt",
+        "Ướp thịt băm với hành tím, tiêu, nước mắm",
+        "Trộn đều đậu xanh xay với thịt băm đã ướp"
+      ],
+      "cooking": [
+        "Đổ bột vào khuôn bánh cống",
+        "Đặt tôm lên trên, đầu tôm hướng lên",
+        "Chiên trong dầu nóng với lửa vừa đến khi vàng giòn"
+      ],
+      "assembly": [
+        "Chuẩn bị đĩa bánh:",
+        "- Xếp bánh cống ra đĩa có lót giấy thấm dầu",
+        "- Bày rau sống và các loại rau thơm xung quanh",
+        "- Đặt chén nước mắm pha bên cạnh"
+      ],
+      "serving": [
+        "Nhúng bánh tráng qua nước ấm nhanh",
+        "Đặt bánh tráng lên đĩa",
+        "Xếp xà lách, rau thơm lên trước",
+        "Thêm thịt heo thái và dưa leo",
+        "Cuốn chặt tay, không để rau thò ra ngoài",
+        "Chấm với nước mắm pha"
+      ],
+      "tips": [
+        "Bột phải được đánh cho thật mịn và để nghỉ 30 phút trước khi chiên",
+        "Dầu chiên phải nóng già (180-190°C) để bánh giòn và không bị ngấm dầu",
+        "Tôm phải được đặt đầu hướng lên và ấn nhẹ vào bột để không bị rơi",
+        "Đậu xanh xay phải mịn và không quá khô để bánh không bị vụn",
+        "Chiên bánh với lửa vừa để chín đều và không bị cháy",
+        "Khuôn bánh phải được làm nóng trước khi đổ bột để bánh không bị dính"
+      ],
+      "storage": [
+        "Bột sống có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Bánh đã chiên nên ăn nóng ngay để giữ độ giòn",
+        "Nếu cần bảo quản bánh đã chiên, để nguội hoàn toàn rồi cho vào hộp kín, hâm nóng lại bằng lò vi sóng",
+        "Nhân đậu xanh và thịt đã trộn có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Nước mắm pha có thể bảo quản trong tủ lạnh đến 1 tuần",
+        "Đồ chua bảo quản trong tủ lạnh đến 2 tuần"
+      ]
+    },
+    "regionId": "92",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 880000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 880000000
+    }
+  },
+  {
+    "id": "95_01",
+    "name": "Bánh Cống Bạc Liêu",
+    "region": "Miền Nam",
+    "image": "recipes/images/95/95_01.jpg",
+    "cookingTime": 60,
+    "difficulty": 3,
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Tôm tươi",
+        "amount": 300,
+        "unit": "g",
+        "note": "Tôm sú hoặc tôm thẻ, bóc vỏ, giữ lại đuôi"
+      },
+      {
+        "name": "Thịt heo xay",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Đậu xanh cà vỏ",
+        "amount": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Bột gạo",
+        "amount": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Bột năng",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Hành tím",
+        "amount": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Tỏi",
+        "amount": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Nước mắm",
+        "amount": 2,
+        "unit": "muỗng canh"
+      },
+      {
+        "name": "Tiêu đen",
+        "amount": 1,
+        "unit": "muỗng cà phê"
+      },
+      {
+        "name": "Dầu ăn",
+        "amount": 500,
+        "unit": "ml",
+        "note": "Dùng để chiên bánh"
+      },
+      {
+        "name": "Rau sống các loại",
+        "amount": 200,
+        "unit": "g",
+        "note": "Xà lách, húng quế, rau răm"
+      },
+      {
+        "name": "Dưa leo",
+        "amount": 2,
+        "unit": "cái"
+      }
+    ],
+    "instructions": {
+      "preparation": [
+        "Đậu xanh:",
+        "- Ngâm đậu xanh 4 tiếng hoặc qua đêm",
+        "- Đãi sạch, để ráo",
+        "- Xay nhuyễn thành bột mịn",
+        "Tôm tươi:",
+        "- Bóc vỏ, giữ lại đuôi",
+        "- Rửa sạch, để ráo",
+        "- Ướp với 1/2 muỗng cà phê tiêu và 1/2 muỗng canh nước mắm",
+        "Gia vị:",
+        "- Hành tím, tỏi bóc vỏ",
+        "- Băm nhuyễn một nửa số hành tím và tỏi",
+        "- Phần còn lại thái lát mỏng"
+      ],
+      "processing": [
+        "Làm bột:",
+        "- Trộn bột gạo với bột năng",
+        "- Thêm 400ml nước ấm",
+        "- Khuấy đều thành hỗn hợp sệt",
+        "- Để nghỉ 30 phút",
+        "Làm nhân:",
+        "- Trộn thịt xay với hành tỏi băm",
+        "- Thêm 1 muỗng canh nước mắm, 1/2 muỗng cà phê tiêu",
+        "- Trộn đều và ướp 15 phút"
+      ],
+      "cooking": [
+        "Chiên bánh:",
+        "- Đun nóng dầu trong chảo sâu lòng",
+        "- Múc bột vào khuôn bánh cống",
+        "- Đặt tôm vào giữa",
+        "- Phủ một lớp bột đậu xanh và thịt lên trên",
+        "- Chiên với lửa vừa đến khi vàng giòn (khoảng 5-7 phút)",
+        "- Vớt ra để ráo dầu trên giấy thấm"
+      ],
+      "sauce": [
+        "Pha nước mắm chua ngọt:",
+        "- 3 muỗng canh nước mắm",
+        "- 3 muỗng canh đường",
+        "- 2 muỗng canh nước cốt chanh",
+        "- 1 muỗng canh ớt băm",
+        "- 2 tép tỏi băm",
+        "Khuấy đều cho đường tan hết"
+      ],
+      "assembly": [
+        "Lắp ráp bánh:",
+        "- Chuẩn bị khuôn bánh cống nóng",
+        "- Múc bột vào khuôn theo thứ tự: bột gạo, tôm, bột đậu xanh, thịt",
+        "- Đảm bảo các lớp được xếp đều và đẹp mắt"
+      ],
+      "serving": [
+        "Dọn bánh nóng kèm:",
+        "- Rau sống các loại",
+        "- Dưa leo thái lát",
+        "- Nước mắm chua ngọt",
+        "Cách ăn:",
+        "- Chấm bánh với nước mắm",
+        "- Ăn kèm rau sống và dưa leo",
+        "- Dùng nóng để bánh giòn ngon"
+      ],
+      "tips": [
+        "Bột phải được để nghỉ đủ thời gian để bánh giòn",
+        "Dầu chiên phải đủ nóng (180-190°C) để bánh không bị ngấm dầu",
+        "Không chiên quá nhiều bánh cùng lúc để dầu không bị nguội",
+        "Tôm nên để nguyên đuôi để tăng thẩm mỹ",
+        "Bột đậu xanh phải xay thật mịn để bánh đẹp mắt",
+        "Nên ăn bánh khi còn nóng để cảm nhận độ giòn"
+      ],
+      "storage": [
+        "Bánh cống nên ăn ngay khi chiên xong",
+        "Nếu cần bảo quản, để nguội hoàn toàn rồi cho vào hộp kín",
+        "Có thể giữ trong tủ lạnh tối đa 24 giờ",
+        "Khi ăn lại, hâm nóng bằng lò nướng hoặc nồi chiên không dầu",
+        "Bột pha sẵn có thể bảo quản trong tủ lạnh đến 24 giờ",
+        "Nước mắm pha có thể giữ trong tủ lạnh đến 1 tuần"
+      ]
+    },
+    "regionId": "95",
+    "createdAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 884000000
+    },
+    "updatedAt": {
+      "_seconds": 1734807259,
+      "_nanoseconds": 884000000
+    }
+  }
+]
