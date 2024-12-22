@@ -4,4 +4,3 @@ export * from './RecipeMeta';
 export * from './RecipeIngredients';
 export * from './RecipeActions';
 export * from './RecipeReviews';
-export * from './RecipeDetail';

@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Modal, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { Recipe } from '../../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RecipeCard } from '../../../components/recipe';
-import { onSnapshot, doc } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
-import { COLLECTIONS } from '../../../constants';
-import { RecipeDetail } from '../../../components/recipe/components/RecipeDetail';
 
 interface Props {
   visible: boolean;
@@ -30,37 +26,8 @@ export const RecipeDetailModal = ({
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null);
 
-  // Lắng nghe thay đổi realtime từ Firebase
-  useEffect(() => {
-    if (!recipe?.id || !visible) return;
-
-    const unsubscribe = onSnapshot(
-      doc(db, COLLECTIONS.RECIPES, recipe.id),
-      (doc) => {
-        if (doc.exists()) {
-          setCurrentRecipe({ ...recipe, ...doc.data() });
-        }
-      }
-    );
-
-    return () => {
-      unsubscribe();
-      if (!visible) {
-        setCurrentRecipe(null); // Reset state khi đóng modal
-      }
-    };
-  }, [recipe?.id, visible]);
-
-  // Cập nhật currentRecipe khi recipe prop thay đổi
-  useEffect(() => {
-    if (recipe && visible) {
-      setCurrentRecipe(recipe);
-    }
-  }, [recipe, visible]);
-
-  if (!currentRecipe) return null;
+  if (!recipe) return null;
 
   return (
     <Modal
@@ -68,9 +35,13 @@ export const RecipeDetailModal = ({
       animationType="slide"
       presentationStyle="fullScreen"
       onRequestClose={onClose}
+      style={{ zIndex: 999 }}
     >
       <View
-        style={{ flex: 1, backgroundColor: theme.colors.background.default }}
+        style={{
+          flex: 1,
+          backgroundColor: theme.colors.background.default,
+        }}
       >
         {/* Header */}
         <View
@@ -99,21 +70,45 @@ export const RecipeDetailModal = ({
             />
           </TouchableOpacity>
 
-          <Typography variant="h2" style={{ fontSize: 20 }}>
-            {currentRecipe.name}
-          </Typography>
+          <View style={{ flex: 1 }}>
+            <Typography variant="h2" style={{ fontSize: 20 }}>
+              {recipe.name}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="secondary"
+              style={{ marginTop: 2 }}
+            >
+              {recipe.region}
+            </Typography>
+          </View>
         </View>
 
-        {/* Content */}
-        <RecipeDetail
-          recipe={currentRecipe}
-          onClose={onClose}
-          onSave={onSave}
-          onDelete={onDelete}
-          showActions={true}
-          showReviews={showReviews}
-          defaultExpandedInstructions={true}
-        />
+        {/* Recipe Detail */}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            padding: theme.spacing.md,
+            paddingBottom: insets.bottom + theme.spacing.xl,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: theme.colors.background.paper,
+              borderRadius: theme.spacing.md,
+              ...theme.shadows.sm,
+            }}
+          >
+            <RecipeCard
+              recipe={recipe}
+              onSave={onSave}
+              onDelete={onDelete ? () => onDelete(recipe) : undefined}
+              showActions={true}
+              showReviews={showReviews}
+              mode="detailed"
+            />
+          </View>
+        </ScrollView>
       </View>
     </Modal>
   );
