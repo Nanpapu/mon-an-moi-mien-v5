@@ -56,4 +56,14 @@ export const createStyles = (theme: Theme) =>
     modalBody: {
       flex: 1,
     },
+    imageContainer: {
+      width: '100%',
+      height: 250,
+      backgroundColor: theme.colors.background.paper,
+      marginBottom: theme.spacing.md,
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+    },
   });

@@ -1,8 +1,11 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { Recipe } from '../../../types';
 import { createStyles } from './RecipeDetail.styles';
 import { useTheme } from '../../../theme/ThemeContext';
+import { ImageViewerModal } from '../../shared';
+import { ImageCacheService } from '../../../services/imageCacheService';
 import {
   RecipeHeader,
   RecipeMeta,
@@ -33,9 +36,42 @@ export const RecipeDetail = ({
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [showImageViewer, setShowImageViewer] = useState(false);
+
+  // Load và cache ảnh
+  useEffect(() => {
+    const loadImage = async () => {
+      if (recipe.image) {
+        const url = await ImageCacheService.getImageUrl(recipe.image);
+        setImageUrl(url);
+      }
+    };
+    loadImage();
+  }, [recipe.image]);
 
   return (
     <ScrollView style={styles.detailContainer}>
+      {/* Phần hình ảnh */}
+      <TouchableOpacity
+        style={styles.imageContainer}
+        onPress={() => setShowImageViewer(true)}
+      >
+        <Image
+          source={imageUrl || require('../../../../assets/default-avatar.png')}
+          style={styles.image}
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
+        />
+      </TouchableOpacity>
+
+      <ImageViewerModal
+        visible={showImageViewer}
+        imageUrl={imageUrl}
+        onClose={() => setShowImageViewer(false)}
+      />
+
       <View style={styles.detailContent}>
         {/* Thông tin cơ bản */}
         <RecipeMeta recipe={recipe} />
