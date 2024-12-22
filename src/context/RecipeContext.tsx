@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Recipe } from '../types';
 import { getSavedRecipes } from '../utils/storage';
 import { useAuth } from './AuthContext';
@@ -14,12 +14,18 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
   const { user } = useAuth();
 
+  useEffect(() => {
+    if (!user) {
+      setSavedRecipes([]); // Clear recipes khi logout
+    }
+  }, [user]);
+
   const refreshSavedRecipes = async () => {
     if (user) {
       const recipes = await getSavedRecipes(user.uid);
       setSavedRecipes(recipes);
     } else {
-      setSavedRecipes([]); // Reset khi không có user
+      setSavedRecipes([]); // Clear recipes khi không có user
     }
   };
 

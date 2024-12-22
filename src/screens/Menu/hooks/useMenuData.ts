@@ -15,13 +15,15 @@ export const useMenuData = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [user]);
 
   const loadData = async () => {
     setIsLoading(true);
     try {
       if (user) {
         await migrateSavedRecipes(user.uid);
+        await refreshSavedRecipes();
+      } else {
         await refreshSavedRecipes();
       }
     } catch (error) {
