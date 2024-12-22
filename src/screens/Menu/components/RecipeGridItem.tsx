@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Typography } from '../../../components/shared';
@@ -22,166 +22,185 @@ interface Props {
   isSelected?: boolean;
   onLongPress?: (recipeId: string) => void;
   onToggleSelect?: () => void;
+  visible?: boolean;
 }
 
-export const RecipeGridItem = ({
-  recipe,
-  onPress,
-  width,
-  config,
-  onFavoriteChange,
-  isSelectionMode = false,
-  isSelected = false,
-  onLongPress,
-  onToggleSelect,
-}: Props) => {
-  const { theme } = useTheme();
-  const styles = createStyles(theme, width, config);
-  const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+export const RecipeGridItem = memo(
+  ({
+    recipe,
+    onPress,
+    width,
+    config,
+    onFavoriteChange,
+    isSelectionMode = false,
+    isSelected = false,
+    onLongPress,
+    onToggleSelect,
+    visible = true,
+  }: Props) => {
+    const { theme } = useTheme();
+    const styles = createStyles(theme, width, config);
+    const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, COLLECTIONS.RECIPE_STATS, recipe.id),
-      (doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          setStats({
-            averageRating: data.averageRating || 0,
-            totalReviews: data.totalReviews || 0,
-          });
+    useEffect(() => {
+      const unsubscribe = onSnapshot(
+        doc(db, COLLECTIONS.RECIPE_STATS, recipe.id),
+        (doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+            setStats({
+              averageRating: data.averageRating || 0,
+              totalReviews: data.totalReviews || 0,
+            });
+          }
         }
-      }
-    );
-    return () => unsubscribe();
-  }, [recipe.id]);
+      );
+      return () => unsubscribe();
+    }, [recipe.id]);
 
-  useEffect(() => {
-    const loadImage = async () => {
-      if (recipe.image) {
-        const url = await ImageUtils.getRecipeImageUrl(recipe.image);
-        setImageUrl(url);
+    useEffect(() => {
+      const loadImage = async () => {
+        if (recipe.image) {
+          const url = await ImageUtils.getRecipeImageUrl(recipe.image);
+          setImageUrl(url);
+        }
+      };
+      loadImage();
+    }, [recipe.image]);
+
+    const renderStars = () => {
+      return [...Array(5)].map((_, index) => (
+        <Ionicons
+          key={index}
+          name={index < stats.averageRating ? 'star' : 'star-outline'}
+          size={12}
+          color={theme.colors.warning.main}
+          style={{ marginRight: 2 }}
+        />
+      ));
+    };
+
+    const handlePress = () => {
+      if (isSelectionMode) {
+        onToggleSelect?.();
+      } else {
+        onPress();
       }
     };
-    loadImage();
-  }, [recipe.image]);
 
-  const renderStars = () => {
-    return [...Array(5)].map((_, index) => (
-      <Ionicons
-        key={index}
-        name={index < stats.averageRating ? 'star' : 'star-outline'}
-        size={12}
-        color={theme.colors.warning.main}
-        style={{ marginRight: 2 }}
-      />
-    ));
-  };
-
-  const handlePress = () => {
-    if (isSelectionMode) {
-      onToggleSelect?.();
-    } else {
-      onPress();
-    }
-  };
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.container,
-        isSelected && styles.containerSelected,
-      ]}
-      onPress={handlePress}
-      onLongPress={() => onLongPress?.(recipe.id)}
-      activeOpacity={0.7}
-      delayLongPress={300}
-    >
-      {isSelectionMode && (
-        <View style={styles.checkboxContainer}>
-          <Ionicons
-            name={isSelected ? 'checkbox' : 'square-outline'}
-            size={24}
-            color={
-              isSelected 
-                ? theme.colors.primary.main 
-                : theme.colors.text.secondary
-            }
-          />
-        </View>
-      )}
-
-      <FavoriteButton recipe={recipe} onToggle={onFavoriteChange} />
-      <Image
-        source={imageUrl || require('../../../../assets/default-avatar.png')}
-        style={[styles.image, { width, height: width }]}
-        contentFit="cover"
-        transition={200}
-      />
-      {config.showTitle && (
-        <View style={styles.infoContainer}>
-          <View
-            style={[styles.nameContainer, { minHeight: config.minTitleHeight }]}
-          >
-            <Typography
-              variant="body2"
-              numberOfLines={config.titleLines || 2}
-              style={styles.name}
-            >
-              {recipe.name}
-            </Typography>
+    return (
+      <TouchableOpacity
+        style={[
+          styles.container,
+          isSelected && styles.containerSelected,
+          !visible && { display: 'none' },
+        ]}
+        onPress={handlePress}
+        onLongPress={() => onLongPress?.(recipe.id)}
+        activeOpacity={0.7}
+        delayLongPress={300}
+      >
+        {isSelectionMode && (
+          <View style={styles.checkboxContainer}>
+            <Ionicons
+              name={isSelected ? 'checkbox' : 'square-outline'}
+              size={24}
+              color={
+                isSelected
+                  ? theme.colors.primary.main
+                  : theme.colors.text.secondary
+              }
+            />
           </View>
+        )}
 
-          {config.showRating && (
-            <>
-              <View style={styles.divider} />
-              <View
-                style={[
-                  styles.ratingContainer,
-                  { minHeight: config.minRatingHeight },
-                ]}
+        <FavoriteButton recipe={recipe} onToggle={onFavoriteChange} />
+        <Image
+          source={imageUrl || require('../../../../assets/default-avatar.png')}
+          style={[styles.image, { width, height: width }]}
+          contentFit="cover"
+          transition={200}
+        />
+        {config.showTitle && (
+          <View style={styles.infoContainer}>
+            <View
+              style={[
+                styles.nameContainer,
+                { minHeight: config.minTitleHeight },
+              ]}
+            >
+              <Typography
+                variant="body2"
+                numberOfLines={config.titleLines || 2}
+                style={styles.name}
               >
-                {stats.totalReviews > 0 ? (
-                  <View style={styles.ratingContainer}>
-                    <View style={styles.starsContainer}>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Ionicons
-                          key={star}
-                          name={
-                            star <= stats.averageRating
-                              ? 'star'
-                              : 'star-outline'
-                          }
-                          size={12}
-                          color={theme.colors.warning.main}
-                          style={{ marginRight: 2 }}
-                        />
-                      ))}
-                      <Typography variant="caption" style={styles.reviewCount}>
-                        ({stats.totalReviews})
+                {recipe.name}
+              </Typography>
+            </View>
+
+            {config.showRating && (
+              <>
+                <View style={styles.divider} />
+                <View
+                  style={[
+                    styles.ratingContainer,
+                    { minHeight: config.minRatingHeight },
+                  ]}
+                >
+                  {stats.totalReviews > 0 ? (
+                    <View style={styles.ratingContainer}>
+                      <View style={styles.starsContainer}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Ionicons
+                            key={star}
+                            name={
+                              star <= stats.averageRating
+                                ? 'star'
+                                : 'star-outline'
+                            }
+                            size={12}
+                            color={theme.colors.warning.main}
+                            style={{ marginRight: 2 }}
+                          />
+                        ))}
+                        <Typography
+                          variant="caption"
+                          style={styles.reviewCount}
+                        >
+                          ({stats.totalReviews})
+                        </Typography>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={styles.noReviewsContainer}>
+                      <Ionicons
+                        name="star-outline"
+                        size={12}
+                        color={theme.colors.text.secondary}
+                      />
+                      <Typography variant="caption" style={styles.noReviews}>
+                        Chưa có đánh giá
                       </Typography>
                     </View>
-                  </View>
-                ) : (
-                  <View style={styles.noReviewsContainer}>
-                    <Ionicons
-                      name="star-outline"
-                      size={12}
-                      color={theme.colors.text.secondary}
-                    />
-                    <Typography variant="caption" style={styles.noReviews}>
-                      Chưa có đánh giá
-                    </Typography>
-                  </View>
-                )}
-              </View>
-            </>
-          )}
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-};
+                  )}
+                </View>
+              </>
+            )}
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.recipe.id === nextProps.recipe.id &&
+      prevProps.width === nextProps.width &&
+      prevProps.isSelected === nextProps.isSelected &&
+      prevProps.visible === nextProps.visible
+    );
+  }
+);
 
 const createStyles = (
   theme: any,

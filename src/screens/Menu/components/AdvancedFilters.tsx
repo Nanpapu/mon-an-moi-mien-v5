@@ -13,12 +13,17 @@ interface Props {
   filterOptions: FilterOptions;
   onFilterChange: (options: FilterOptions) => void;
   regions: string[];
+  quickFilterSettings: {
+    showCategories: boolean;
+    showDifficulty: boolean;
+  };
 }
 
 export const AdvancedFilters = ({
   filterOptions,
   onFilterChange,
   regions,
+  quickFilterSettings,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -60,7 +65,12 @@ export const AdvancedFilters = ({
   return (
     <View style={styles.container}>
       {/* Loại món */}
-      <View style={styles.filterGroup}>
+      <View
+        style={[
+          styles.filterGroup,
+          { display: quickFilterSettings.showCategories ? 'flex' : 'none' },
+        ]}
+      >
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Loại món
         </Typography>
@@ -105,7 +115,12 @@ export const AdvancedFilters = ({
       </View>
 
       {/* Độ khó */}
-      <View style={styles.filterGroup}>
+      <View
+        style={[
+          styles.filterGroup,
+          { display: quickFilterSettings.showDifficulty ? 'flex' : 'none' },
+        ]}
+      >
         <Typography variant="subtitle2" style={styles.groupTitle}>
           Độ khó
         </Typography>
@@ -126,7 +141,7 @@ export const AdvancedFilters = ({
                   filterOptions.difficulty === level && styles.activeChipText,
                 ]}
               >
-                {level}
+                {level} ⭐
               </Typography>
             </TouchableOpacity>
           ))}

@@ -20,7 +20,7 @@ import { Typography } from '../../../components/shared/Typography';
 interface Props {
   isLoading: boolean;
   isRefreshing: boolean;
-  filteredRecipes: Recipe[];
+  filteredRecipes: { recipe: Recipe; visible: boolean }[];
   savedRecipes: Recipe[];
   onRefresh: () => void;
   onDeleteRecipe: (recipe: Recipe) => Promise<void>;
@@ -83,20 +83,28 @@ export const RecipeList = ({
         }
       >
         <View style={styles.grid}>
-          {filteredRecipes.map((recipe) => (
-            <RecipeGridItem
-              key={recipe.id}
-              recipe={recipe}
-              onPress={() => handleRecipePress(recipe)}
-              width={calculateItemWidth()}
-              config={currentConfig}
-              onFavoriteChange={onFavoriteChange}
-              isSelectionMode={isSelectionMode}
-              isSelected={selectedRecipes.has(recipe.id)}
-              onLongPress={() => onLongPress?.(recipe.id)}
-              onToggleSelect={() => onToggleSelect?.(recipe.id)}
-            />
-          ))}
+          {savedRecipes.map((recipe) => {
+            // Tìm trạng thái visible của recipe
+            const filterResult = filteredRecipes.find(
+              (fr) => fr.recipe.id === recipe.id
+            );
+
+            return (
+              <RecipeGridItem
+                key={recipe.id}
+                recipe={recipe}
+                onPress={() => handleRecipePress(recipe)}
+                width={calculateItemWidth()}
+                config={currentConfig}
+                onFavoriteChange={onFavoriteChange}
+                isSelectionMode={isSelectionMode}
+                isSelected={selectedRecipes.has(recipe.id)}
+                onLongPress={() => onLongPress?.(recipe.id)}
+                onToggleSelect={() => onToggleSelect?.(recipe.id)}
+                visible={filterResult?.visible ?? true}
+              />
+            );
+          })}
         </View>
       </ScrollView>
 

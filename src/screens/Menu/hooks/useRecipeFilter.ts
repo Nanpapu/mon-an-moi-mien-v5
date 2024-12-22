@@ -34,8 +34,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     setFavoriteRecipes(favorites);
   };
 
-  // Hàm helper để kiểm tra thời gian nấu
-  const matchesCookingTime = (recipe: Recipe): boolean => {
+  // Khai báo kiểu trước khi sử dụng
+  const matchesCookingTime: (recipe: Recipe) => boolean = (recipe) => {
     if (!filterOptions.cookingTime.min && !filterOptions.cookingTime.max)
       return true;
     if (!recipe.cookingTime) return false;
@@ -72,114 +72,65 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   };
 
   const filteredRecipes = useMemo(() => {
-    try {
-      // Kiểm tra mảng savedRecipes có tồn tại không
-      if (!savedRecipes || savedRecipes.length === 0) {
-        return [];
-      }
+    return savedRecipes.map((recipe) => {
+      // Kiểm tra từng điều kiện filter
+      const matchesRegion =
+        !filterOptions.region || recipe.region === filterOptions.region;
+      const matchesCategory =
+        !filterOptions.category || recipe.category === filterOptions.category;
+      const matchesDifficulty =
+        !filterOptions.difficulty ||
+        recipe.difficulty === filterOptions.difficulty;
+      const matchesFavorite =
+        !filterOptions.showFavorites ||
+        favoriteRecipes.some((fav) => fav.id === recipe.id);
 
-      let recipes = [...savedRecipes];
+      // Kiểm tra thời gian nấu
+      const timeMatches =
+        !filterOptions.cookingTime.min && !filterOptions.cookingTime.max
+          ? true
+          : recipe.cookingTime &&
+            (!filterOptions.cookingTime.min ||
+              recipe.cookingTime >= filterOptions.cookingTime.min) &&
+            (!filterOptions.cookingTime.max ||
+              recipe.cookingTime <= filterOptions.cookingTime.max);
 
-      // Lọc theo từ khóa - Thêm kiểm tra null/undefined và empty string
-      if (filterOptions.searchQuery?.trim()) {
-        recipes = recipes.filter((recipe) => {
-          try {
-            if (!recipe) return false;
+      // Kiểm tra số người ăn
+      const servingsMatches =
+        !filterOptions.servings.min && !filterOptions.servings.max
+          ? true
+          : recipe.servings &&
+            (!filterOptions.servings.min ||
+              recipe.servings >= filterOptions.servings.min) &&
+            (!filterOptions.servings.max ||
+              recipe.servings <= filterOptions.servings.max);
 
-            const searchQuery = filterOptions.searchQuery?.trim() || '';
+      // Kiểm tra nguyên liệu
+      const ingredientMatches =
+        filterOptions.mainIngredientTypes.length === 0
+          ? true
+          : recipe.ingredients.some(
+              (ingredient) =>
+                ingredient.type &&
+                filterOptions.mainIngredientTypes.includes(ingredient.type)
+            );
 
-            // Kiểm tra tên công thức
-            const matchesName = recipe.name
-              ? containsSearchQuery(recipe.name, searchQuery)
-              : false;
+      // Kết hợp tất cả điều kiện
+      const isVisible = Boolean(
+        matchesRegion &&
+          matchesCategory &&
+          matchesDifficulty &&
+          matchesFavorite &&
+          timeMatches &&
+          servingsMatches &&
+          ingredientMatches
+      );
 
-            // Kiểm tra nguyên liệu
-            const matchesIngredients =
-              recipe.ingredients?.some((ingredient) => {
-                if (!ingredient || !ingredient.name) return false;
-                return containsSearchQuery(ingredient.name, searchQuery);
-              }) || false;
-
-            // Kiểm tra các bước thực hiện
-            const matchesInstructions = recipe.instructions
-              ? Object.values(recipe.instructions)
-                  .flat()
-                  .some((step: any) => {
-                    if (!step) return false;
-
-                    const matchesTitle = step.title
-                      ? containsSearchQuery(step.title, searchQuery)
-                      : false;
-
-                    const matchesDetails =
-                      step.details?.some((detail: string) =>
-                        detail
-                          ? containsSearchQuery(detail, searchQuery)
-                          : false
-                      ) || false;
-
-                    return matchesTitle || matchesDetails;
-                  })
-              : false;
-
-            return matchesName || matchesIngredients || matchesInstructions;
-          } catch (error) {
-            console.error('Lỗi khi lọc công thức:', error);
-            return false;
-          }
-        });
-      }
-
-      // Lọc theo vùng miền
-      if (filterOptions.region) {
-        recipes = recipes.filter(
-          (recipe) => recipe.region === filterOptions.region
-        );
-      }
-
-      // Lọc theo loại món
-      if (filterOptions.category) {
-        recipes = recipes.filter(
-          (recipe) => recipe.category === filterOptions.category
-        );
-      }
-
-      // Lọc theo độ khó
-      if (filterOptions.difficulty) {
-        recipes = recipes.filter(
-          (recipe) => recipe.difficulty === filterOptions.difficulty
-        );
-      }
-
-      // Lọc theo thời gian nấu
-      recipes = recipes.filter(matchesCookingTime);
-
-      // Lọc theo số người ăn
-      recipes = recipes.filter(matchesServings);
-
-      // Lọc theo loại nguyên liệu
-      recipes = recipes.filter(matchesIngredientTypes);
-
-      // Lọc yêu thích
-      if (filterOptions.showFavorites) {
-        return recipes.filter((recipe) =>
-          favoriteRecipes.some((fav) => fav.id === recipe.id)
-        );
-      }
-
-      // Sắp xếp: yêu thích lên đầu
-      return [
-        ...recipes.filter((recipe) =>
-          favoriteRecipes.some((fav) => fav.id === recipe.id)
-        ),
-        ...recipes.filter(
-          (recipe) => !favoriteRecipes.some((fav) => fav.id === recipe.id)
-        ),
-      ];
-    } catch (error) {
-      console.error('Lỗi khi xử lý filteredRecipes:', error);
-      return [];
-    }
+      return {
+        recipe,
+        visible: isVisible,
+      };
+    });
   }, [savedRecipes, filterOptions, favoriteRecipes]);
 
   return {

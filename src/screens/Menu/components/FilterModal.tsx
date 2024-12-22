@@ -121,7 +121,12 @@ export const FilterModal = ({
             />
           </View>
 
-          <View style={styles.section}>
+          <View
+            style={[
+              styles.section,
+              { display: quickFilterSettings.showRegions ? 'flex' : 'none' },
+            ]}
+          >
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Vùng miền
             </Typography>
@@ -129,14 +134,14 @@ export const FilterModal = ({
               regions={regions}
               selectedRegion={tempFilterOptions.region}
               onSelectRegion={(region) =>
-                setTempFilterOptions({ ...tempFilterOptions, region })
+                setTempFilterOptions((prev) => ({ ...prev, region }))
               }
               showFavorites={tempFilterOptions.showFavorites}
               onToggleFavorites={() =>
-                setTempFilterOptions({
-                  ...tempFilterOptions,
-                  showFavorites: !tempFilterOptions.showFavorites,
-                })
+                setTempFilterOptions((prev) => ({
+                  ...prev,
+                  showFavorites: !prev.showFavorites,
+                }))
               }
             />
           </View>
@@ -149,6 +154,7 @@ export const FilterModal = ({
               filterOptions={tempFilterOptions}
               onFilterChange={setTempFilterOptions}
               regions={regions}
+              quickFilterSettings={quickFilterSettings}
             />
           </View>
         </ScrollView>
