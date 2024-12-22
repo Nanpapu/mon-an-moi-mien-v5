@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Instructions } from '../../../types';
+import { Instructions, Step } from '../../../types';
 import { createStyles } from './InstructionsSection.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
@@ -66,27 +66,27 @@ export const InstructionsSection = ({
     },
     {
       key: 'broth',
-      title: 'Nấu nước dùng',
+      title: 'Nấu nước dùng/xốt',
       icon: 'water-outline',
       color: '#2196F3',
     },
     {
       key: 'sauce',
-      title: 'Làm nước chấm',
-      icon: 'color-fill-outline',
-      color: '#F44336',
+      title: 'Làm nước chấm/sốt',
+      icon: 'beaker-outline',
+      color: '#00BCD4',
     },
     {
       key: 'cooking',
-      title: 'Nấu chính',
+      title: 'Nướng/Chiên/Xào',
       icon: 'flame-outline',
-      color: '#E91E63',
+      color: '#F44336',
     },
     {
       key: 'steaming',
       title: 'Hấp/Luộc',
       icon: 'thermometer-outline',
-      color: '#00BCD4',
+      color: '#3F51B5',
     },
     {
       key: 'filling',
@@ -98,33 +98,91 @@ export const InstructionsSection = ({
       key: 'dough',
       title: 'Làm vỏ/bột',
       icon: 'disc-outline',
-      color: '#607D8B',
+      color: '#FF5722',
     },
     {
       key: 'assembly',
-      title: 'Hoàn thiện',
+      title: 'Hoàn thiện món ăn',
       icon: 'construct-outline',
-      color: '#3F51B5',
+      color: '#607D8B',
     },
     {
       key: 'serving',
-      title: 'Cách dùng',
+      title: 'Cách thưởng thức',
       icon: 'restaurant-outline',
       color: '#8BC34A',
     },
-    {
-      key: 'tips',
-      title: 'Mẹo và lưu ý',
-      icon: 'bulb-outline',
-      color: '#FFC107',
-    },
-    {
-      key: 'storage',
-      title: 'Bảo quản',
-      icon: 'file-tray-outline',
-      color: '#9E9E9E',
-    },
   ];
+
+  const renderStep = (step: Step, index: number, color: string) => (
+    <View key={index} style={styles.instructionItem}>
+      <View style={[styles.instructionNumber, { backgroundColor: color }]}>
+        <Typography style={styles.instructionNumberText}>
+          {index + 1}
+        </Typography>
+      </View>
+      <View style={styles.instructionContent}>
+        <Typography variant="subtitle1" style={styles.stepTitle}>
+          {step.title}
+        </Typography>
+        {step.details.map((detail, detailIndex) => (
+          <Typography
+            key={detailIndex}
+            style={styles.instructionText}
+            variant="body2"
+          >
+            • {detail}
+          </Typography>
+        ))}
+      </View>
+    </View>
+  );
+
+  const renderTipsAndStorage = () => (
+    <>
+      {instructions.tips?.length > 0 && (
+        <View style={styles.tipsContainer}>
+          <View style={styles.sectionHeader}>
+            <Ionicons
+              name="bulb-outline"
+              size={20}
+              color={theme.colors.warning.main}
+              style={styles.sectionIcon}
+            />
+            <Typography variant="subtitle1" style={styles.sectionTitle}>
+              Mẹo và lưu ý quan trọng
+            </Typography>
+          </View>
+          {instructions.tips.map((tip, index) => (
+            <Typography key={index} style={styles.tipText} variant="body2">
+              • {tip}
+            </Typography>
+          ))}
+        </View>
+      )}
+
+      {instructions.storage?.length > 0 && (
+        <View style={styles.storageContainer}>
+          <View style={styles.sectionHeader}>
+            <Ionicons
+              name="file-tray-outline"
+              size={20}
+              color={theme.colors.info.main}
+              style={styles.sectionIcon}
+            />
+            <Typography variant="subtitle1" style={styles.sectionTitle}>
+              Cách bảo quản
+            </Typography>
+          </View>
+          {instructions.storage.map((item, index) => (
+            <Typography key={index} style={styles.storageText} variant="body2">
+              • {item}
+            </Typography>
+          ))}
+        </View>
+      )}
+    </>
+  );
 
   return (
     <View style={styles.instructionsContainer}>
@@ -206,9 +264,32 @@ export const InstructionsSection = ({
                       </Typography>
                     </View>
                     <View style={styles.instructionContent}>
-                      <Typography style={styles.instructionText}>
-                        {step}
-                      </Typography>
+                      {typeof step === 'string' ? (
+                        <Typography
+                          style={styles.instructionText}
+                          variant="body2"
+                        >
+                          {step}
+                        </Typography>
+                      ) : (
+                        <>
+                          <Typography
+                            variant="subtitle1"
+                            style={styles.stepTitle}
+                          >
+                            {step.title}
+                          </Typography>
+                          {step.details.map((detail, detailIndex) => (
+                            <Typography
+                              key={detailIndex}
+                              style={styles.instructionText}
+                              variant="body2"
+                            >
+                              • {detail}
+                            </Typography>
+                          ))}
+                        </>
+                      )}
                     </View>
                   </View>
                 ))}
@@ -217,6 +298,8 @@ export const InstructionsSection = ({
           </View>
         );
       })}
+
+      {renderTipsAndStorage()}
     </View>
   );
 };

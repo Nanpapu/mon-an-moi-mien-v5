@@ -9,11 +9,11 @@ export const createStyles = (theme: Theme) =>
       padding: theme.spacing.sm,
       marginTop: theme.spacing.md,
     },
-    sectionTitle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: theme.spacing.sm,
-    },
+    // sectionTitle: {
+    //   flexDirection: 'row',
+    //   alignItems: 'center',
+    //   marginBottom: theme.spacing.sm,
+    // },
     sectionIcon: {
       marginRight: theme.spacing.sm,
     },
@@ -69,6 +69,44 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
       color: theme.colors.text.secondary,
       fontSize: 14,
+      lineHeight: 20,
+    },
+    stepTitle: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: theme.colors.text.primary,
+      marginBottom: theme.spacing.xs,
+    },
+    tipsContainer: {
+      marginTop: theme.spacing.md,
+      padding: theme.spacing.md,
+      backgroundColor: theme.colors.warning.light,
+      borderRadius: theme.spacing.md,
+    },
+    storageContainer: {
+      marginTop: theme.spacing.md,
+      padding: theme.spacing.md,
+      backgroundColor: theme.colors.info.light,
+      borderRadius: theme.spacing.md,
+    },
+    sectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: theme.spacing.sm,
+    },
+    sectionTitle: {
+      marginLeft: theme.spacing.sm,
+      color: theme.colors.text.primary,
+      fontWeight: '600',
+    },
+    tipText: {
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.xs,
+      lineHeight: 20,
+    },
+    storageText: {
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.xs,
       lineHeight: 20,
     },
   });
