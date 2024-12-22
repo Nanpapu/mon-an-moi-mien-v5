@@ -2,6 +2,9 @@
 // Bao gồm các hàm để lưu, lấy và xóa công thức nấu ăn
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Recipe, Region } from '../types';
+import { UserSavedRecipesService } from '../services/userSavedRecipesService';
+import { CacheService } from '../services/cacheService';
+import { CACHE_KEYS } from '../constants/cacheKeys';
 
 // Khóa lưu trữ cho danh sách công thức
 const SAVED_RECIPES_KEY = (userId: string) => `saved_recipes_${userId}`;
@@ -19,12 +22,24 @@ export const saveRecipe = async (
       ? JSON.parse(savedRecipesStr)
       : [];
 
+    // Check if recipe already exists
     if (savedRecipes.some((r) => r.id === recipe.id)) {
       return false;
     }
 
+    // Add new recipe
     savedRecipes.push(recipe);
+
+    // Save to local storage
     await AsyncStorage.setItem(key, JSON.stringify(savedRecipes));
+
+    // Clear cache to force reload
+    await CacheService.clearCache(`${CACHE_KEYS.SAVED_RECIPES}${userId}`);
+
+    // Sync to cloud
+    const recipeIds = savedRecipes.map((r: Recipe) => r.id);
+    await UserSavedRecipesService.syncToCloud(userId, recipeIds);
+
     return true;
   } catch (error) {
     console.error('Lỗi khi lưu công thức:', error);
@@ -59,7 +74,16 @@ export const removeRecipe = async (
       (recipe) => recipe.id !== recipeId
     );
 
+    // Update local storage
     await AsyncStorage.setItem(key, JSON.stringify(updatedRecipes));
+
+    // Clear cache
+    await CacheService.clearCache(`${CACHE_KEYS.SAVED_RECIPES}${userId}`);
+
+    // Sync to cloud
+    const recipeIds = updatedRecipes.map((r: Recipe) => r.id);
+    await UserSavedRecipesService.syncToCloud(userId, recipeIds);
+
     return true;
   } catch (error) {
     console.error('Lỗi khi xóa công thức:', error);
@@ -82,10 +106,19 @@ export const migrateSavedRecipes = async (userId: string) => {
       };
     });
 
+    // Save to local storage
     await AsyncStorage.setItem(
       SAVED_RECIPES_KEY(userId),
       JSON.stringify(updatedRecipes)
     );
+
+    // Clear cache
+    await CacheService.clearCache(`${CACHE_KEYS.SAVED_RECIPES}${userId}`);
+
+    // Sync to cloud after migration
+    const recipeIds = updatedRecipes.map((r: Recipe) => r.id);
+    await UserSavedRecipesService.syncToCloud(userId, recipeIds);
+
     return true;
   } catch (error) {
     console.error('Lỗi khi migrate dữ liệu:', error);

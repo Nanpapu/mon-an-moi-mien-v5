@@ -3,11 +3,12 @@
  */
 
 import { CacheService, CACHE_KEYS, CACHE_EXPIRY } from './cacheService';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { COLLECTIONS } from '../constants/collections';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Recipe, Region } from '../types';
+import { UserSavedRecipesService } from './userSavedRecipesService';
 
 /**
  * Service quản lý công thức nấu ăn
@@ -62,6 +63,11 @@ export const RecipeService = {
       );
 
       if (cachedRecipes) {
+        // Sync lên cloud ngầm nếu có cache
+        const recipeIds = cachedRecipes.map((r: Recipe) => r.id);
+        UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
+          console.error
+        );
         return cachedRecipes;
       }
 
@@ -71,7 +77,33 @@ export const RecipeService = {
       if (savedRecipes) {
         const recipes = JSON.parse(savedRecipes);
         await CacheService.setCache(cacheKey, recipes);
+
+        // Sync lên cloud khi lấy từ storage
+        const recipeIds = recipes.map((r: Recipe) => r.id);
+        UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
+          console.error
+        );
+
         return recipes;
+      }
+
+      // Nếu không có local data, thử lấy từ cloud
+      const { recipeIds } = await UserSavedRecipesService.getFromCloud(userId);
+      if (recipeIds.length > 0) {
+        // Convert IDs thành recipes
+        const recipes = await Promise.all(
+          recipeIds.map((id) => RecipeService.getRecipeById(id))
+        );
+        const validRecipes = recipes.filter((r) => r !== null);
+
+        // Save xuống local
+        await AsyncStorage.setItem(
+          `saved_recipes_${userId}`,
+          JSON.stringify(validRecipes)
+        );
+        await CacheService.setCache(cacheKey, validRecipes);
+
+        return validRecipes;
       }
 
       return [];
@@ -91,11 +123,8 @@ export const RecipeService = {
 
   /**
    * Lưu công thức vào danh sách yêu thích của user
-   * @param recipe - Công thức cần lưu
-   * @param userId - ID của user đang đăng nhập
-   * @returns Promise<boolean> - true nếu lưu thành công
    */
-  saveRecipe: async (recipe: Recipe, userId: string, region?: Region) => {
+  saveRecipe: async (recipe: Recipe, userId: string) => {
     try {
       const cacheKey = `${CACHE_KEYS.SAVED_RECIPES}${userId}`;
       const savedRecipes = await AsyncStorage.getItem(
@@ -103,27 +132,51 @@ export const RecipeService = {
       );
       let recipes: Recipe[] = savedRecipes ? JSON.parse(savedRecipes) : [];
 
-      // Check if recipe already exists
       if (recipes.some((r) => r.id === recipe.id)) {
         return false;
       }
 
-      // Add new recipe
       recipes.push(recipe);
 
-      // Save to storage
+      // Save local
       await AsyncStorage.setItem(
         `saved_recipes_${userId}`,
         JSON.stringify(recipes)
       );
-
-      // Update cache
       await CacheService.setCache(cacheKey, recipes);
+
+      // Sync to cloud
+      const recipeIds = recipes.map((r) => r.id);
+      UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
+        console.error
+      );
 
       return true;
     } catch (error) {
       console.error('Lỗi khi lưu công thức:', error);
       return false;
+    }
+  },
+
+  syncToCloud: async (userId: string, recipes: Recipe[]) => {
+    try {
+      const userRecipesRef = doc(db, 'users', userId, 'saved_recipes', 'data');
+      await setDoc(userRecipesRef, { recipes });
+      return true;
+    } catch (error) {
+      console.error('Lỗi khi đồng bộ lên cloud:', error);
+      return false;
+    }
+  },
+
+  getFromCloud: async (userId: string) => {
+    try {
+      const userRecipesRef = doc(db, 'users', userId, 'saved_recipes', 'data');
+      const snapshot = await getDoc(userRecipesRef);
+      return snapshot.exists() ? snapshot.data().recipes : [];
+    } catch (error) {
+      console.error('Lỗi khi lấy dữ liệu từ cloud:', error);
+      return [];
     }
   },
 };
