@@ -40,8 +40,8 @@ export const RegionService = {
         CACHE_EXPIRY.REGIONS
       );
 
-      if (cachedRegions) {
-        console.log('Returning cached regions:', cachedRegions.length);
+      if (cachedRegions && Array.isArray(cachedRegions) && cachedRegions.length > 0) {
+        console.log('Using cached regions:', cachedRegions.length);
         return cachedRegions;
       }
 
