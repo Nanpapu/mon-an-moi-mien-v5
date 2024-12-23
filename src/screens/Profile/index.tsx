@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Animated, Easing } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading, Typography } from '../../components/shared';
 import { AuthForm } from './components/AuthForm';
@@ -14,6 +14,7 @@ import { useToast } from '../../hooks/useToast';
 import { Card, Button } from '../../components/shared';
 import { ThemeSelector } from './components/ThemeSelector';
 import { ImportButton } from './components/ImportButton';
+import { useScreenTransition } from './hooks/useScreenTransition';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -36,6 +37,8 @@ export default function ProfileScreen() {
   // Custom hooks
   const { fadeAnim, slideAnim, animateFormTransition } =
     useAuthAnimation(isRegistering);
+  const { fadeAnim: profileFadeAnim, slideAnim: profileSlideAnim } =
+    useScreenTransition(!!user);
   const {
     displayName,
     setDisplayName,
@@ -104,8 +107,25 @@ export default function ProfileScreen() {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      showToast('success', 'Đã đăng xuất');
+      // Trigger animation trước
+      Animated.parallel([
+        Animated.timing(profileFadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+          easing: Easing.out(Easing.ease),
+        }),
+        Animated.timing(profileSlideAnim, {
+          toValue: -30,
+          duration: 300,
+          useNativeDriver: true,
+          easing: Easing.out(Easing.ease),
+        }),
+      ]).start(async () => {
+        // Thực hiện logout sau khi animation hoàn thành
+        await logout();
+        showToast('success', 'Đã đăng xuất');
+      });
     } catch (error: any) {
       showToast('error', 'Đăng xuất thất bại');
     }
@@ -139,58 +159,65 @@ export default function ProfileScreen() {
         {isLoading ? (
           <Loading text="Đang tải..." />
         ) : user ? (
-          <View style={styles.container}>
-            <Card
-              style={[
-                styles.profileCard,
-                {
-                  backgroundColor: theme.colors.background.paper,
-                  ...theme.shadows.md,
-                },
-              ]}
-            >
-              <UserProfile
-                user={user}
-                displayName={displayName}
-                isEditing={isEditing}
-                onDisplayNameChange={setDisplayName}
-                onEditPress={handleStartEditing}
-                onSavePress={handleSaveProfile}
-                onCancelPress={handleCancelEditing}
-                onPickImage={pickImage}
-                onLogout={handleLogout}
-                onImportData={
-                  user.email === '21521059@gm.uit.edu.vn'
-                    ? handleImportData
-                    : undefined
-                }
-                photoURL={photoURL}
-                isUploading={isUploading}
-                isImporting={isImporting}
-              />
-            </Card>
-
-            <ThemeSelector />
-
-            {/* <Card
-              style={[
-                styles.logoutCard,
-                {
-                  backgroundColor: theme.colors.background.paper,
-                  ...theme.shadows.md,
-                },
-              ]}
-            >
-              <Button
-                variant="secondary"
-                icon="log-out-outline"
-                onPress={handleLogout}
-                style={styles.logoutButton}
+          <Animated.View
+            style={{
+              opacity: profileFadeAnim,
+              transform: [{ translateY: profileSlideAnim }],
+            }}
+          >
+            <View style={styles.container}>
+              <Card
+                style={[
+                  styles.profileCard,
+                  {
+                    backgroundColor: theme.colors.background.paper,
+                    ...theme.shadows.md,
+                  },
+                ]}
               >
-                Đăng xuất
-              </Button>
-            </Card> */}
-          </View>
+                <UserProfile
+                  user={user}
+                  displayName={displayName}
+                  isEditing={isEditing}
+                  onDisplayNameChange={setDisplayName}
+                  onEditPress={handleStartEditing}
+                  onSavePress={handleSaveProfile}
+                  onCancelPress={handleCancelEditing}
+                  onPickImage={pickImage}
+                  onLogout={handleLogout}
+                  onImportData={
+                    user.email === '21521059@gm.uit.edu.vn'
+                      ? handleImportData
+                      : undefined
+                  }
+                  photoURL={photoURL}
+                  isUploading={isUploading}
+                  isImporting={isImporting}
+                />
+              </Card>
+
+              <ThemeSelector />
+
+              {/* <Card
+                style={[
+                  styles.logoutCard,
+                  {
+                    backgroundColor: theme.colors.background.paper,
+                    ...theme.shadows.md,
+                  },
+                ]}
+              >
+                <Button
+                  variant="secondary"
+                  icon="log-out-outline"
+                  onPress={handleLogout}
+                  style={styles.logoutButton}
+                >
+                  Đăng xuất
+                </Button>
+              </Card> */}
+            </View>
+          </Animated.View>
         ) : (
           <>
             <AuthForm
@@ -217,7 +244,7 @@ export default function ProfileScreen() {
               onDisplayNameChange={setDisplayName}
               isSubmitting={isSubmitting}
             />
-            {/* Tạm ẩn đăng nhập bằng Google 
+            {/* Tạm ���n đăng nhập bằng Google 
             <GoogleSignInButton onPress={signInWithGoogle} />
             */}
           </>
