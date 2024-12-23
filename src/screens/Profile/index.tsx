@@ -31,6 +31,7 @@ export default function ProfileScreen() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Custom hooks
   const { fadeAnim, slideAnim, animateFormTransition } =
@@ -73,20 +74,26 @@ export default function ProfileScreen() {
   // Handlers
   const handleLogin = async () => {
     try {
+      setIsSubmitting(true);
       await login(email, password);
       showToast('success', 'Đăng nhập thành công');
     } catch (error: any) {
       showToast('error', 'Đăng nhập thất bại: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleRegister = async () => {
     try {
       if (!validateDisplayName(displayName)) return;
+      setIsSubmitting(true);
       await register(email, password, displayName);
       showToast('success', 'Đăng ký thành công');
     } catch (error: any) {
       showToast('error', 'Đăng ký thất bại: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -208,6 +215,7 @@ export default function ProfileScreen() {
               onToggleAuthMode={toggleAuthMode}
               displayName={displayName}
               onDisplayNameChange={setDisplayName}
+              isSubmitting={isSubmitting}
             />
             {/* Tạm ẩn đăng nhập bằng Google 
             <GoogleSignInButton onPress={signInWithGoogle} />

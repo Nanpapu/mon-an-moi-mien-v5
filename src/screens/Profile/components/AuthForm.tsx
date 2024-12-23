@@ -32,6 +32,7 @@ interface Props {
   isLoading?: boolean;
   displayName: string;
   onDisplayNameChange: (text: string) => void;
+  isSubmitting?: boolean;
 }
 
 export const AuthForm = ({
@@ -55,6 +56,7 @@ export const AuthForm = ({
   isLoading,
   displayName,
   onDisplayNameChange,
+  isSubmitting,
 }: Props) => {
   const { theme } = useTheme();
 
@@ -176,6 +178,7 @@ export const AuthForm = ({
           <Button
             variant="primary"
             onPress={onSubmit}
+            disabled={isSubmitting}
             style={[
               styles.submitButton,
               {
@@ -186,7 +189,16 @@ export const AuthForm = ({
             ]}
             icon={isRegistering ? 'person-add-outline' : 'log-in-outline'}
           >
-            {isRegistering ? 'Đăng ký' : 'Đăng nhập'}
+            {isSubmitting ? (
+              <ActivityIndicator
+                size="small"
+                color={theme.colors.primary.contrast}
+              />
+            ) : isRegistering ? (
+              'Đăng ký'
+            ) : (
+              'Đăng nhập'
+            )}
           </Button>
 
           {!isRegistering && (
