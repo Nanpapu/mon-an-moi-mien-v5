@@ -1,17 +1,21 @@
 // Context quản lý trạng thái đăng nhập và xác thực người dùng
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { User } from "firebase/auth";
-import { AuthService } from "../services/authService";
-import { auth } from "../config/firebase";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { GoogleAuthService } from "../services/googleAuthService";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { User } from 'firebase/auth';
+import { AuthService } from '../services/authService';
+import { auth } from '../config/firebase';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { GoogleAuthService } from '../services/googleAuthService';
 
 // Định nghĩa các hàm và state có trong context
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    displayName: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -48,9 +52,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Xử lý đăng ký
-  const register = async (email: string, password: string) => {
+  const register = async (
+    email: string,
+    password: string,
+    displayName: string
+  ) => {
     try {
-      const user = await AuthService.register(email, password);
+      const user = await AuthService.register(email, password, displayName);
       setUser(user);
     } catch (error: any) {
       throw new Error(error.message);
@@ -82,15 +90,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const result = await promptAsync();
-      console.log("Google Sign In Result:", result);
-      
+      console.log('Google Sign In Result:', result);
+
       if (result?.type === 'success') {
         const { id_token } = result.params;
         const credential = await GoogleAuthService.signInWithGoogle(id_token);
         setUser(credential);
       }
     } catch (error) {
-      console.error("Google Sign In Error:", error);
+      console.error('Google Sign In Error:', error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -119,7 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

@@ -3,13 +3,13 @@
  */
 
 import { auth, db } from '../config/firebase';
-import { 
+import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   User,
   sendPasswordResetEmail,
-  updateProfile
+  updateProfile,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -27,7 +27,11 @@ export const AuthService = {
    */
   login: async (email: string, password: string): Promise<User> => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       return userCredential.user;
     } catch (error: any) {
       throw new Error(error.message);
@@ -38,19 +42,33 @@ export const AuthService = {
    * Đăng ký tài khoản mới
    * @param {string} email - Email đăng ký
    * @param {string} password - Mật khẩu đăng ký
+   * @param {string} displayName - Tên hiển thị của người dùng
    * @returns {Promise<User>} Thông tin người dùng sau khi đăng ký thành công
    * @throws {Error} Lỗi khi đăng ký thất bại
    */
-  register: async (email: string, password: string): Promise<User> => {
+  register: async (
+    email: string,
+    password: string,
+    displayName: string
+  ): Promise<User> => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // Cập nhật displayName ngay sau khi tạo tài khoản
+      await updateProfile(userCredential.user, {
+        displayName: displayName,
+      });
+
       // Tạo document user trong Firestore
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         email: userCredential.user.email,
-        displayName: '',
+        displayName: displayName,
         photoURL: '',
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
       return userCredential.user;
@@ -101,27 +119,33 @@ export const AuthService = {
    * @returns {Promise<void>}
    * @throws {Error} Lỗi khi cập nhật profile
    */
-  updateProfile: async (displayName?: string, photoURL?: string): Promise<void> => {
+  updateProfile: async (
+    displayName?: string,
+    photoURL?: string
+  ): Promise<void> => {
     try {
       const user = auth.currentUser;
       if (!user) throw new Error('Không tìm thấy người dùng');
 
       await updateProfile(user, {
         displayName: displayName || user.displayName,
-        photoURL: photoURL || user.photoURL
+        photoURL: photoURL || user.photoURL,
       });
 
       // Cập nhật thông tin trong Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        displayName: displayName || user.displayName,
-        photoURL: photoURL || user.photoURL,
-        updatedAt: new Date()
-      }, { merge: true });
-
+      await setDoc(
+        doc(db, 'users', user.uid),
+        {
+          displayName: displayName || user.displayName,
+          photoURL: photoURL || user.photoURL,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
     } catch (error: any) {
       throw new Error(error.message);
     }
-  }
+  },
 };
 
 /**
@@ -138,5 +162,5 @@ export const AUTH_ERROR_CODES = {
   /** Sai mật khẩu */
   WRONG_PASSWORD: 'auth/wrong-password',
   /** Email đã được sử dụng */
-  EMAIL_IN_USE: 'auth/email-already-in-use'
+  EMAIL_IN_USE: 'auth/email-already-in-use',
 };

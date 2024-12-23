@@ -5,7 +5,11 @@ import { auth } from '../../../config/firebase';
 
 export const useAuthForm = (
   login: (email: string, password: string) => Promise<void>,
-  register: (email: string, password: string) => Promise<void>,
+  register: (
+    email: string,
+    password: string,
+    displayName: string
+  ) => Promise<void>,
   resetPassword: (email: string) => Promise<void>
 ) => {
   const { showToast } = useToast();
@@ -14,10 +18,12 @@ export const useAuthForm = (
   const [confirmPassword, setConfirmPassword] = useState('');
   const [resetEmail, setResetEmail] = useState('');
   const [showResetPassword, setShowResetPassword] = useState(false);
+  const [displayName, setDisplayName] = useState('');
   const [errors, setErrors] = useState({
     email: '',
     password: '',
     confirmPassword: '',
+    displayName: '',
   });
 
   const validateEmail = (email: string) => {
@@ -46,6 +52,15 @@ export const useAuthForm = (
     setErrors((prev) => ({
       ...prev,
       confirmPassword: isValid ? '' : 'Mật khẩu nhập lại không khớp',
+    }));
+    return isValid;
+  };
+
+  const validateDisplayName = (name: string) => {
+    const isValid = name.trim().length >= 3;
+    setErrors((prev) => ({
+      ...prev,
+      displayName: isValid ? '' : 'Tên hiển thị phải có ít nhất 3 ký tự',
     }));
     return isValid;
   };
@@ -85,5 +100,8 @@ export const useAuthForm = (
     validatePassword,
     validateConfirmPassword,
     handleResetPassword,
+    displayName,
+    setDisplayName,
+    validateDisplayName,
   };
 };

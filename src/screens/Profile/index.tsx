@@ -65,6 +65,7 @@ export default function ProfileScreen() {
     validatePassword,
     validateConfirmPassword,
     handleResetPassword,
+    validateDisplayName,
   } = useAuthForm(login, register, resetPassword);
 
   const { showToast } = useToast();
@@ -81,8 +82,9 @@ export default function ProfileScreen() {
 
   const handleRegister = async () => {
     try {
-      await register(email, password);
-      showToast('success', '��ăng ký thành công');
+      if (!validateDisplayName(displayName)) return;
+      await register(email, password, displayName);
+      showToast('success', 'Đăng ký thành công');
     } catch (error: any) {
       showToast('error', 'Đăng ký thất bại: ' + error.message);
     }
@@ -203,6 +205,8 @@ export default function ProfileScreen() {
               onSubmit={isRegistering ? handleRegister : handleLogin}
               onForgotPassword={() => setShowResetPassword(true)}
               onToggleAuthMode={toggleAuthMode}
+              displayName={displayName}
+              onDisplayNameChange={setDisplayName}
             />
             {/* Tạm ẩn đăng nhập bằng Google 
             <GoogleSignInButton onPress={signInWithGoogle} />

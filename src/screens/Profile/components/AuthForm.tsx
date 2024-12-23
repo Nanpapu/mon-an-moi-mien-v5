@@ -30,6 +30,8 @@ interface Props {
   onForgotPassword: () => void;
   onToggleAuthMode: () => void;
   isLoading?: boolean;
+  displayName: string;
+  onDisplayNameChange: (text: string) => void;
 }
 
 export const AuthForm = ({
@@ -51,6 +53,8 @@ export const AuthForm = ({
   onForgotPassword,
   onToggleAuthMode,
   isLoading,
+  displayName,
+  onDisplayNameChange,
 }: Props) => {
   const { theme } = useTheme();
 
@@ -87,6 +91,18 @@ export const AuthForm = ({
         >
           {isRegistering ? 'Tạo tài khoản mới' : 'Chào mừng trở lại!'}
         </Typography>
+
+        {isRegistering && (
+          <Input
+            label="Tên hiển thị"
+            value={displayName}
+            onChangeText={onDisplayNameChange}
+            leftIcon="person-outline"
+            error={errors.displayName}
+            placeholder="Nhập tên hiển thị của bạn"
+            containerStyle={styles.input}
+          />
+        )}
 
         <Input
           label="Email"
