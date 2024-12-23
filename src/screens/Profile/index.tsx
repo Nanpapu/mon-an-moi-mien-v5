@@ -127,6 +127,7 @@ export default function ProfileScreen() {
           paddingHorizontal: user ? theme.spacing.lg : 0,
         }}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={!!user}
       >
         {isLoading ? (
           <Loading text="Đang tải..." />

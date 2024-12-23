@@ -225,14 +225,26 @@ export const AuthForm = ({
           </View>
 
           <Button
-            variant="outline"
+            variant="text"
             onPress={onToggleAuthMode}
-            style={styles.switchButton}
+            style={[
+              styles.switchButton,
+              {
+                marginTop: theme.spacing.sm,
+                backgroundColor: 'transparent',
+              },
+            ]}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            textStyle={{
+              color: theme.colors.primary.main,
+              fontSize: 14,
+              textDecorationLine: 'underline',
+            }}
             icon={isRegistering ? 'log-in-outline' : 'person-add-outline'}
           >
             {isRegistering
-              ? 'Đã có tài khoản? Đăng nhập'
-              : 'Chưa có tài khoản? Đăng ký'}
+              ? 'Đã có tài khoản? Đăng nhập ngay'
+              : 'Chưa có tài khoản? Đăng ký ngay'}
           </Button>
         </Animated.View>
       </View>
@@ -303,5 +315,8 @@ const styles = StyleSheet.create({
   },
   switchButton: {
     marginTop: 8,
+    alignSelf: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
 });
