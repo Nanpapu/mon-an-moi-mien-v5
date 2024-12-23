@@ -22,8 +22,6 @@ interface Props {
   onFilterChange: (options: FilterOptions) => void;
   onApply: (options: FilterOptions) => void;
   regions: string[];
-  quickFilterSettings: QuickFilterSettings;
-  onQuickFilterSettingsChange: (settings: QuickFilterSettings) => void;
 }
 
 export const FilterModal = ({
@@ -33,8 +31,6 @@ export const FilterModal = ({
   onFilterChange,
   onApply,
   regions,
-  quickFilterSettings,
-  onQuickFilterSettingsChange,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -115,38 +111,6 @@ export const FilterModal = ({
         {/* Content */}
         <ScrollView style={styles.content}>
           <View style={styles.section}>
-            <FilterSettings
-              settings={quickFilterSettings}
-              onSettingsChange={onQuickFilterSettingsChange}
-            />
-          </View>
-
-          <View
-            style={[
-              styles.section,
-              { display: quickFilterSettings.showRegions ? 'flex' : 'none' },
-            ]}
-          >
-            <Typography variant="subtitle1" style={styles.sectionTitle}>
-              Vùng miền
-            </Typography>
-            <RegionFilter
-              regions={regions}
-              selectedRegion={tempFilterOptions.region}
-              onSelectRegion={(region) =>
-                setTempFilterOptions((prev) => ({ ...prev, region }))
-              }
-              showFavorites={tempFilterOptions.showFavorites}
-              onToggleFavorites={() =>
-                setTempFilterOptions((prev) => ({
-                  ...prev,
-                  showFavorites: !prev.showFavorites,
-                }))
-              }
-            />
-          </View>
-
-          <View style={[styles.section, styles.lastSection]}>
             <Typography variant="subtitle1" style={styles.sectionTitle}>
               Bộ lọc nâng cao
             </Typography>
@@ -154,7 +118,6 @@ export const FilterModal = ({
               filterOptions={tempFilterOptions}
               onFilterChange={setTempFilterOptions}
               regions={regions}
-              quickFilterSettings={quickFilterSettings}
             />
           </View>
         </ScrollView>

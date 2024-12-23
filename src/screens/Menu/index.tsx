@@ -66,12 +66,6 @@ export default function MenuScreen() {
   );
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [quickFilterSettings, setQuickFilterSettings] =
-    useState<QuickFilterSettings>({
-      showRegions: true,
-      showCategories: false,
-      showDifficulty: false,
-    });
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
 
@@ -247,8 +241,6 @@ export default function MenuScreen() {
             onFilterChange={setTempFilterOptions}
             onApply={handleApplyFilter}
             regions={regions}
-            quickFilterSettings={quickFilterSettings}
-            onQuickFilterSettingsChange={setQuickFilterSettings}
           />
         </>
       )}
