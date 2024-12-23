@@ -2,7 +2,7 @@
  * @fileoverview Service xử lý đánh giá và bình luận cho công thức nấu ăn
  */
 
-import { db } from "../config/firebase";
+import { db } from '../config/firebase';
 import {
   collection,
   doc,
@@ -15,11 +15,11 @@ import {
   Timestamp,
   runTransaction,
   orderBy,
-} from "firebase/firestore";
-import { Review } from "../types";
-import { UserService } from "./userService";
-import { CacheService, CACHE_KEYS, CACHE_EXPIRY } from "./cacheService";
-import { COLLECTIONS } from "../constants";
+} from 'firebase/firestore';
+import { Review } from '../types';
+import { UserService } from './userService';
+import { CacheService, CACHE_KEYS, CACHE_EXPIRY } from './cacheService';
+import { COLLECTIONS } from '../constants';
 
 /**
  * Service quản lý đánh giá và bình luận
@@ -48,7 +48,7 @@ export const ReviewService = {
         userId
       );
       if (existingReview) {
-        throw new Error("Bạn đã đánh giá món ăn này rồi");
+        throw new Error('Bạn đã đánh giá món ăn này rồi');
       }
 
       // Tạo review mới
@@ -73,7 +73,7 @@ export const ReviewService = {
         const statsDoc = await transaction.get(statsRef);
 
         if (!statsDoc.exists()) {
-          throw new Error("Không tìm thấy stats");
+          throw new Error('Không tìm thấy stats');
         }
 
         const statsData = statsDoc.data();
@@ -113,9 +113,9 @@ export const ReviewService = {
   ): Promise<Review | null> => {
     try {
       const q = query(
-        collection(db, "reviews"),
-        where("recipeId", "==", recipeId),
-        where("userId", "==", userId)
+        collection(db, 'reviews'),
+        where('recipeId', '==', recipeId),
+        where('userId', '==', userId)
       );
 
       const querySnapshot = await getDocs(q);
@@ -129,7 +129,7 @@ export const ReviewService = {
         ...doc.data(),
       } as Review;
     } catch (error) {
-      console.error("Lỗi khi lấy đánh giá:", error);
+      console.error('Lỗi khi lấy đánh giá:', error);
       return null;
     }
   },
@@ -141,38 +141,37 @@ export const ReviewService = {
    */
   getRecipeReviews: async (recipeId: string): Promise<Review[]> => {
     try {
-      console.log("Fetching reviews for recipe:", recipeId);
+      const reviewsRef = collection(db, COLLECTIONS.REVIEWS);
       const q = query(
-        collection(db, "reviews"),
-        where("recipeId", "==", recipeId),
-        orderBy("createdAt", "desc")
+        reviewsRef,
+        where('recipeId', '==', recipeId),
+        orderBy('createdAt', 'desc')
       );
 
       const querySnapshot = await getDocs(q);
-      console.log("Found reviews:", querySnapshot.size);
+      const reviews: Review[] = [];
 
-      const reviews = await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          const data = doc.data();
-          console.log("Review data:", data);
-          const userInfo = await UserService.getUserInfo(data.userId);
-          return {
-            id: doc.id,
-            recipeId: data.recipeId,
-            userId: data.userId,
-            rating: data.rating,
-            comment: data.comment,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-            userInfo: userInfo,
-          } as Review;
-        })
-      );
+      for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        // Lấy thông tin user
+        const userInfo = await UserService.getUserInfo(data.userId);
+
+        reviews.push({
+          id: doc.id,
+          ...data,
+          upvotes: data.upvotes || 0,
+          downvotes: data.downvotes || 0,
+          votes: data.votes || {},
+          userInfo,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        } as Review);
+      }
 
       return reviews;
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách đánh giá:", error);
-      return [];
+      console.error('Lỗi khi lấy reviews:', error);
+      throw error;
     }
   },
 
@@ -193,23 +192,23 @@ export const ReviewService = {
     try {
       await runTransaction(db, async (transaction) => {
         // Đọc review và recipe trước
-        const reviewRef = doc(db, "reviews", reviewId);
-        const recipeRef = doc(db, "recipeStats", recipeId);
+        const reviewRef = doc(db, 'reviews', reviewId);
+        const recipeRef = doc(db, 'recipeStats', recipeId);
 
         const reviewDoc = await transaction.get(reviewRef);
         const recipeDoc = await transaction.get(recipeRef);
 
         if (!reviewDoc.exists()) {
-          throw new Error("Không tìm thấy đánh giá");
+          throw new Error('Không tìm thấy đánh giá');
         }
         if (!recipeDoc.exists()) {
-          throw new Error("Không tìm thấy công thức");
+          throw new Error('Không tìm thấy công thức');
         }
 
         const oldRating = reviewDoc.data().rating;
         const recipeData = recipeDoc.data();
 
-        // Sau khi đọc xong mới thực hiện write
+        // Sau khi đ���c xong mới thực hiện write
         const currentTotal = recipeData.averageRating * recipeData.totalReviews;
         const newTotal = currentTotal - oldRating + rating;
         const newAverageRating = newTotal / recipeData.totalReviews;
@@ -253,8 +252,8 @@ export const ReviewService = {
 
       // Nếu không có cache thì query từ Firestore
       const q = query(
-        collection(db, "reviews"),
-        where("recipeId", "==", recipeId)
+        collection(db, 'reviews'),
+        where('recipeId', '==', recipeId)
       );
 
       const querySnapshot = await getDocs(q);
@@ -274,7 +273,7 @@ export const ReviewService = {
 
       return stats;
     } catch (error) {
-      console.error("Lỗi khi lấy thống kê đánh giá:", error);
+      console.error('Lỗi khi lấy thống kê đánh giá:', error);
       return { averageRating: 0, totalReviews: 0 };
     }
   },
