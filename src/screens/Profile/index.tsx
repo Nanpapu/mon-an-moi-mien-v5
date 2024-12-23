@@ -148,13 +148,14 @@ export default function ProfileScreen() {
         }}
         contentContainerStyle={{
           flexGrow: 1,
-          paddingTop: user ? theme.spacing.xl : 0,
-          paddingBottom: theme.spacing.xl,
+          paddingTop: user ? theme.spacing.xl : theme.spacing.xl,
+          paddingBottom: theme.spacing.xl * 2,
           justifyContent: user ? 'flex-start' : 'center',
           paddingHorizontal: user ? theme.spacing.lg : 0,
         }}
         showsVerticalScrollIndicator={false}
-        scrollEnabled={!!user}
+        keyboardShouldPersistTaps="handled"
+        bounces={false}
       >
         {isLoading ? (
           <Loading text="Đang tải..." />
@@ -244,9 +245,7 @@ export default function ProfileScreen() {
               onDisplayNameChange={setDisplayName}
               isSubmitting={isSubmitting}
             />
-            {/* Tạm ���n đăng nhập bằng Google 
-            <GoogleSignInButton onPress={signInWithGoogle} />
-            */}
+            {/* Tạm ẩn đăng nhập bằng Google */}
           </>
         )}
       </ScrollView>
