@@ -71,7 +71,8 @@ export const AuthForm = ({
             styles.title,
             {
               color: theme.colors.text.primary,
-              marginBottom: theme.spacing.lg,
+              marginBottom: theme.spacing.sm,
+              marginTop: theme.spacing.md,
             },
           ]}
         >
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 24,
+    marginVertical: 8,
   },
   dividerLine: {
     flex: 1,

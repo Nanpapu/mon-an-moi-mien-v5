@@ -36,6 +36,19 @@
       "eas": {
         "projectId": "813e424c-768f-4912-8a6c-a2d599d22d93"
       }
-    }
+    },
+    "fonts": [
+      {
+        "asset": "assets/fonts/DancingScript-Bold.ttf",
+        "name": "DancingScript_700Bold"
+      },
+      {
+        "asset": "assets/fonts/Pacifico-Regular.ttf",
+        "name": "Pacifico_400Regular"
+      }
+    ],
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
