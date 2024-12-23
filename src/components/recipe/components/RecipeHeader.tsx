@@ -43,7 +43,7 @@ export const RecipeHeader = ({
           onPress={onToggleDetails}
         >
           <Ionicons
-            name="chevron-up"
+            name="chevron-down"
             size={24}
             color={theme.colors.text.primary}
           />
