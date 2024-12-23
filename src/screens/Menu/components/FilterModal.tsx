@@ -44,28 +44,6 @@ const PinnedFiltersSection = () => {
     { type: 'dietType', label: 'Loại món' },
   ];
 
-  const renderFilterToggle = (type: QuickFilterType['type'], label: string) => {
-    const isEnabled = pinnedFilters[type].enabled;
-    const isDisabled = !isEnabled && !canPinMore;
-
-    return (
-      <View style={styles.filterToggleRow}>
-        <Typography variant="body1">{label}</Typography>
-        <Switch
-          value={isEnabled}
-          onValueChange={() => togglePinnedFilter(type)}
-          trackColor={{
-            false: theme.colors.divider,
-            true: theme.colors.primary.main,
-          }}
-          thumbColor={theme.colors.background.paper}
-          disabled={isDisabled}
-          style={{ opacity: isDisabled ? 0.5 : 1 }}
-        />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.section}>
       <Typography variant="subtitle1" style={styles.sectionTitle}>
@@ -75,9 +53,24 @@ const PinnedFiltersSection = () => {
         Chọn các bộ lọc bạn muốn hiển thị trực tiếp trên màn hình Menu
       </Typography>
 
-      {availableFilters.map(({ type, label }) =>
-        renderFilterToggle(type, label)
-      )}
+      {availableFilters.map(({ type, label }) => (
+        <View key={type} style={styles.filterToggleRow}>
+          <Typography variant="body1">{label}</Typography>
+          <Switch
+            value={pinnedFilters[type].enabled}
+            onValueChange={() => togglePinnedFilter(type)}
+            trackColor={{
+              false: theme.colors.divider,
+              true: theme.colors.primary.main,
+            }}
+            thumbColor={theme.colors.background.paper}
+            disabled={!pinnedFilters[type].enabled && !canPinMore}
+            style={{
+              opacity: !pinnedFilters[type].enabled && !canPinMore ? 0.5 : 1,
+            }}
+          />
+        </View>
+      ))}
     </View>
   );
 };
