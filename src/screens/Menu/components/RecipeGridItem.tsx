@@ -12,6 +12,7 @@ import { COLLECTIONS } from '../../../constants';
 import { FavoriteButton } from '../../../components/buttons';
 import { ImageUtils } from '../../../utils/imageUtils';
 import { ImageCacheService } from '../../../services/imageCacheService';
+import { useAdaptiveText } from '../hooks/useAdaptiveText';
 
 interface Props {
   recipe: Recipe;
@@ -43,6 +44,12 @@ export const RecipeGridItem = memo(
     const styles = createStyles(theme, width, config);
     const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
     const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const { fontSize, onTextLayout } = useAdaptiveText({
+      text: recipe.name,
+      maxLines: config.maxLines || 2,
+      baseFontSize: config.baseFontSize || 13,
+      minFontSize: config.minFontSize || 11,
+    });
 
     useEffect(() => {
       const unsubscribe = onSnapshot(
@@ -142,7 +149,17 @@ export const RecipeGridItem = memo(
               <Typography
                 variant="body2"
                 numberOfLines={config.titleLines || 2}
-                style={styles.name}
+                style={[
+                  styles.name,
+                  {
+                    fontSize: config.adjustableFontSize
+                      ? fontSize
+                      : styles.name.fontSize,
+                  },
+                ]}
+                onTextLayout={
+                  config.adjustableFontSize ? onTextLayout : undefined
+                }
               >
                 {recipe.name}
               </Typography>
@@ -236,26 +253,30 @@ const createStyles = (
       backgroundColor: theme.colors.background.default,
     },
     infoContainer: {
-      padding: theme.spacing.sm,
+      padding: theme.spacing.xs,
     },
     nameContainer: {
       minHeight: config.minTitleHeight,
       justifyContent: 'center',
+      paddingHorizontal: theme.spacing.xs,
     },
     name: {
       textAlign: 'center',
       fontWeight: '500',
+      fontSize: 13,
+      lineHeight: 18,
     },
     divider: {
       height: 1,
       backgroundColor: theme.colors.divider,
-      marginVertical: theme.spacing.xs,
+      marginVertical: theme.spacing.xxs,
     },
     ratingContainer: {
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: config.minRatingHeight,
-      gap: theme.spacing.xs,
+      gap: theme.spacing.xxs,
+      paddingBottom: theme.spacing.xs,
     },
     starsContainer: {
       flexDirection: 'row',
