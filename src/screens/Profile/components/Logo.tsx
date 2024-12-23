@@ -51,7 +51,7 @@ export const Logo = () => {
               styles.slogan,
               {
                 color: theme.colors.text.secondary,
-                fontFamily: 'DancingScript',
+                fontFamily: 'Pacifico',
               },
             ]}
           >
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   slogan: {
     fontSize: 18,
-    lineHeight: 24,
+    lineHeight: 27,
     letterSpacing: 0.25,
     opacity: 0.9,
     includeFontPadding: false,
