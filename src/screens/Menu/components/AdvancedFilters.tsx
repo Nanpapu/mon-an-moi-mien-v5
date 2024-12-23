@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   FilterOptions,
   COOKING_TIME_RANGES,
@@ -57,13 +58,59 @@ export const AdvancedFilters = ({
     });
   };
 
+  const handleFavoritesChange = () => {
+    onFilterChange({
+      ...filterOptions,
+      showFavorites: !filterOptions.showFavorites,
+    });
+  };
+
   return (
     <View style={styles.container}>
+      {/* Yêu thích - Đặt lên đầu và tách biệt */}
+      <View style={styles.favoriteSection}>
+        <TouchableOpacity
+          style={[
+            styles.favoriteButton,
+            filterOptions.showFavorites && styles.activeFavoriteButton,
+          ]}
+          onPress={handleFavoritesChange}
+        >
+          <Ionicons
+            name={filterOptions.showFavorites ? 'heart' : 'heart-outline'}
+            size={24}
+            color={
+              filterOptions.showFavorites
+                ? theme.colors.primary.contrast
+                : theme.colors.primary.main
+            }
+          />
+          <Typography
+            variant="body1"
+            style={[
+              styles.favoriteText,
+              filterOptions.showFavorites && styles.activeFavoriteText,
+            ]}
+          >
+            Chỉ hiện công thức yêu thích
+          </Typography>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.divider} />
+
       {/* Vùng miền */}
       <View style={styles.filterGroup}>
-        <Typography variant="subtitle2" style={styles.groupTitle}>
-          Vùng miền
-        </Typography>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="map-marker-outline"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Vùng miền
+          </Typography>
+        </View>
         <View style={styles.chipContainer}>
           {regions.map((region) => (
             <TouchableOpacity
@@ -95,9 +142,16 @@ export const AdvancedFilters = ({
 
       {/* Loại món */}
       <View style={styles.filterGroup}>
-        <Typography variant="subtitle2" style={styles.groupTitle}>
-          Loại món
-        </Typography>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="food-variant"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Loại món
+          </Typography>
+        </View>
         <View style={styles.chipContainer}>
           <TouchableOpacity
             style={[
@@ -106,6 +160,15 @@ export const AdvancedFilters = ({
             ]}
             onPress={() => handleCategoryChange('vegetarian')}
           >
+            <MaterialCommunityIcons
+              name="leaf"
+              size={16}
+              color={
+                filterOptions.category === 'vegetarian'
+                  ? theme.colors.primary.contrast
+                  : theme.colors.text.primary
+              }
+            />
             <Typography
               variant="body2"
               style={[
@@ -124,6 +187,15 @@ export const AdvancedFilters = ({
             ]}
             onPress={() => handleCategoryChange('non-vegetarian')}
           >
+            <MaterialCommunityIcons
+              name="food-steak"
+              size={16}
+              color={
+                filterOptions.category === 'non-vegetarian'
+                  ? theme.colors.primary.contrast
+                  : theme.colors.text.primary
+              }
+            />
             <Typography
               variant="body2"
               style={[
@@ -140,9 +212,16 @@ export const AdvancedFilters = ({
 
       {/* Độ khó */}
       <View style={styles.filterGroup}>
-        <Typography variant="subtitle2" style={styles.groupTitle}>
-          Độ khó
-        </Typography>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="star-outline"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Độ khó
+          </Typography>
+        </View>
         <View style={styles.chipContainer}>
           {[1, 2, 3, 4, 5].map((level) => (
             <TouchableOpacity
@@ -169,9 +248,16 @@ export const AdvancedFilters = ({
 
       {/* Thời gian nấu */}
       <View style={styles.filterGroup}>
-        <Typography variant="subtitle2" style={styles.groupTitle}>
-          Thời gian
-        </Typography>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="clock-outline"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Thời gian
+          </Typography>
+        </View>
         <View style={styles.chipContainer}>
           {COOKING_TIME_RANGES.map((range) => (
             <TouchableOpacity
@@ -202,9 +288,16 @@ export const AdvancedFilters = ({
 
       {/* Số người ăn */}
       <View style={styles.filterGroup}>
-        <Typography variant="subtitle2" style={styles.groupTitle}>
-          Số người
-        </Typography>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="account-group-outline"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Số người
+          </Typography>
+        </View>
         <View style={styles.chipContainer}>
           {SERVINGS_RANGES.map((range) => (
             <TouchableOpacity
@@ -241,11 +334,51 @@ const createStyles = (theme: any) =>
     container: {
       gap: theme.spacing.lg,
     },
+    favoriteSection: {
+      marginBottom: theme.spacing.md,
+    },
+    favoriteButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: theme.spacing.md,
+      backgroundColor: theme.colors.background.paper,
+      borderRadius: theme.spacing.lg,
+      borderWidth: 2,
+      borderColor: theme.colors.primary.main,
+      gap: theme.spacing.sm,
+    },
+    activeFavoriteButton: {
+      backgroundColor: theme.colors.primary.main,
+    },
+    favoriteText: {
+      color: theme.colors.primary.main,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    activeFavoriteText: {
+      color: theme.colors.primary.contrast,
+    },
+    divider: {
+      height: 1,
+      backgroundColor: theme.colors.divider,
+      marginVertical: theme.spacing.md,
+    },
     filterGroup: {
+      gap: theme.spacing.md,
+      backgroundColor: theme.colors.background.paper,
+      padding: theme.spacing.md,
+      borderRadius: theme.spacing.lg,
+      borderWidth: 1,
+      borderColor: theme.colors.divider,
+    },
+    groupHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: theme.spacing.sm,
     },
     groupTitle: {
-      marginBottom: theme.spacing.xs,
+      fontSize: 18,
+      fontWeight: '600',
     },
     chipContainer: {
       flexDirection: 'row',
@@ -253,10 +386,13 @@ const createStyles = (theme: any) =>
       gap: theme.spacing.sm,
     },
     chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.xs,
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
       borderRadius: theme.spacing.lg,
-      backgroundColor: theme.colors.background.paper,
+      backgroundColor: theme.colors.background.default,
       borderWidth: 1,
       borderColor: theme.colors.divider,
     },

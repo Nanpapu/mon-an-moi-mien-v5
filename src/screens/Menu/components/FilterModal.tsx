@@ -9,7 +9,7 @@ import {
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { FilterOptions } from '../types';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AdvancedFilters } from './AdvancedFilters';
 import { useToast } from '../../../hooks/useToast';
@@ -34,7 +34,6 @@ export const FilterModal = ({
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme);
-  const { showToast } = useToast();
 
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
@@ -49,11 +48,6 @@ export const FilterModal = ({
     tempFilterOptions.showFavorites,
   ].filter(Boolean).length;
 
-  const handleApply = () => {
-    onApply(tempFilterOptions);
-    onClose();
-  };
-
   return (
     <Modal
       visible={visible}
@@ -62,7 +56,6 @@ export const FilterModal = ({
       onRequestClose={onClose}
     >
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        {/* Header mới với thiết kế tối giản */}
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -73,7 +66,7 @@ export const FilterModal = ({
               />
             </TouchableOpacity>
             <Typography variant="h2" style={styles.title}>
-              Bộ lọc
+              Bộ lọc nâng cao
             </Typography>
             <TouchableOpacity
               style={styles.resetButton}
@@ -86,46 +79,56 @@ export const FilterModal = ({
                   cookingTime: { min: null, max: null },
                   servings: { min: null, max: null },
                   mainIngredientTypes: [],
+                  showFavorites: false,
                 });
               }}
             >
-              <Typography
-                variant="body2"
-                color="error"
-                style={styles.resetButtonText}
-              >
-                Đặt lại
-              </Typography>
+              <MaterialCommunityIcons
+                name="refresh"
+                size={24}
+                color={theme.colors.error.main}
+              />
             </TouchableOpacity>
           </View>
 
-          {/* <Typography
-            variant="body2"
-            color="secondary"
-            style={styles.filterCount}
-          >
-            {activeFiltersCount} bộ lọc đang áp dụng
-          </Typography> */}
+          {activeFiltersCount > 0 && (
+            <View style={styles.filterCountContainer}>
+              <MaterialCommunityIcons
+                name="filter-variant"
+                size={20}
+                color={theme.colors.primary.main}
+              />
+              <Typography
+                variant="body2"
+                color="primary"
+                style={styles.filterCount}
+              >
+                {activeFiltersCount} bộ lọc đang áp dụng
+              </Typography>
+            </View>
+          )}
         </View>
 
-        {/* Content */}
-        <ScrollView style={styles.content}>
-          <View style={styles.section}>
-            <Typography variant="subtitle1" style={styles.sectionTitle}>
-              Bộ lọc nâng cao
-            </Typography>
-            <AdvancedFilters
-              filterOptions={tempFilterOptions}
-              onFilterChange={setTempFilterOptions}
-              regions={regions}
-            />
-          </View>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          <AdvancedFilters
+            filterOptions={tempFilterOptions}
+            onFilterChange={setTempFilterOptions}
+            regions={regions}
+          />
         </ScrollView>
 
-        {/* Footer mới với nút áp dụng to hơn */}
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-            <Typography variant="body2" style={styles.applyButtonText}>
+          <TouchableOpacity
+            style={styles.applyButton}
+            onPress={() => {
+              onApply(tempFilterOptions);
+              onClose();
+            }}
+          >
+            <Typography
+              variant="body2"
+              style={[styles.applyButtonText, { fontWeight: '700' }]}
+            >
               Áp dụng {activeFiltersCount > 0 ? `(${activeFiltersCount})` : ''}
             </Typography>
           </TouchableOpacity>
@@ -151,7 +154,6 @@ const createStyles = (theme: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: theme.spacing.xs,
     },
     closeButton: {
       padding: theme.spacing.xs,
@@ -162,28 +164,19 @@ const createStyles = (theme: any) =>
       fontSize: 20,
       fontWeight: '600',
     },
+    filterCountContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: theme.spacing.sm,
+      gap: theme.spacing.xs,
+    },
     filterCount: {
-      textAlign: 'left',
-      marginTop: theme.spacing.xs,
-      marginLeft: theme.spacing.xs,
+      fontSize: 14,
     },
     content: {
       flex: 1,
-    },
-    section: {
       padding: theme.spacing.md,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.divider,
-      backgroundColor: theme.colors.background.paper,
-    },
-    lastSection: {
-      borderBottomWidth: 0,
-      paddingBottom: theme.spacing.xl * 2,
-    },
-    sectionTitle: {
-      marginBottom: theme.spacing.md,
-      fontSize: 18,
-      fontWeight: '600',
     },
     footer: {
       padding: theme.spacing.md,
@@ -206,20 +199,6 @@ const createStyles = (theme: any) =>
       fontWeight: '600',
     },
     resetButton: {
-      padding: theme.spacing.sm,
-    },
-    resetButtonText: {
-      fontSize: 16,
-      fontWeight: '700',
-    },
-    sectionDescription: {
-      marginBottom: theme.spacing.md,
-      color: theme.colors.text.secondary,
-    },
-    filterToggleRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: theme.spacing.sm,
+      padding: theme.spacing.xs,
     },
   });
