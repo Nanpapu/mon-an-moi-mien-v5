@@ -5,6 +5,7 @@ import {
   Modal,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe, Review } from '../../../types';
@@ -83,6 +84,23 @@ export const RecipeReviews = ({ recipe }: Props) => {
     }
   };
 
+  const handleReviewPress = () => {
+    if (!user) {
+      Alert.alert(
+        'Yêu cầu đăng nhập',
+        'Bạn cần đăng nhập để có thể đánh giá công thức này.',
+        [
+          {
+            text: 'Đóng',
+            style: 'cancel',
+          },
+        ]
+      );
+      return;
+    }
+    setModalVisible(true);
+  };
+
   return (
     <>
       <View style={styles.ratingContainer}>
@@ -133,24 +151,25 @@ export const RecipeReviews = ({ recipe }: Props) => {
             )}
           </View>
 
-          {user && (
-            <TouchableOpacity
-              style={styles.addReviewButton}
-              onPress={() => setModalVisible(true)}
+          <TouchableOpacity
+            style={[
+              styles.addReviewButton,
+              !user && styles.disabledReviewButton,
+            ]}
+            onPress={handleReviewPress}
+          >
+            <Ionicons
+              name={existingReview ? 'create' : 'add'}
+              size={20}
+              color={theme.colors.primary.contrast}
+            />
+            <Typography
+              variant="body1"
+              style={{ color: theme.colors.primary.contrast }}
             >
-              <Ionicons
-                name={existingReview ? 'create' : 'add'}
-                size={20}
-                color={theme.colors.primary.contrast}
-              />
-              <Typography
-                variant="body1"
-                style={{ color: theme.colors.primary.contrast }}
-              >
-                {existingReview ? 'Sửa đánh giá' : 'Đánh giá'}
-              </Typography>
-            </TouchableOpacity>
-          )}
+              {existingReview ? 'Sửa đánh giá' : 'Đánh giá'}
+            </Typography>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity

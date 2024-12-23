@@ -48,6 +48,10 @@ export const createStyles = (theme: Theme) =>
       borderRadius: theme.spacing.sm,
       gap: theme.spacing.xs,
     },
+    disabledReviewButton: {
+      opacity: 0.5,
+      backgroundColor: theme.colors.primary.light,
+    },
     addReviewText: {
       ...theme.typography.body2,
       color: theme.colors.background.default,
