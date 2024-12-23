@@ -200,7 +200,9 @@ export default function ProfileScreen() {
               onForgotPassword={() => setShowResetPassword(true)}
               onToggleAuthMode={toggleAuthMode}
             />
+            {/* Tạm ẩn đăng nhập bằng Google 
             <GoogleSignInButton onPress={signInWithGoogle} />
+            */}
           </>
         )}
       </ScrollView>
