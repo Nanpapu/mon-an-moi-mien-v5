@@ -90,9 +90,12 @@ export const RecipeReviews = ({ recipe }: Props) => {
           <View style={styles.ratingScore}>
             {!isLoadingStats && stats.totalReviews > 0 ? (
               <>
-                <Typography variant="h2" style={styles.averageRating}>
+                <View>
+                  <Typography variant="h2" style={styles.averageRating}>
                   {stats.averageRating.toFixed(1)}
                 </Typography>
+                </View>
+                
                 <View style={styles.starsRow}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Ionicons
@@ -105,9 +108,11 @@ export const RecipeReviews = ({ recipe }: Props) => {
                     />
                   ))}
                 </View>
-                <Typography variant="caption" color="secondary">
-                  {stats.totalReviews} đánh giá
-                </Typography>
+                <View>
+                  <Typography variant="caption" color="secondary" numberOfLines={1}>
+                    {stats.totalReviews} đánh giá
+                  </Typography>
+                </View>
               </>
             ) : isLoadingStats ? (
               <ActivityIndicator

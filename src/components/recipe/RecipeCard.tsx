@@ -133,11 +133,11 @@ export function RecipeCard({
               instructions={recipe.instructions}
               defaultExpanded={mode === 'detailed'}
             />
-            {showReviews && (
-              <View style={styles.reviewsContainer}>
-                <RecipeReviews recipe={recipe} />
-              </View>
-            )}
+          </View>
+        )}
+        {showReviews && (
+          <View style={styles.reviewsContainer}>
+            <RecipeReviews recipe={recipe} />
           </View>
         )}
       </View>
