@@ -15,10 +15,15 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.background.paper,
     },
     reviewContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
       padding: theme.spacing.md,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
+    },
+    reviewContent: {
+      flex: 1,
     },
     userInfoContainer: {
       flexDirection: 'row',
@@ -49,15 +54,19 @@ export const createStyles = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: theme.spacing.sm,
-      gap: theme.spacing.md,
+      gap: theme.spacing.xs,
     },
     voteButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: theme.spacing.xs,
+      gap: theme.spacing.sm,
     },
     voteCount: {
       minWidth: 32,
       textAlign: 'center',
+      backgroundColor: theme.colors.primary.main,
+      borderRadius: 20,
+      paddingHorizontal: theme.spacing.xs,
+      paddingVertical: theme.spacing.xs,
     },
   });

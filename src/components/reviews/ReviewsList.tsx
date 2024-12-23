@@ -240,48 +240,50 @@ export const ReviewsList = ({
 
       {reviews.map((review) => (
         <View key={review.id} style={styles.reviewContainer}>
-          <View style={styles.userInfoContainer}>
-            {review.userInfo?.photoURL ? (
-              <Image
-                source={{ uri: review.userInfo.photoURL }}
-                style={styles.userAvatar}
-                contentFit="cover"
-                transition={200}
-              />
-            ) : (
-              <Ionicons
-                name="person-circle"
-                size={40}
-                color={theme.colors.primary.main}
-                style={{ marginRight: theme.spacing.sm }}
-              />
-            )}
-            <View>
-              <Typography variant="subtitle2">
-                {review.userInfo?.displayName || 'Người dùng'}
-              </Typography>
-              <Typography variant="caption" color="secondary">
-                {review.userInfo?.email}
-              </Typography>
-            </View>
-          </View>
-
-          <View style={styles.ratingContainer}>
-            <View style={styles.starsContainer}>
-              {renderStars(review.rating)}
-            </View>
-            <Typography
-              variant="caption"
-              color="secondary"
-              style={styles.dateText}
-            >
-              {new Date(review.createdAt.seconds * 1000).toLocaleDateString(
-                'vi-VN'
+          <View style={styles.reviewContent}>
+            <View style={styles.userInfoContainer}>
+              {review.userInfo?.photoURL ? (
+                <Image
+                  source={{ uri: review.userInfo.photoURL }}
+                  style={styles.userAvatar}
+                  contentFit="cover"
+                  transition={200}
+                />
+              ) : (
+                <Ionicons
+                  name="person-circle"
+                  size={40}
+                  color={theme.colors.primary.main}
+                  style={{ marginRight: theme.spacing.sm }}
+                />
               )}
-            </Typography>
-          </View>
+              <View>
+                <Typography variant="subtitle2">
+                  {review.userInfo?.displayName || 'Người dùng'}
+                </Typography>
+                <Typography variant="caption" color="secondary">
+                  {review.userInfo?.email}
+                </Typography>
+              </View>
+            </View>
 
-          <Typography variant="body2">{review.comment}</Typography>
+            <View style={styles.ratingContainer}>
+              <View style={styles.starsContainer}>
+                {renderStars(review.rating)}
+              </View>
+              <Typography
+                variant="caption"
+                color="secondary"
+                style={styles.dateText}
+              >
+                {new Date(review.createdAt.seconds * 1000).toLocaleDateString(
+                  'vi-VN'
+                )}
+              </Typography>
+            </View>
+
+            <Typography variant="body2">{review.comment}</Typography>
+          </View>
 
           {/* Thêm phần voting UI */}
           {renderVoteButtons(review)}
