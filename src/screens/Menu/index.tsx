@@ -24,11 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchHistoryService } from '../../services/searchHistoryService';
 import { useAuth } from '../../context/AuthContext';
 import { FilterModal } from './components/FilterModal';
-import { QuickFilterSettings } from './components/FilterSettings';
 import { FilterOptions } from './types';
-import { QuickFilter } from './components/QuickFilter';
-import { usePinnedFilters } from './contexts/PinnedFiltersContext';
-import { useQuickFilters } from './hooks/useQuickFilters';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -36,15 +32,7 @@ export default function MenuScreen() {
   const styles = createStyles(theme, insets);
   const { showToast } = useToast();
   const { user } = useAuth();
-  const { pinnedFilters } = usePinnedFilters();
   const { savedRecipes } = useMenuData();
-  const {
-    filterState,
-    filterData,
-    handleFilterChange,
-    filteredRecipes,
-    hasActiveFilters,
-  } = useQuickFilters(savedRecipes);
 
   const {
     isRefreshing,
@@ -83,6 +71,27 @@ export default function MenuScreen() {
     filterOptions.servings.min || filterOptions.servings.max,
     filterOptions.mainIngredientTypes.length > 0,
   ].filter(Boolean).length;
+
+  const hasActiveFilters =
+    filterOptions.searchQuery || filterOptions.region || activeFiltersCount > 0;
+
+  const filteredRecipes = useMemo(() => {
+    return savedRecipes
+      .map((recipe) => ({
+        recipe,
+        visible: true,
+      }))
+      .filter((item) => {
+        const searchMatch =
+          !filterOptions.searchQuery ||
+          item.recipe.name
+            .toLowerCase()
+            .includes(filterOptions.searchQuery.toLowerCase());
+        const regionMatch =
+          !filterOptions.region || item.recipe.region === filterOptions.region;
+        return searchMatch && regionMatch;
+      });
+  }, [savedRecipes, filterOptions]);
 
   useEffect(() => {
     loadSearchHistory();
@@ -130,7 +139,7 @@ export default function MenuScreen() {
 
     Alert.alert(
       'Xác nhận xóa',
-      `Bạn có chắc muốn xóa ${selectedRecipes.size} công thức đã chọn?`,
+      `Bạn có ch��c muốn xóa ${selectedRecipes.size} công thức đã chọn?`,
       [
         {
           text: 'Hủy',
@@ -160,41 +169,6 @@ export default function MenuScreen() {
     );
   };
 
-  const QuickFilters = () => {
-    if (!user) return null;
-
-    return (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.quickFiltersContainer}
-        contentContainerStyle={styles.quickFiltersContent}
-      >
-        <View style={styles.filterContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.quickFiltersContent}
-          >
-            {activePinnedFilters.map(([filterType, _]) => {
-              const type = filterType as keyof typeof filterData;
-              const data = filterData[type];
-              return (
-                <QuickFilter
-                  key={filterType}
-                  label={data.label}
-                  options={data.options}
-                  selectedOption={filterState[type]}
-                  onSelectOption={(option) => handleFilterChange(type, option)}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
-      </ScrollView>
-    );
-  };
-
   const handleCloseFilterModal = () => {
     setTempFilterOptions(filterOptions);
     setShowFilterModal(false);
@@ -204,11 +178,6 @@ export default function MenuScreen() {
     setFilterOptions(newFilterOptions);
     setShowFilterModal(false);
   };
-
-  // Lấy danh sách các filter đã được pin và sắp xếp theo order
-  const activePinnedFilters = Object.entries(pinnedFilters)
-    .filter(([_, settings]) => settings.enabled)
-    .sort((a, b) => a[1].order - b[1].order);
 
   return (
     <View
@@ -232,34 +201,28 @@ export default function MenuScreen() {
               />
             </View>
 
-            <View style={styles.filterButtonGroup}>
-              <TouchableOpacity
-                style={styles.filterButton}
-                onPress={() => setShowFilterModal(true)}
-              >
-                <Ionicons
-                  name="options-outline"
-                  size={24}
-                  color={theme.colors.text.primary}
-                />
-                {activeFiltersCount > 0 && (
-                  <View style={styles.filterBadge}>
-                    <Typography
-                      variant="caption"
-                      style={styles.filterBadgeText}
-                    >
-                      {activeFiltersCount}
-                    </Typography>
-                  </View>
-                )}
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => setShowFilterModal(true)}
+            >
+              <Ionicons
+                name="options-outline"
+                size={24}
+                color={theme.colors.text.primary}
+              />
+              {activeFiltersCount > 0 && (
+                <View style={styles.filterBadge}>
+                  <Typography variant="caption" style={styles.filterBadgeText}>
+                    {activeFiltersCount}
+                  </Typography>
+                </View>
+              )}
+            </TouchableOpacity>
           </View>
-          <QuickFilters />
 
           <FilterModal
             visible={showFilterModal}
-            onClose={handleCloseFilterModal}
+            onClose={() => setShowFilterModal(false)}
             filterOptions={tempFilterOptions}
             onFilterChange={setTempFilterOptions}
             onApply={handleApplyFilter}

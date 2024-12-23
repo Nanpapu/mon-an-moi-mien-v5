@@ -47,23 +47,3 @@ export const SERVINGS_RANGES: ServingsRange[] = [
   { label: '5-6 người', min: 5, max: 6 },
   { label: '> 6 người', min: 7, max: null },
 ];
-
-// Thêm type mới để quản lý các loại filter có thể pin
-export type QuickFilterType = {
-  id: string;
-  type: 'region' | 'difficulty' | 'cookTime' | 'servings' | 'dietType';
-  label: string;
-  options: string[];
-  selectedOption: string | null;
-};
-
-// Type cho settings của filter được ghim
-export type PinnedFilterSettings = {
-  enabled: boolean; // Filter có được ghim không
-  order: number; // Thứ tự hiển thị
-};
-
-// Map lưu settings của từng loại filter
-export type PinnedFiltersMap = {
-  [key in QuickFilterType['type']]: PinnedFilterSettings;
-};

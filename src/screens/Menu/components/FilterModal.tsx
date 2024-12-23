@@ -15,8 +15,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RegionFilter } from './RegionFilter';
 import { AdvancedFilters } from './AdvancedFilters';
 import { FilterSettings, QuickFilterSettings } from './FilterSettings';
-import { usePinnedFilters } from '../contexts/PinnedFiltersContext';
-import { QuickFilterType } from '../types';
 import { useToast } from '../../../hooks/useToast';
 
 interface Props {
@@ -27,53 +25,6 @@ interface Props {
   onApply: (options: FilterOptions) => void;
   regions: string[];
 }
-
-const PinnedFiltersSection = () => {
-  const { theme } = useTheme();
-  const { pinnedFilters, togglePinnedFilter, canPinMore } = usePinnedFilters();
-  const styles = createStyles(theme);
-
-  const availableFilters: Array<{
-    type: QuickFilterType['type'];
-    label: string;
-  }> = [
-    { type: 'region', label: 'Vùng miền' },
-    { type: 'difficulty', label: 'Độ khó' },
-    { type: 'cookTime', label: 'Thời gian nấu' },
-    { type: 'servings', label: 'Số người ăn' },
-    { type: 'dietType', label: 'Loại món' },
-  ];
-
-  return (
-    <View style={styles.section}>
-      <Typography variant="subtitle1" style={styles.sectionTitle}>
-        Hiển thị bộ lọc nhanh
-      </Typography>
-      <Typography variant="caption" style={styles.sectionDescription}>
-        Chọn các bộ lọc bạn muốn hiển thị trực tiếp trên màn hình Menu
-      </Typography>
-
-      {availableFilters.map(({ type, label }) => (
-        <View key={type} style={styles.filterToggleRow}>
-          <Typography variant="body1">{label}</Typography>
-          <Switch
-            value={pinnedFilters[type].enabled}
-            onValueChange={() => togglePinnedFilter(type)}
-            trackColor={{
-              false: theme.colors.divider,
-              true: theme.colors.primary.main,
-            }}
-            thumbColor={theme.colors.background.paper}
-            disabled={!pinnedFilters[type].enabled && !canPinMore}
-            style={{
-              opacity: !pinnedFilters[type].enabled && !canPinMore ? 0.5 : 1,
-            }}
-          />
-        </View>
-      ))}
-    </View>
-  );
-};
 
 export const FilterModal = ({
   visible,
@@ -87,7 +38,6 @@ export const FilterModal = ({
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme);
   const { showToast } = useToast();
-  const { pinnedFilters, togglePinnedFilter, canPinMore } = usePinnedFilters();
 
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
@@ -173,7 +123,6 @@ export const FilterModal = ({
               regions={regions}
             />
           </View>
-          <PinnedFiltersSection />
         </ScrollView>
 
         {/* Footer mới với nút áp dụng to hơn */}

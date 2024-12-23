@@ -146,6 +146,7 @@ export interface Recipe extends BaseRecipe {
   servings?: number;
   /** Phân loại món chay/mặn */
   category: DishCategory;
+  visible?: boolean;
 }
 
 /**
