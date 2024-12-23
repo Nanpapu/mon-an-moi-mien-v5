@@ -17,6 +17,7 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { FilterSettings, QuickFilterSettings } from './FilterSettings';
 import { usePinnedFilters } from '../contexts/PinnedFiltersContext';
 import { QuickFilterType } from '../types';
+import { useToast } from '../../../hooks/useToast';
 
 interface Props {
   visible: boolean;
@@ -29,7 +30,7 @@ interface Props {
 
 const PinnedFiltersSection = () => {
   const { theme } = useTheme();
-  const { pinnedFilters, togglePinnedFilter } = usePinnedFilters();
+  const { pinnedFilters, togglePinnedFilter, canPinMore } = usePinnedFilters();
   const styles = createStyles(theme);
 
   const availableFilters: Array<{
@@ -43,6 +44,28 @@ const PinnedFiltersSection = () => {
     { type: 'dietType', label: 'Loại món' },
   ];
 
+  const renderFilterToggle = (type: QuickFilterType['type'], label: string) => {
+    const isEnabled = pinnedFilters[type].enabled;
+    const isDisabled = !isEnabled && !canPinMore;
+
+    return (
+      <View style={styles.filterToggleRow}>
+        <Typography variant="body1">{label}</Typography>
+        <Switch
+          value={isEnabled}
+          onValueChange={() => togglePinnedFilter(type)}
+          trackColor={{
+            false: theme.colors.divider,
+            true: theme.colors.primary.main,
+          }}
+          thumbColor={theme.colors.background.paper}
+          disabled={isDisabled}
+          style={{ opacity: isDisabled ? 0.5 : 1 }}
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.section}>
       <Typography variant="subtitle1" style={styles.sectionTitle}>
@@ -52,20 +75,9 @@ const PinnedFiltersSection = () => {
         Chọn các bộ lọc bạn muốn hiển thị trực tiếp trên màn hình Menu
       </Typography>
 
-      {availableFilters.map(({ type, label }) => (
-        <View key={type} style={styles.filterToggleRow}>
-          <Typography variant="body1">{label}</Typography>
-          <Switch
-            value={pinnedFilters[type].enabled}
-            onValueChange={() => togglePinnedFilter(type)}
-            trackColor={{
-              false: theme.colors.divider,
-              true: theme.colors.primary.main,
-            }}
-            thumbColor={theme.colors.background.paper}
-          />
-        </View>
-      ))}
+      {availableFilters.map(({ type, label }) =>
+        renderFilterToggle(type, label)
+      )}
     </View>
   );
 };
@@ -81,6 +93,8 @@ export const FilterModal = ({
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const styles = createStyles(theme);
+  const { showToast } = useToast();
+  const { pinnedFilters, togglePinnedFilter, canPinMore } = usePinnedFilters();
 
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);

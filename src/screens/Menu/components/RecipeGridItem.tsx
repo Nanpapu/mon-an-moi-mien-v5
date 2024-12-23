@@ -91,11 +91,7 @@ export const RecipeGridItem = memo(
 
     return (
       <TouchableOpacity
-        style={[
-          styles.container,
-          isSelected && styles.containerSelected,
-          !visible && { display: 'none' },
-        ]}
+        style={[styles.container, { width }, !visible && { display: 'none' }]}
         onPress={handlePress}
         onLongPress={() => onLongPress?.(recipe.id)}
         activeOpacity={0.7}

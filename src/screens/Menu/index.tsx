@@ -334,7 +334,7 @@ export default function MenuScreen() {
         </>
       )}
 
-      {/* Hiển thị số lượng kết quả nếu có filter active */}
+      {/* Hiển thị số lượng k��t quả nếu có filter active */}
       {hasActiveFilters && (
         <Typography
           variant="caption"
@@ -343,7 +343,8 @@ export default function MenuScreen() {
             color: theme.colors.text.secondary,
           }}
         >
-          Tìm thấy {filteredRecipes.length} công thức
+          Tìm thấy {filteredRecipes.filter((item) => item.visible).length} công
+          thức
         </Typography>
       )}
     </View>

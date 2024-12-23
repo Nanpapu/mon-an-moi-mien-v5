@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PinnedFiltersMap, QuickFilterType } from '../types';
+import { useToast } from '../../../hooks/useToast';
 
 // Key để lưu settings vào AsyncStorage
 const PINNED_FILTERS_STORAGE_KEY = '@menu_pinned_filters';
@@ -14,6 +15,9 @@ const defaultPinnedFilters: PinnedFiltersMap = {
   dietType: { enabled: false, order: 4 },
 };
 
+// Thêm constant cho số lượng filter tối đa được phép ghim
+const MAX_PINNED_FILTERS = 2;
+
 interface PinnedFiltersContextType {
   // Settings của các filter
   pinnedFilters: PinnedFiltersMap;
@@ -23,6 +27,8 @@ interface PinnedFiltersContextType {
   updateFilterOrder: (type: QuickFilterType['type'], newOrder: number) => void;
   // Reset về settings mặc định
   resetToDefault: () => void;
+  // Thêm prop mới
+  canPinMore: boolean;
 }
 
 const PinnedFiltersContext = createContext<
@@ -32,6 +38,7 @@ const PinnedFiltersContext = createContext<
 export const PinnedFiltersProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { showToast } = useToast();
   const [pinnedFilters, setPinnedFilters] =
     useState<PinnedFiltersMap>(defaultPinnedFilters);
 
@@ -65,7 +72,28 @@ export const PinnedFiltersProvider: React.FC<{ children: React.ReactNode }> = ({
     savePinnedFilters();
   }, [pinnedFilters]);
 
+  // Thêm hàm kiểm tra số lượng filter đang được ghim
+  const getEnabledFiltersCount = () => {
+    return Object.values(pinnedFilters).filter((filter) => filter.enabled)
+      .length;
+  };
+
+  // Thêm computed value để kiểm tra có thể ghim thêm không
+  const canPinMore = getEnabledFiltersCount() < MAX_PINNED_FILTERS;
+
+  // Sửa lại hàm togglePinnedFilter để kiểm tra điều kiện
   const togglePinnedFilter = (type: QuickFilterType['type']) => {
+    const isCurrentlyEnabled = pinnedFilters[type].enabled;
+
+    // Nếu đang tắt và muốn bật, kiểm tra số lượng
+    if (!isCurrentlyEnabled && !canPinMore) {
+      showToast(
+        'error',
+        `Bạn chỉ được ghim tối đa ${MAX_PINNED_FILTERS} bộ lọc`
+      );
+      return;
+    }
+
     setPinnedFilters((prev) => ({
       ...prev,
       [type]: {
@@ -99,6 +127,7 @@ export const PinnedFiltersProvider: React.FC<{ children: React.ReactNode }> = ({
         togglePinnedFilter,
         updateFilterOrder,
         resetToDefault,
+        canPinMore,
       }}
     >
       {children}

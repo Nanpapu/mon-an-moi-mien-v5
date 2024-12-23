@@ -91,76 +91,58 @@ export const useQuickFilters = (recipes: Recipe[]) => {
 
   // Thêm logic lọc recipes
   const filteredRecipes = useMemo(() => {
-    return recipes.map((recipe) => ({
-      recipe,
-      visible: recipes
-        .filter((recipe) => {
-          // Giữ nguyên logic filter cũ
-          const matchesRegion =
-            !filterState.region || recipe.region === filterState.region;
-          const matchesDifficulty =
-            !filterState.difficulty ||
-            getDifficultyText(recipe.difficulty || 1) ===
-              filterState.difficulty;
-          const matchesDietType =
-            !filterState.dietType ||
-            (recipe.category === 'vegetarian' ? 'Chay' : 'Mặn') ===
-              filterState.dietType;
+    return recipes.map((recipe) => {
+      // Kiểm tra từng điều kiện filter
+      const matchesRegion =
+        !filterState.region || recipe.region === filterState.region;
+      const matchesDifficulty =
+        !filterState.difficulty ||
+        getDifficultyText(recipe.difficulty || 1) === filterState.difficulty;
+      const matchesDietType =
+        !filterState.dietType ||
+        (recipe.category === 'vegetarian' ? 'Chay' : 'Mặn') ===
+          filterState.dietType;
 
-          // Xử lý cookingTime ranges
-          const matchesCookTime =
-            !filterState.cookTime ||
-            (() => {
-              const time = recipe.cookingTime;
-              if (!time) return false;
+      // Xử lý cookingTime ranges
+      const matchesCookTime = (() => {
+        if (!filterState.cookTime) return true;
+        const cookTimeRange = filterData.cookTime.options.find(
+          (option) => option === filterState.cookTime
+        );
+        if (!cookTimeRange) return true;
 
-              switch (filterState.cookTime) {
-                case '< 15 phút':
-                  return time < 15;
-                case '15-30 phút':
-                  return time >= 15 && time <= 30;
-                case '30-60 phút':
-                  return time > 30 && time <= 60;
-                case '> 60 phút':
-                  return time > 60;
-                default:
-                  return true;
-              }
-            })();
+        const [min, max] = cookTimeRange.split('-').map(Number);
+        return recipe.cookingTime != null
+          ? recipe.cookingTime >= min && recipe.cookingTime <= max
+          : true;
+      })();
 
-          // Xử lý servings ranges
-          const matchesServings =
-            !filterState.servings ||
-            (() => {
-              const servings = recipe.servings;
-              if (!servings) return false;
+      // Xử lý servings ranges
+      const matchesServings = (() => {
+        if (!filterState.servings) return true;
+        const servingsRange = filterData.servings.options.find(
+          (option) => option === filterState.servings
+        );
+        if (!servingsRange) return true;
 
-              switch (filterState.servings) {
-                case '1-2 người':
-                  return servings >= 1 && servings <= 2;
-                case '3-4 người':
-                  return servings >= 3 && servings <= 4;
-                case '5-6 người':
-                  return servings >= 5 && servings <= 6;
-                case '> 6 người':
-                  return servings > 6;
-                default:
-                  return true;
-              }
-            })();
+        const [min, max] = servingsRange.split('-').map(Number);
+        return recipe.servings != null
+          ? recipe.servings >= min && recipe.servings <= max
+          : true;
+      })();
 
-          // Recipe phải thỏa mãn tất cả điều kiện
-          return (
-            matchesRegion &&
-            matchesDifficulty &&
-            matchesCookTime &&
-            matchesServings &&
-            matchesDietType
-          );
-        })
-        .includes(recipe),
-    }));
-  }, [recipes, filterState]);
+      // Set visible dựa trên tất cả điều kiện
+      return {
+        recipe,
+        visible:
+          matchesRegion &&
+          matchesDifficulty &&
+          matchesCookTime &&
+          matchesServings &&
+          matchesDietType,
+      };
+    });
+  }, [recipes, filterState, filterData]);
 
   return {
     filterState,

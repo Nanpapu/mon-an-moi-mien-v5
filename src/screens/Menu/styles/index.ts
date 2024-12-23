@@ -205,5 +205,22 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     quickFilterButtonActive: {
       backgroundColor: theme.colors.error.main,
     },
+    resultBadge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: theme.colors.primary.main,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm,
+      borderRadius: theme.spacing.lg,
+      position: 'absolute',
+      bottom: theme.spacing.xl + 60,
+      alignSelf: 'center',
+      gap: theme.spacing.xs,
+      ...theme.shadows.sm,
+    },
+    resultText: {
+      color: theme.colors.primary.contrast,
+      fontWeight: '500',
+    },
   });
 };
