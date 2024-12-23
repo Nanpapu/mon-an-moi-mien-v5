@@ -91,22 +91,20 @@ export const FilterModal = ({
             </TouchableOpacity>
           </View>
 
-          {activeFiltersCount > 0 && (
-            <View style={styles.filterCountContainer}>
-              <MaterialCommunityIcons
-                name="filter-variant"
-                size={20}
-                color={theme.colors.primary.main}
-              />
-              <Typography
-                variant="body2"
-                color="primary"
-                style={styles.filterCount}
-              >
-                {activeFiltersCount} bộ lọc đang áp dụng
-              </Typography>
-            </View>
-          )}
+          <View style={styles.filterCountContainer}>
+            <MaterialCommunityIcons
+              name="filter-variant"
+              size={20}
+              color={theme.colors.primary.main}
+            />
+            <Typography
+              variant="body2"
+              color="primary"
+              style={styles.filterCount}
+            >
+              {activeFiltersCount} bộ lọc đang áp dụng
+            </Typography>
+          </View>
         </View>
 
         <ScrollView
@@ -171,6 +169,7 @@ const createStyles = (theme: any) =>
       justifyContent: 'center',
       marginTop: theme.spacing.xs,
       gap: theme.spacing.xs,
+      opacity: 0.8,
     },
     filterCount: {
       fontSize: 14,
