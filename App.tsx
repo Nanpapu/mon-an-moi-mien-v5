@@ -19,11 +19,25 @@ import { ToastProvider } from './src/context/ToastContext';
 import { AppBar } from './src/components/shared/AppBar';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { PinnedFiltersProvider } from './src/screens/Menu/contexts/PinnedFiltersContext';
+import { ImageCacheService } from './src/services/imageCacheService';
+import { useEffect } from 'react';
 
 // Khởi tạo Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        await ImageCacheService.initialize();
+      } catch (error) {
+        console.error('Lỗi khởi tạo image cache:', error);
+      }
+    };
+
+    initializeApp();
+  }, []);
+
   return (
     <RootSiblingParent>
       <SafeAreaProvider>

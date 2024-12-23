@@ -11,6 +11,7 @@ import { db } from '../../../config/firebase';
 import { COLLECTIONS } from '../../../constants';
 import { FavoriteButton } from '../../../components/buttons';
 import { ImageUtils } from '../../../utils/imageUtils';
+import { ImageCacheService } from '../../../services/imageCacheService';
 
 interface Props {
   recipe: Recipe;
@@ -62,8 +63,20 @@ export const RecipeGridItem = memo(
     useEffect(() => {
       const loadImage = async () => {
         if (recipe.image) {
+          const cachedImage = await ImageCacheService.getCachedImage(recipe.id);
+          if (cachedImage) {
+            setImageUrl(cachedImage);
+            return;
+          }
+
           const url = await ImageUtils.getRecipeImageUrl(recipe.image);
-          setImageUrl(url);
+          if (url) {
+            const cachedUrl = await ImageCacheService.cacheImage(
+              url,
+              recipe.id
+            );
+            setImageUrl(cachedUrl);
+          }
         }
       };
       loadImage();
