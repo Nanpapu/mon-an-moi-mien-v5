@@ -5,16 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Switch,
 } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { FilterOptions } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RegionFilter } from './RegionFilter';
 import { AdvancedFilters } from './AdvancedFilters';
-import { FilterSettings, QuickFilterSettings } from './FilterSettings';
 import { useToast } from '../../../hooks/useToast';
 
 interface Props {
