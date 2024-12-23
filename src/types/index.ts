@@ -207,6 +207,16 @@ export interface Review {
     /** URL ảnh đại diện */
     photoURL?: string;
   };
+  /** Số lượt upvote */
+  upvotes?: number;
+
+  /** Số lượt downvote */
+  downvotes?: number;
+
+  /** Danh sách user đã vote */
+  votes?: {
+    [userId: string]: 'up' | 'down' | null;
+  };
 }
 
 /**

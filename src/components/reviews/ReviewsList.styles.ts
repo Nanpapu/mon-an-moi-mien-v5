@@ -45,4 +45,19 @@ export const createStyles = (theme: Theme) =>
     dateText: {
       marginLeft: theme.spacing.md,
     },
+    votingContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: theme.spacing.sm,
+      gap: theme.spacing.md,
+    },
+    voteButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.xs,
+    },
+    voteCount: {
+      minWidth: 32,
+      textAlign: 'center',
+    },
   });

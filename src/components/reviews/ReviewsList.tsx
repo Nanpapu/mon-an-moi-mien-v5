@@ -1,11 +1,14 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Typography } from '../shared';
 import { useTheme } from '../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { createStyles } from './ReviewsList.styles';
 import { Review } from '../../types';
+import { ReviewVoteService } from '../../services/reviewVoteService';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../hooks/useToast';
 
 // Props interface cho ReviewsList
 interface ReviewsListProps {
@@ -13,6 +16,11 @@ interface ReviewsListProps {
   reviews: Review[];
   averageRating?: number;
   totalReviews?: number;
+}
+
+interface VoteState {
+  voteType: 'up' | 'down' | null;
+  score: number;
 }
 
 // ReviewsList component
@@ -24,6 +32,11 @@ export const ReviewsList = ({
 }: ReviewsListProps) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const { user } = useAuth();
+  const { showToast } = useToast();
+
+  // State để lưu trạng thái vote cho mỗi review
+  const [votes, setVotes] = useState<Record<string, VoteState>>({});
 
   // Hàm render sao đánh giá
   const renderStars = (rating: number) => {
@@ -36,6 +49,110 @@ export const ReviewsList = ({
         style={{ marginRight: theme.spacing.xs }}
       />
     ));
+  };
+
+  // Thêm hàm xử lý vote
+  const handleVote = async (
+    reviewId: string,
+    voteType: 'up' | 'down' | null
+  ) => {
+    if (!user) {
+      showToast('warning', 'Vui lòng đăng nhập để vote');
+      return;
+    }
+
+    // Lấy trạng thái vote hiện tại
+    const currentVote = votes[reviewId]?.voteType || null;
+    const currentScore = votes[reviewId]?.score || 0;
+
+    // Tính toán score mới dựa trên hành động vote
+    let newScore = currentScore;
+    let newVoteType = voteType;
+
+    if (currentVote === voteType) {
+      // Nếu click lại vote cũ -> hủy vote
+      newScore = currentScore + (voteType === 'up' ? -1 : 1);
+      newVoteType = null;
+    } else if (currentVote === null) {
+      // Nếu chưa vote -> vote mới
+      newScore = currentScore + (voteType === 'up' ? 1 : -1);
+    } else {
+      // Nếu đã vote khác -> đổi vote
+      newScore = currentScore + (voteType === 'up' ? 2 : -2);
+    }
+
+    // Update state ngay lập tức
+    setVotes((prev) => ({
+      ...prev,
+      [reviewId]: {
+        voteType: newVoteType,
+        score: newScore,
+      },
+    }));
+
+    // Gọi API trong background
+    try {
+      await ReviewVoteService.vote(reviewId, user.uid, newVoteType);
+    } catch (error) {
+      // Nếu API fail -> rollback state
+      setVotes((prev) => ({
+        ...prev,
+        [reviewId]: {
+          voteType: currentVote,
+          score: currentScore,
+        },
+      }));
+      showToast('error', 'Không thể vote lúc này, vui lòng thử lại sau');
+    }
+  };
+
+  const renderVoteButtons = (review: Review) => {
+    const voteState = votes[review.id] || {
+      voteType: null,
+      score: (review.upvotes || 0) - (review.downvotes || 0),
+    };
+
+    return (
+      <View style={styles.votingContainer}>
+        <TouchableOpacity
+          onPress={() => handleVote(review.id, 'up')}
+          style={styles.voteButton}
+        >
+          <Ionicons
+            name={voteState.voteType === 'up' ? 'arrow-up' : 'arrow-up-outline'}
+            size={20}
+            color={
+              voteState.voteType === 'up'
+                ? theme.colors.primary.main
+                : theme.colors.text.secondary
+            }
+          />
+        </TouchableOpacity>
+
+        <Typography variant="body2" style={styles.voteCount}>
+          {voteState.score}
+        </Typography>
+
+        <TouchableOpacity
+          onPress={() => handleVote(review.id, 'down')}
+          style={styles.voteButton}
+        >
+          <Ionicons
+            name={
+              voteState.voteType === 'down'
+                ? 'arrow-down'
+                : 'arrow-down-outline'
+            }
+            size={20}
+            color={
+              voteState.voteType === 'down'
+                ? theme.colors.error.main
+                : theme.colors.text.secondary
+            }
+          />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   // Nếu không có đánh giá nào, hiển thị thông báo
@@ -128,6 +245,9 @@ export const ReviewsList = ({
           </View>
 
           <Typography variant="body2">{review.comment}</Typography>
+
+          {/* Thêm phần voting UI */}
+          {renderVoteButtons(review)}
         </View>
       ))}
     </ScrollView>
