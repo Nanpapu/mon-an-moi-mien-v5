@@ -42,8 +42,13 @@ export default function MenuScreen() {
     handleDeleteRecipe,
   } = useMenuData();
 
-  const { regions, refreshFavorites, filterOptions, setFilterOptions } =
-    useRecipeFilter(savedRecipes);
+  const {
+    regions,
+    refreshFavorites,
+    filterOptions,
+    setFilterOptions,
+    filteredRecipes,
+  } = useRecipeFilter(savedRecipes);
 
   const {
     currentConfig,
@@ -74,24 +79,6 @@ export default function MenuScreen() {
 
   const hasActiveFilters =
     filterOptions.searchQuery || filterOptions.region || activeFiltersCount > 0;
-
-  const filteredRecipes = useMemo(() => {
-    return savedRecipes
-      .map((recipe) => ({
-        recipe,
-        visible: true,
-      }))
-      .filter((item) => {
-        const searchMatch =
-          !filterOptions.searchQuery ||
-          item.recipe.name
-            .toLowerCase()
-            .includes(filterOptions.searchQuery.toLowerCase());
-        const regionMatch =
-          !filterOptions.region || item.recipe.region === filterOptions.region;
-        return searchMatch && regionMatch;
-      });
-  }, [savedRecipes, filterOptions]);
 
   useEffect(() => {
     loadSearchHistory();
@@ -139,7 +126,7 @@ export default function MenuScreen() {
 
     Alert.alert(
       'Xác nhận xóa',
-      `Bạn có ch��c muốn xóa ${selectedRecipes.size} công thức đã chọn?`,
+      `Bạn có chắc muốn xóa ${selectedRecipes.size} công thức đã chọn?`,
       [
         {
           text: 'Hủy',

@@ -88,6 +88,9 @@ export const RecipeList = ({
             const filterResult = filteredRecipes.find(
               (fr) => fr.recipe.id === recipe.id
             );
+            const isVisible = filterResult?.visible ?? true;
+
+            if (!isVisible) return null;
 
             return (
               <RecipeGridItem
@@ -101,7 +104,6 @@ export const RecipeList = ({
                 isSelected={selectedRecipes.has(recipe.id)}
                 onLongPress={() => onLongPress?.(recipe.id)}
                 onToggleSelect={() => onToggleSelect?.(recipe.id)}
-                visible={filterResult?.visible ?? true}
               />
             );
           })}

@@ -2,7 +2,7 @@ import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { COLLECTIONS } from '../constants';
 import { UserSavedRecipes } from '../types/savedRecipes';
-import { SyncQueueService } from './syncQueueService';
+import { SyncService } from './syncService';
 import NetInfo from '@react-native-community/netinfo';
 
 export const UserSavedRecipesService = {
@@ -17,7 +17,12 @@ export const UserSavedRecipesService = {
       // Check internet connection
       const networkState = await NetInfo.fetch();
       if (!networkState.isConnected) {
-        await SyncQueueService.addToQueue(userId, recipeIds);
+        await SyncService.addToQueue({
+          userId,
+          data: recipeIds,
+          type: 'RECIPES',
+          timestamp: Date.now(),
+        });
         return false;
       }
 
@@ -37,7 +42,12 @@ export const UserSavedRecipesService = {
       return true;
     } catch (error) {
       console.error('Lỗi khi sync lên cloud:', error);
-      await SyncQueueService.addToQueue(userId, recipeIds);
+      await SyncService.addToQueue({
+        userId,
+        data: recipeIds,
+        type: 'RECIPES',
+        timestamp: Date.now(),
+      });
       return false;
     }
   },

@@ -73,6 +73,13 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   const filteredRecipes = useMemo(() => {
     return savedRecipes.map((recipe) => {
+      // Kiểm tra search query
+      const matchesSearch =
+        !filterOptions.searchQuery ||
+        recipe.name
+          .toLowerCase()
+          .includes(filterOptions.searchQuery.toLowerCase());
+
       // Kiểm tra từng điều kiện filter
       const matchesRegion =
         !filterOptions.region || recipe.region === filterOptions.region;
@@ -117,7 +124,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
       // Kết hợp tất cả điều kiện
       const isVisible = Boolean(
-        matchesRegion &&
+        matchesSearch &&
+          matchesRegion &&
           matchesCategory &&
           matchesDifficulty &&
           matchesFavorite &&
