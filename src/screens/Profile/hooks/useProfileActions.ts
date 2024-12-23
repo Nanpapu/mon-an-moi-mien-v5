@@ -8,61 +8,60 @@ import { auth } from '../../../config/firebase';
 import { updateProfile } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { ProfileCacheService } from '../../../services/profileCacheService';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useProfileActions = (user: User | null) => {
+  const { cachedProfile } = useAuth();
   const { showToast } = useToast();
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [isEditing, setIsEditing] = useState(false);
-  const [originalDisplayName, setOriginalDisplayName] = useState(
-    user?.displayName || ''
+  const [displayName, setDisplayName] = useState(
+    cachedProfile?.displayName || user?.displayName || ''
   );
+  const [isEditing, setIsEditing] = useState(false);
+  const [originalDisplayName, setOriginalDisplayName] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
+  const [photoURL, setPhotoURL] = useState(
+    cachedProfile?.photoURL || user?.photoURL || ''
+  );
   const [isImporting, setIsImporting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      setPhotoURL(user.photoURL || '');
-      setDisplayName(user.displayName || '');
-      setOriginalDisplayName(user.displayName || '');
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
+    const loadProfileData = async () => {
       if (!user) return;
 
       try {
+        setIsLoading(true);
+
+        if (cachedProfile && cachedProfile.uid === user.uid) {
+          setDisplayName(cachedProfile.displayName || '');
+          setPhotoURL(cachedProfile.photoURL || '');
+          setOriginalDisplayName(cachedProfile.displayName || '');
+        }
+
         const userData = await UserService.getUserData(user.uid);
-        if (userData && userData.displayName) {
-          setDisplayName(userData.displayName);
-          setOriginalDisplayName(userData.displayName);
+        if (userData) {
+          setDisplayName(userData.displayName || user.displayName || '');
+          setPhotoURL(userData.photoURL || user.photoURL || '');
+          setOriginalDisplayName(
+            userData.displayName || user.displayName || ''
+          );
+
+          await ProfileCacheService.saveProfileCache({
+            uid: user.uid,
+            displayName: userData.displayName || user.displayName || '',
+            email: user.email || '',
+            photoURL: userData.photoURL || user.photoURL || '',
+          });
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Lỗi khi load profile:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchUserData();
-  }, [user]);
-
-  useEffect(() => {
-    const loadProfileCache = async () => {
-      if (!user) return;
-
-      try {
-        const cache = await ProfileCacheService.getProfileCache();
-        if (cache && cache.uid === user.uid) {
-          setDisplayName(cache.displayName || '');
-          setPhotoURL(cache.photoURL || '');
-        }
-      } catch (error) {
-        console.error('Lỗi khi load profile cache:', error);
-      }
-    };
-
-    loadProfileCache();
-  }, [user]);
+    loadProfileData();
+  }, [user?.uid, cachedProfile]);
 
   const handleStartEditing = () => {
     setOriginalDisplayName(displayName);
@@ -214,5 +213,6 @@ export const useProfileActions = (user: User | null) => {
     isUploading,
     photoURL,
     isImporting,
+    isLoading,
   };
 };

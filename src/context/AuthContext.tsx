@@ -5,13 +5,15 @@ import { AuthService } from '../services/authService';
 import { auth } from '../config/firebase';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { GoogleAuthService } from '../services/googleAuthService';
-import { ProfileCacheService } from '../services/profileCacheService';
+import { ProfileCache, ProfileCacheService } from '../services/profileCacheService';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 
 // Định nghĩa các hàm và state có trong context
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  cachedProfile: ProfileCache | null;
   login: (email: string, password: string) => Promise<void>;
   register: (
     email: string,
@@ -31,16 +33,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // STATE
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [cachedProfile, setCachedProfile] = useState<ProfileCache | null>(null);
+
+  // Load cache ngay khi component mount
+  useEffect(() => {
+    const preloadCache = async () => {
+      try {
+        const cache = await ProfileCacheService.getProfileCache();
+        if (cache) {
+          setCachedProfile(cache);
+        }
+      } catch (error) {
+        console.error('Lỗi khi load profile cache:', error);
+      }
+    };
+
+    preloadCache();
+  }, []);
 
   useEffect(() => {
-    // Lắng nghe sự thay đổi trạng thái đăng nhập
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // Nếu có cache và match với user hiện tại
+        if (cachedProfile && cachedProfile.uid === user.uid) {
+          // Cập nhật user profile từ cache
+          await updateProfile(user, {
+            displayName: cachedProfile.displayName || user.displayName,
+            photoURL: cachedProfile.photoURL || user.photoURL,
+          });
+        }
+      }
       setUser(user);
       setIsLoading(false);
     });
 
-    return unsubscribe;
-  }, []);
+    return () => unsubscribe();
+  }, [cachedProfile]); // Thêm cachedProfile vào dependencies
 
   // HANDLERS
   // Xử lý đăng nhập
@@ -82,12 +110,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Xử lý đăng xuất
   const logout = async () => {
     try {
-      await AuthService.logout();
-      setUser(null);
-      // Xóa cache khi logout
+      await auth.signOut();
       await ProfileCacheService.clearProfileCache();
-    } catch (error: any) {
-      throw new Error(error.message);
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -127,6 +153,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         isLoading,
+        cachedProfile,
         login,
         register,
         logout,
