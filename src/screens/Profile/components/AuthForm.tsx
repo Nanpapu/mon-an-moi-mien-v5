@@ -1,8 +1,15 @@
 import React from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import {
+  View,
+  Animated,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import { Input, Button, Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Logo } from './Logo';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   isRegistering: boolean;
@@ -22,6 +29,7 @@ interface Props {
   onSubmit: () => void;
   onForgotPassword: () => void;
   onToggleAuthMode: () => void;
+  isLoading?: boolean;
 }
 
 export const AuthForm = ({
@@ -42,6 +50,7 @@ export const AuthForm = ({
   onSubmit,
   onForgotPassword,
   onToggleAuthMode,
+  isLoading,
 }: Props) => {
   const { theme } = useTheme();
 
@@ -120,11 +129,13 @@ export const AuthForm = ({
         )}
 
         <Button
+          variant="primary"
           onPress={onSubmit}
           style={[
             styles.submitButton,
             { backgroundColor: theme.colors.primary.main },
           ]}
+          icon={isRegistering ? 'person-add-outline' : 'log-in-outline'}
         >
           {isRegistering ? 'Đăng ký' : 'Đăng nhập'}
         </Button>
@@ -134,6 +145,7 @@ export const AuthForm = ({
             variant="text"
             onPress={onForgotPassword}
             style={styles.forgotPassword}
+            icon="key-outline"
           >
             Quên mật khẩu?
           </Button>
@@ -164,6 +176,7 @@ export const AuthForm = ({
           variant="outline"
           onPress={onToggleAuthMode}
           style={styles.switchButton}
+          icon={isRegistering ? 'log-in-outline' : 'person-add-outline'}
         >
           {isRegistering
             ? 'Đã có tài khoản? Đăng nhập'
@@ -193,8 +206,25 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   submitButton: {
-    marginTop: 24,
     height: 48,
+    borderRadius: 24,
+    marginTop: 24,
+  },
+  submitButtonContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  submitButtonIcon: {
+    marginRight: 8,
+  },
+  submitButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   forgotPassword: {
     marginTop: 12,
