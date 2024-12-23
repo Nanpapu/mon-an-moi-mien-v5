@@ -129,7 +129,7 @@ export const FilterModal = ({
               onClose();
             }}
           >
-            <Typography variant="body2" style={styles.applyButtonText}>
+            <Typography variant="body1" style={styles.applyButtonText}>
               Áp dụng {activeFiltersCount > 0 ? `(${activeFiltersCount})` : ''}
             </Typography>
           </TouchableOpacity>
@@ -146,7 +146,7 @@ const createStyles = (theme: any) =>
       backgroundColor: theme.colors.background.default,
     },
     header: {
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
@@ -169,7 +169,7 @@ const createStyles = (theme: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: theme.spacing.sm,
+      marginTop: theme.spacing.xs,
       gap: theme.spacing.xs,
     },
     filterCount: {
@@ -179,23 +179,23 @@ const createStyles = (theme: any) =>
       flex: 1,
     },
     contentContainer: {
-      padding: theme.spacing.md,
-      paddingBottom: theme.spacing.xl * 4,
+      padding: theme.spacing.sm,
+      paddingBottom: theme.spacing.xl * 3,
     },
     footer: {
       position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,
-      padding: theme.spacing.md,
-      paddingBottom: theme.spacing.lg,
+      padding: theme.spacing.sm,
+      paddingBottom: theme.spacing.md,
       borderTopWidth: 1,
       borderTopColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
     },
     applyButton: {
       backgroundColor: theme.colors.primary.main,
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       borderRadius: theme.spacing.lg,
       alignItems: 'center',
       justifyContent: 'center',

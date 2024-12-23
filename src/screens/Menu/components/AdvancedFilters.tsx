@@ -79,11 +79,7 @@ export const AdvancedFilters = ({
           <Ionicons
             name={filterOptions.showFavorites ? 'heart' : 'heart-outline'}
             size={24}
-            color={
-              filterOptions.showFavorites
-                ? theme.colors.primary.contrast
-                : theme.colors.primary.main
-            }
+            color={theme.colors.error.main}
           />
           <Typography
             variant="body1"
@@ -335,23 +331,23 @@ const createStyles = (theme: any) =>
       gap: theme.spacing.lg,
     },
     favoriteSection: {
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.xs,
     },
     favoriteButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       backgroundColor: theme.colors.background.paper,
       borderRadius: theme.spacing.lg,
       borderWidth: 2,
-      borderColor: theme.colors.primary.main,
+      borderColor: theme.colors.error.main,
       gap: theme.spacing.sm,
     },
     activeFavoriteButton: {
-      backgroundColor: theme.colors.primary.main,
+      backgroundColor: theme.colors.error.main,
     },
     favoriteText: {
-      color: theme.colors.primary.main,
+      color: theme.colors.error.main,
       fontSize: 16,
       fontWeight: '600',
     },
@@ -361,7 +357,7 @@ const createStyles = (theme: any) =>
     divider: {
       height: 1,
       backgroundColor: theme.colors.divider,
-      marginVertical: theme.spacing.md,
+      marginVertical: theme.spacing.xs,
     },
     filterGroup: {
       gap: theme.spacing.md,
