@@ -7,38 +7,40 @@ export const useScreenTransition = (isAuthenticated: boolean) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      // Animation khi đăng nhập thành công
+      // Animation đăng nhập - mượt mà hơn với spring
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 500,
+          duration: 400, // Giảm duration xuống
           useNativeDriver: true,
+          easing: Easing.bezier(0.4, 0, 0.2, 1), // Dùng bezier để mượt hơn
         }),
         Animated.spring(slideAnim, {
           toValue: 0,
-          tension: 50,
-          friction: 7,
           useNativeDriver: true,
+          tension: 65, // Tăng tension để animation nhanh hơn
+          friction: 10, // Giảm friction để bớt "nảy"
+          restSpeedThreshold: 10, // Tối ưu điểm dừng
+          restDisplacementThreshold: 10,
         }),
       ]).start();
     } else {
-      // Animation khi logout
+      // Animation đăng xuất - mượt mà với timing
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
-          duration: 300,
+          duration: 250, // Giảm duration để nhanh hơn
           useNativeDriver: true,
-          easing: Easing.out(Easing.ease),
+          easing: Easing.bezier(0.4, 0, 1, 1), // Dùng bezier cho mượt
         }),
         Animated.timing(slideAnim, {
-          toValue: -30, // Slide ra phía trên khi logout
-          duration: 300,
+          toValue: -20, // Giảm khoảng cách slide
+          duration: 250,
           useNativeDriver: true,
-          easing: Easing.out(Easing.ease),
+          easing: Easing.bezier(0.4, 0, 1, 1),
         }),
       ]).start(() => {
-        // Reset animation values sau khi hoàn thành
-        slideAnim.setValue(30);
+        slideAnim.setValue(30); // Reset giá trị sau animation
       });
     }
   }, [isAuthenticated]);
