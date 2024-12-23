@@ -186,7 +186,7 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       flex: 1,
     },
     quickFiltersContainer: {
-      maxHeight: 50,
+      maxHeight: 60,
       flexDirection: 'row',
       paddingHorizontal: theme.spacing.md,
     },
