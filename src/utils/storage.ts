@@ -5,6 +5,7 @@ import { Recipe, Region } from '../types';
 import { UserSavedRecipesService } from '../services/userSavedRecipesService';
 import { CacheService } from '../services/cacheService';
 import { CACHE_KEYS } from '../constants/cacheKeys';
+import { ImageCacheService } from '../services/imageCacheService';
 
 // Khóa lưu trữ cho danh sách công thức
 const SAVED_RECIPES_KEY = (userId: string) => `saved_recipes_${userId}`;
@@ -73,6 +74,9 @@ export const removeRecipe = async (
     const updatedRecipes = savedRecipes.filter(
       (recipe) => recipe.id !== recipeId
     );
+
+    // Xóa cache ảnh
+    await ImageCacheService.clearImageCache(recipeId);
 
     // Update local storage
     await AsyncStorage.setItem(key, JSON.stringify(updatedRecipes));

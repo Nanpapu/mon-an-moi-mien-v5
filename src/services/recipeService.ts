@@ -9,6 +9,8 @@ import { COLLECTIONS } from '../constants/collections';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Recipe, Region } from '../types';
 import { UserSavedRecipesService } from './userSavedRecipesService';
+import { ImageUtils } from '../utils/imageUtils';
+import { ImageCacheService } from './imageCacheService';
 
 /**
  * Service quản lý công thức nấu ăn
@@ -134,6 +136,14 @@ export const RecipeService = {
 
       if (recipes.some((r) => r.id === recipe.id)) {
         return false;
+      }
+
+      // Cache ảnh trước khi lưu công thức
+      if (recipe.image) {
+        const imageUrl = await ImageUtils.getRecipeImageUrl(recipe.image);
+        if (imageUrl) {
+          await ImageCacheService.cacheImage(imageUrl, recipe.id);
+        }
       }
 
       recipes.push(recipe);
