@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Typography } from '../shared';
@@ -38,6 +38,29 @@ export const ReviewsList = ({
   // State để lưu trạng thái vote cho mỗi review
   const [votes, setVotes] = useState<Record<string, VoteState>>({});
 
+  // Load trạng thái vote ban đầu
+  useEffect(() => {
+    // Debug: Log dữ liệu từ server
+    console.log('Reviews from server:', reviews);
+
+    // Khởi tạo state votes từ dữ liệu reviews
+    const initialVotes: Record<string, VoteState> = {};
+    reviews.forEach((review) => {
+      const score = (review.upvotes || 0) - (review.downvotes || 0);
+      console.log(
+        `Review ${review.id} - upvotes: ${review.upvotes}, downvotes: ${review.downvotes}, score: ${score}`
+      );
+
+      initialVotes[review.id] = {
+        voteType: review.votes?.[user?.uid || ''] || null,
+        score: score,
+      };
+    });
+    console.log('Initial votes state:', initialVotes);
+
+    setVotes(initialVotes);
+  }, [reviews, user?.uid]);
+
   // Hàm render sao đánh giá
   const renderStars = (rating: number) => {
     return [...Array(5)].map((_, index) => (
@@ -56,6 +79,8 @@ export const ReviewsList = ({
     reviewId: string,
     voteType: 'up' | 'down' | null
   ) => {
+    console.log('handleVote called:', { reviewId, voteType }); // Debug
+
     if (!user) {
       showToast('warning', 'Vui lòng đăng nhập để vote');
       return;
@@ -64,6 +89,8 @@ export const ReviewsList = ({
     // Lấy trạng thái vote hiện tại
     const currentVote = votes[reviewId]?.voteType || null;
     const currentScore = votes[reviewId]?.score || 0;
+
+    console.log('Current state:', { currentVote, currentScore }); // Debug
 
     // Tính toán score mới dựa trên hành động vote
     let newScore = currentScore;
@@ -81,19 +108,29 @@ export const ReviewsList = ({
       newScore = currentScore + (voteType === 'up' ? 2 : -2);
     }
 
+    console.log('New state:', { newVoteType, newScore }); // Debug
+
     // Update state ngay lập tức
-    setVotes((prev) => ({
-      ...prev,
-      [reviewId]: {
-        voteType: newVoteType,
-        score: newScore,
-      },
-    }));
+    setVotes((prev) => {
+      console.log('Updating votes state:', {
+        old: prev[reviewId],
+        new: { voteType: newVoteType, score: newScore },
+      });
+      return {
+        ...prev,
+        [reviewId]: {
+          voteType: newVoteType,
+          score: newScore,
+        },
+      };
+    });
 
     // Gọi API trong background
     try {
       await ReviewVoteService.vote(reviewId, user.uid, newVoteType);
+      console.log('API call successful'); // Debug
     } catch (error) {
+      console.error('API call failed:', error); // Debug
       // Nếu API fail -> rollback state
       setVotes((prev) => ({
         ...prev,
@@ -108,7 +145,7 @@ export const ReviewsList = ({
 
   const renderVoteButtons = (review: Review) => {
     const voteState = votes[review.id] || {
-      voteType: null,
+      voteType: review.votes?.[user?.uid || ''] || null,
       score: (review.upvotes || 0) - (review.downvotes || 0),
     };
 
