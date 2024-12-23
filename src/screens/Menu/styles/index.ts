@@ -222,37 +222,10 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       color: theme.colors.primary.contrast,
       fontWeight: '500',
     },
-    sortModalContainer: {
-      flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing.lg,
-    },
-    sortOption: {
-      width: '100%',
-      padding: theme.spacing.md,
-      backgroundColor: theme.colors.background.paper,
-      borderRadius: theme.spacing.sm,
-      marginBottom: theme.spacing.xs,
-    },
-    selectedSortOption: {
-      backgroundColor: theme.colors.primary.main,
-    },
-    sortOptionText: {
-      color: theme.colors.text.primary,
-      textAlign: 'center',
-    },
-    selectedSortOptionText: {
-      color: theme.colors.primary.contrast,
-    },
     filterButtonGroup: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: theme.spacing.xs,
-    },
-    resetSortButton: {
-      padding: theme.spacing.xs,
     },
     activeFilterButton: {
       backgroundColor: theme.colors.primary.light,

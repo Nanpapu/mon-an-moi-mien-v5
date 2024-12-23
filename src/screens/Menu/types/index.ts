@@ -67,15 +67,3 @@ export type PinnedFilterSettings = {
 export type PinnedFiltersMap = {
   [key in QuickFilterType['type']]: PinnedFilterSettings;
 };
-
-export enum SortType {
-  DEFAULT = 'default',
-  NAME_ASC = 'name_asc',
-  NAME_DESC = 'name_desc',
-  DIFFICULTY_ASC = 'difficulty_asc',
-  DIFFICULTY_DESC = 'difficulty_desc',
-  COOKING_TIME_ASC = 'cooking_time_asc',
-  COOKING_TIME_DESC = 'cooking_time_desc',
-  SERVINGS_ASC = 'servings_asc',
-  SERVINGS_DESC = 'servings_desc',
-}
