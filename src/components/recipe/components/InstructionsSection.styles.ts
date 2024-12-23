@@ -101,9 +101,9 @@ export const createStyles = (theme: Theme) =>
       borderBottomColor: 'rgba(0,0,0,0.1)',
     },
     sectionTitle: {
-      marginLeft: theme.spacing.sm,
-      color: theme.colors.text.primary,
-      fontWeight: '600',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: theme.spacing.sm,
     },
     tipIconContainer: {
       width: 28,
