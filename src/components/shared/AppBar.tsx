@@ -4,16 +4,25 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Typography } from './Typography';
 import { ThemeToggle } from './ThemeToggle';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '../../context/AuthContext';
 
 // Props interface cho AppBar
-interface Props {
+interface AppBarProps {
   title: string;
+  showHeader?: boolean;
   rightComponent?: React.ReactNode;
 }
 
 // AppBar component
-export const AppBar = ({ title, rightComponent }: Props) => {
+export const AppBar = ({
+  title,
+  showHeader = true,
+  rightComponent,
+}: AppBarProps) => {
   const { theme } = useTheme();
+  const { user } = useAuth();
+
+  if (!showHeader || !user) return null;
 
   // Lấy kích thước của màn hình
   const insets = useSafeAreaInsets();

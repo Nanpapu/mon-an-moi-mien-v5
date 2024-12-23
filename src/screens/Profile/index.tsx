@@ -82,7 +82,7 @@ export default function ProfileScreen() {
   const handleRegister = async () => {
     try {
       await register(email, password);
-      showToast('success', 'Đăng ký thành công');
+      showToast('success', '��ăng ký thành công');
     } catch (error: any) {
       showToast('error', 'Đăng ký thất bại: ' + error.message);
     }
@@ -118,7 +118,11 @@ export default function ProfileScreen() {
           backgroundColor: theme.colors.background.default,
         }}
         contentContainerStyle={{
-          padding: theme.spacing.lg,
+          flexGrow: 1,
+          paddingHorizontal: theme.spacing.lg,
+          paddingTop: user ? theme.spacing.xl : theme.spacing.md,
+          paddingBottom: theme.spacing.xl,
+          justifyContent: user ? 'flex-start' : 'center',
         }}
         showsVerticalScrollIndicator={false}
       >
