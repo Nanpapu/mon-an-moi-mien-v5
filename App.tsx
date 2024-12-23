@@ -13,7 +13,7 @@ import MapScreen from './src/screens/Map';
 import MenuScreen from './src/screens/Menu';
 import ProfileScreen from './src/screens/Profile';
 import { RecipeProvider } from './src/context/RecipeContext';
-import { AuthProvider } from './src/context/AuthContext';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { ThemeProvider } from './src/theme/ThemeContext';
 import { ToastProvider } from './src/context/ToastContext';
 import { AppBar } from './src/components/shared/AppBar';
@@ -51,9 +51,13 @@ export default function App() {
                     <Tab.Navigator
                       screenOptions={({ route }) => {
                         const { theme } = useTheme();
+                        const { user } = useAuth();
 
                         return {
-                          header: ({ route }) => <AppBar title={route.name} />,
+                          header: () => {
+                            if (!user) return null;
+                            return <AppBar title={route.name} />;
+                          },
                           tabBarIcon: ({ focused, size }) => {
                             let iconName: keyof typeof Ionicons.glyphMap;
                             if (route.name === 'Bản đồ') {
