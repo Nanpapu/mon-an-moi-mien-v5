@@ -109,7 +109,11 @@ export const FilterModal = ({
           )}
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
           <AdvancedFilters
             filterOptions={tempFilterOptions}
             onFilterChange={setTempFilterOptions}
@@ -125,10 +129,7 @@ export const FilterModal = ({
               onClose();
             }}
           >
-            <Typography
-              variant="body2"
-              style={[styles.applyButtonText, { fontWeight: '700' }]}
-            >
+            <Typography variant="body2" style={styles.applyButtonText}>
               Áp dụng {activeFiltersCount > 0 ? `(${activeFiltersCount})` : ''}
             </Typography>
           </TouchableOpacity>
@@ -176,9 +177,16 @@ const createStyles = (theme: any) =>
     },
     content: {
       flex: 1,
+    },
+    contentContainer: {
       padding: theme.spacing.md,
+      paddingBottom: theme.spacing.xl * 4,
     },
     footer: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
       padding: theme.spacing.md,
       paddingBottom: theme.spacing.lg,
       borderTopWidth: 1,
