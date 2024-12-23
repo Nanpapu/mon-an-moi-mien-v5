@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Switch,
 } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -14,6 +15,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RegionFilter } from './RegionFilter';
 import { AdvancedFilters } from './AdvancedFilters';
 import { FilterSettings, QuickFilterSettings } from './FilterSettings';
+import { usePinnedFilters } from '../contexts/PinnedFiltersContext';
+import { QuickFilterType } from '../types';
 
 interface Props {
   visible: boolean;
@@ -23,6 +26,49 @@ interface Props {
   onApply: (options: FilterOptions) => void;
   regions: string[];
 }
+
+const PinnedFiltersSection = () => {
+  const { theme } = useTheme();
+  const { pinnedFilters, togglePinnedFilter } = usePinnedFilters();
+  const styles = createStyles(theme);
+
+  const availableFilters: Array<{
+    type: QuickFilterType['type'];
+    label: string;
+  }> = [
+    { type: 'region', label: 'Vùng miền' },
+    { type: 'difficulty', label: 'Độ khó' },
+    { type: 'cookTime', label: 'Thời gian nấu' },
+    { type: 'servings', label: 'Số người ăn' },
+    { type: 'dietType', label: 'Loại món' },
+  ];
+
+  return (
+    <View style={styles.section}>
+      <Typography variant="subtitle1" style={styles.sectionTitle}>
+        Hiển thị bộ lọc nhanh
+      </Typography>
+      <Typography variant="caption" style={styles.sectionDescription}>
+        Chọn các bộ lọc bạn muốn hiển thị trực tiếp trên màn hình Menu
+      </Typography>
+
+      {availableFilters.map(({ type, label }) => (
+        <View key={type} style={styles.filterToggleRow}>
+          <Typography variant="body1">{label}</Typography>
+          <Switch
+            value={pinnedFilters[type].enabled}
+            onValueChange={() => togglePinnedFilter(type)}
+            trackColor={{
+              false: theme.colors.divider,
+              true: theme.colors.primary.main,
+            }}
+            thumbColor={theme.colors.background.paper}
+          />
+        </View>
+      ))}
+    </View>
+  );
+};
 
 export const FilterModal = ({
   visible,
@@ -99,13 +145,13 @@ export const FilterModal = ({
             </TouchableOpacity>
           </View>
 
-          <Typography
+          {/* <Typography
             variant="body2"
             color="secondary"
             style={styles.filterCount}
           >
             {activeFiltersCount} bộ lọc đang áp dụng
-          </Typography>
+          </Typography> */}
         </View>
 
         {/* Content */}
@@ -120,6 +166,7 @@ export const FilterModal = ({
               regions={regions}
             />
           </View>
+          <PinnedFiltersSection />
         </ScrollView>
 
         {/* Footer mới với nút áp dụng to hơn */}
@@ -171,7 +218,7 @@ const createStyles = (theme: any) =>
       flex: 1,
     },
     section: {
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
       backgroundColor: theme.colors.background.paper,
@@ -211,5 +258,15 @@ const createStyles = (theme: any) =>
     resetButtonText: {
       fontSize: 16,
       fontWeight: '700',
+    },
+    sectionDescription: {
+      marginBottom: theme.spacing.md,
+      color: theme.colors.text.secondary,
+    },
+    filterToggleRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: theme.spacing.sm,
     },
   });

@@ -59,6 +59,40 @@ export const AdvancedFilters = ({
 
   return (
     <View style={styles.container}>
+      {/* Vùng miền */}
+      <View style={styles.filterGroup}>
+        <Typography variant="subtitle2" style={styles.groupTitle}>
+          Vùng miền
+        </Typography>
+        <View style={styles.chipContainer}>
+          {regions.map((region) => (
+            <TouchableOpacity
+              key={region}
+              style={[
+                styles.chip,
+                filterOptions.region === region && styles.activeChip,
+              ]}
+              onPress={() =>
+                onFilterChange({
+                  ...filterOptions,
+                  region: filterOptions.region === region ? null : region,
+                })
+              }
+            >
+              <Typography
+                variant="body2"
+                style={[
+                  styles.chipText,
+                  filterOptions.region === region && styles.activeChipText,
+                ]}
+              >
+                {region}
+              </Typography>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
       {/* Loại món */}
       <View style={styles.filterGroup}>
         <Typography variant="subtitle2" style={styles.groupTitle}>

@@ -11,7 +11,6 @@ import { Loading } from '../../components/shared';
 import { MenuSearchBar } from './components/MenuSearchBar';
 import { useMenuData } from './hooks/useMenuData';
 import { useRecipeFilter } from './hooks/useRecipeFilter';
-import { RegionFilter } from './components/RegionFilter';
 import { RecipeList } from './components/RecipeList';
 import { Ionicons } from '@expo/vector-icons';
 import { useGridZoom } from './hooks/useGridZoom';
@@ -26,6 +25,9 @@ import { useAuth } from '../../context/AuthContext';
 import { FilterModal } from './components/FilterModal';
 import { QuickFilterSettings } from './components/FilterSettings';
 import { FilterOptions } from './types';
+import { QuickFilter } from './components/QuickFilter';
+import { usePinnedFilters } from './contexts/PinnedFiltersContext';
+import { useQuickFilters } from './hooks/useQuickFilters';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -33,9 +35,17 @@ export default function MenuScreen() {
   const styles = createStyles(theme, insets);
   const { showToast } = useToast();
   const { user } = useAuth();
+  const { pinnedFilters } = usePinnedFilters();
+  const { savedRecipes } = useMenuData();
+  const {
+    filterState,
+    filterData,
+    handleFilterChange,
+    filteredRecipes,
+    hasActiveFilters,
+  } = useQuickFilters(savedRecipes);
 
   const {
-    savedRecipes,
     isRefreshing,
     isLoading,
     setIsLoading,
@@ -43,13 +53,8 @@ export default function MenuScreen() {
     handleDeleteRecipe,
   } = useMenuData();
 
-  const {
-    filteredRecipes,
-    regions,
-    refreshFavorites,
-    filterOptions,
-    setFilterOptions,
-  } = useRecipeFilter(savedRecipes);
+  const { regions, refreshFavorites, filterOptions, setFilterOptions } =
+    useRecipeFilter(savedRecipes);
 
   const {
     currentConfig,
@@ -164,20 +169,27 @@ export default function MenuScreen() {
         style={styles.quickFiltersContainer}
         contentContainerStyle={styles.quickFiltersContent}
       >
-        <RegionFilter
-          regions={regions}
-          selectedRegion={filterOptions.region}
-          onSelectRegion={(region) =>
-            setFilterOptions((prev) => ({ ...prev, region }))
-          }
-          showFavorites={filterOptions.showFavorites}
-          onToggleFavorites={() =>
-            setFilterOptions((prev) => ({
-              ...prev,
-              showFavorites: !prev.showFavorites,
-            }))
-          }
-        />
+        <View style={styles.filterContainer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.quickFiltersContent}
+          >
+            {activePinnedFilters.map(([filterType, _]) => {
+              const type = filterType as keyof typeof filterData;
+              const data = filterData[type];
+              return (
+                <QuickFilter
+                  key={filterType}
+                  label={data.label}
+                  options={data.options}
+                  selectedOption={filterState[type]}
+                  onSelectOption={(option) => handleFilterChange(type, option)}
+                />
+              );
+            })}
+          </ScrollView>
+        </View>
       </ScrollView>
     );
   };
@@ -191,6 +203,11 @@ export default function MenuScreen() {
     setFilterOptions(newFilterOptions);
     setShowFilterModal(false);
   };
+
+  // Lấy danh sách các filter đã được pin và sắp xếp theo order
+  const activePinnedFilters = Object.entries(pinnedFilters)
+    .filter(([_, settings]) => settings.enabled)
+    .sort((a, b) => a[1].order - b[1].order);
 
   return (
     <View
@@ -315,6 +332,19 @@ export default function MenuScreen() {
             />
           )}
         </>
+      )}
+
+      {/* Hiển thị số lượng kết quả nếu có filter active */}
+      {hasActiveFilters && (
+        <Typography
+          variant="caption"
+          style={{
+            marginTop: theme.spacing.sm,
+            color: theme.colors.text.secondary,
+          }}
+        >
+          Tìm thấy {filteredRecipes.length} công thức
+        </Typography>
       )}
     </View>
   );

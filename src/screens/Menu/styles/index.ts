@@ -9,10 +9,9 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       backgroundColor: theme.colors.background.default,
     },
     filterContainer: {
-      paddingHorizontal: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
       marginBottom: theme.spacing.md,
-      maxHeight: 50,
-      minHeight: 50,
+      height: 44,
     },
     filterButton: {
       padding: theme.spacing.xs,
@@ -193,7 +192,7 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     quickFiltersContent: {
       flexDirection: 'row',
       gap: theme.spacing.sm,
-      paddingVertical: theme.spacing.sm,
+      height: 44,
     },
     quickFilterButton: {
       padding: theme.spacing.sm,
