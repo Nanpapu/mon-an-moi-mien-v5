@@ -5,6 +5,8 @@ import { AuthService } from '../services/authService';
 import { auth } from '../config/firebase';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { GoogleAuthService } from '../services/googleAuthService';
+import { ProfileCacheService } from '../services/profileCacheService';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 // Định nghĩa các hàm và state có trong context
 interface AuthContextType {
@@ -44,10 +46,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Xử lý đăng nhập
   const login = async (email: string, password: string) => {
     try {
-      const user = await AuthService.login(email, password);
-      setUser(user);
-    } catch (error: any) {
-      throw new Error(error.message);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Lưu cache ngay khi login thành công
+      await ProfileCacheService.saveProfileCache({
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -70,6 +84,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await AuthService.logout();
       setUser(null);
+      // Xóa cache khi logout
+      await ProfileCacheService.clearProfileCache();
     } catch (error: any) {
       throw new Error(error.message);
     }

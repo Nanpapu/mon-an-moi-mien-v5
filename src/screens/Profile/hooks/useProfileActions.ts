@@ -7,6 +7,7 @@ import { User } from 'firebase/auth';
 import { auth } from '../../../config/firebase';
 import { updateProfile } from 'firebase/auth';
 import { Alert } from 'react-native';
+import { ProfileCacheService } from '../../../services/profileCacheService';
 
 export const useProfileActions = (user: User | null) => {
   const { showToast } = useToast();
@@ -43,6 +44,24 @@ export const useProfileActions = (user: User | null) => {
     };
 
     fetchUserData();
+  }, [user]);
+
+  useEffect(() => {
+    const loadProfileCache = async () => {
+      if (!user) return;
+
+      try {
+        const cache = await ProfileCacheService.getProfileCache();
+        if (cache && cache.uid === user.uid) {
+          setDisplayName(cache.displayName || '');
+          setPhotoURL(cache.photoURL || '');
+        }
+      } catch (error) {
+        console.error('Lỗi khi load profile cache:', error);
+      }
+    };
+
+    loadProfileCache();
   }, [user]);
 
   const handleStartEditing = () => {
@@ -152,6 +171,12 @@ export const useProfileActions = (user: User | null) => {
         displayName,
       });
       if (success) {
+        await ProfileCacheService.saveProfileCache({
+          uid: user.uid,
+          displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
         showToast('success', 'Đã cập nhật thông tin');
         setIsEditing(false);
       }

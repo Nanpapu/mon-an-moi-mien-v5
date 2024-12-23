@@ -12,6 +12,8 @@ import {
 } from 'firebase/storage';
 import { CacheService, CACHE_KEYS, CACHE_EXPIRY } from './cacheService';
 import { ImageUtils } from '../utils/imageUtils';
+import { ProfileCacheService } from './profileCacheService';
+import { auth } from '../config/firebase';
 
 /**
  * Service quản lý thông tin người dùng
@@ -117,6 +119,14 @@ export const UserService = {
           console.warn('Không thể xóa ảnh cũ:', error);
         }
       }
+
+      // Thêm cập nhật cache sau khi upload thành công
+      await ProfileCacheService.saveProfileCache({
+        uid: userId,
+        displayName: auth.currentUser?.displayName || null,
+        email: auth.currentUser?.email || null,
+        photoURL: downloadURL,
+      });
 
       return downloadURL;
     } catch (error) {
