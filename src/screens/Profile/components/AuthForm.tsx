@@ -60,145 +60,182 @@ export const AuthForm = ({
 
   return (
     <View style={styles.container}>
-      <Logo />
-
-      <Animated.View
+      <View
         style={[
-          styles.formContainer,
+          styles.logoContainer,
           {
-            opacity: fadeAnim,
-            transform: [
-              {
-                translateX: slideAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, -30],
-                }),
-              },
-            ],
+            backgroundColor: theme.colors.background.default,
+            paddingBottom: 0,
+            paddingTop: 0,
           },
         ]}
       >
-        <Typography
-          variant="h2"
+        <Logo />
+      </View>
+
+      <View
+        style={[
+          styles.formWrapper,
+          {
+            backgroundColor: theme.colors.background.paper,
+            borderTopLeftRadius: 32,
+            borderTopRightRadius: 32,
+            paddingTop: theme.spacing.sm,
+            paddingHorizontal: theme.spacing.lg,
+            flex: 1,
+            ...theme.shadows.lg,
+            minHeight: '100%',
+            paddingBottom: theme.spacing.xl * 2,
+          },
+        ]}
+      >
+        <Animated.View
           style={[
-            styles.title,
+            styles.formContainer,
             {
-              color: theme.colors.text.primary,
-              marginBottom: theme.spacing.sm,
-              marginTop: theme.spacing.md,
+              opacity: fadeAnim,
+              transform: [
+                {
+                  translateX: slideAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -30],
+                  }),
+                },
+              ],
             },
           ]}
         >
-          {isRegistering ? 'Tạo tài khoản mới' : 'Chào mừng trở lại!'}
-        </Typography>
-
-        {isRegistering && (
-          <Input
-            label="Tên hiển thị"
-            value={displayName}
-            onChangeText={onDisplayNameChange}
-            leftIcon="person-outline"
-            error={errors.displayName}
-            placeholder="Nhập tên hiển thị của bạn"
-            containerStyle={styles.input}
-          />
-        )}
-
-        <Input
-          label="Email"
-          value={email}
-          onChangeText={onEmailChange}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          leftIcon="mail-outline"
-          error={errors.email}
-          placeholder="Nhập email của bạn"
-          containerStyle={styles.input}
-        />
-
-        <Input
-          label="Mật khẩu"
-          value={password}
-          onChangeText={onPasswordChange}
-          secureTextEntry={!showPassword}
-          leftIcon="lock-closed-outline"
-          rightIcon={showPassword ? 'eye-off-outline' : 'eye-outline'}
-          onRightIconPress={onTogglePassword}
-          error={errors.password}
-          placeholder="Nhập mật khẩu"
-          containerStyle={styles.input}
-        />
-
-        {isRegistering && (
-          <Input
-            label="Xác nhận mật khẩu"
-            value={confirmPassword}
-            onChangeText={onConfirmPasswordChange}
-            secureTextEntry={!showConfirmPassword}
-            leftIcon="lock-closed-outline"
-            rightIcon={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
-            onRightIconPress={onToggleConfirmPassword}
-            error={errors.confirmPassword}
-            placeholder="Nhập lại mật khẩu"
-            containerStyle={styles.input}
-          />
-        )}
-
-        <Button
-          variant="primary"
-          onPress={onSubmit}
-          style={[
-            styles.submitButton,
-            { backgroundColor: theme.colors.primary.main },
-          ]}
-          icon={isRegistering ? 'person-add-outline' : 'log-in-outline'}
-        >
-          {isRegistering ? 'Đăng ký' : 'Đăng nhập'}
-        </Button>
-
-        {!isRegistering && (
-          <Button
-            variant="text"
-            onPress={onForgotPassword}
-            style={styles.forgotPassword}
-            icon="key-outline"
-          >
-            Quên mật khẩu?
-          </Button>
-        )}
-
-        <View style={styles.divider}>
-          <View
-            style={[
-              styles.dividerLine,
-              { backgroundColor: theme.colors.divider },
-            ]}
-          />
           <Typography
-            variant="caption"
-            style={[styles.dividerText, { color: theme.colors.text.secondary }]}
-          >
-            HOẶC
-          </Typography>
-          <View
+            variant="h2"
             style={[
-              styles.dividerLine,
-              { backgroundColor: theme.colors.divider },
+              styles.title,
+              {
+                color: theme.colors.text.primary,
+                marginBottom: theme.spacing.sm,
+                marginTop: theme.spacing.md,
+              },
             ]}
-          />
-        </View>
+          >
+            {isRegistering ? 'Tạo tài khoản mới' : 'Chào mừng trở lại!'}
+          </Typography>
 
-        <Button
-          variant="outline"
-          onPress={onToggleAuthMode}
-          style={styles.switchButton}
-          icon={isRegistering ? 'log-in-outline' : 'person-add-outline'}
-        >
-          {isRegistering
-            ? 'Đã có tài khoản? Đăng nhập'
-            : 'Chưa có tài khoản? Đăng ký'}
-        </Button>
-      </Animated.View>
+          {isRegistering && (
+            <Input
+              label="Tên hiển thị"
+              value={displayName}
+              onChangeText={onDisplayNameChange}
+              leftIcon="person-outline"
+              error={errors.displayName}
+              placeholder="Nhập tên hiển thị của bạn"
+              containerStyle={styles.input}
+            />
+          )}
+
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={onEmailChange}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            leftIcon="mail-outline"
+            error={errors.email}
+            placeholder="Nhập email của bạn"
+            containerStyle={styles.input}
+          />
+
+          <Input
+            label="Mật khẩu"
+            value={password}
+            onChangeText={onPasswordChange}
+            secureTextEntry={!showPassword}
+            leftIcon="lock-closed-outline"
+            rightIcon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            onRightIconPress={onTogglePassword}
+            error={errors.password}
+            placeholder="Nhập mật khẩu"
+            containerStyle={styles.input}
+          />
+
+          {isRegistering && (
+            <Input
+              label="Xác nhận mật khẩu"
+              value={confirmPassword}
+              onChangeText={onConfirmPasswordChange}
+              secureTextEntry={!showConfirmPassword}
+              leftIcon="lock-closed-outline"
+              rightIcon={
+                showConfirmPassword ? 'eye-off-outline' : 'eye-outline'
+              }
+              onRightIconPress={onToggleConfirmPassword}
+              error={errors.confirmPassword}
+              placeholder="Nhập lại mật khẩu"
+              containerStyle={styles.input}
+            />
+          )}
+
+          <Button
+            variant="primary"
+            onPress={onSubmit}
+            style={[
+              styles.submitButton,
+              {
+                backgroundColor: theme.colors.primary.main,
+                width: '80%',
+                alignSelf: 'center',
+              },
+            ]}
+            icon={isRegistering ? 'person-add-outline' : 'log-in-outline'}
+          >
+            {isRegistering ? 'Đăng ký' : 'Đăng nhập'}
+          </Button>
+
+          {!isRegistering && (
+            <Button
+              variant="text"
+              onPress={onForgotPassword}
+              style={styles.forgotPassword}
+              icon="key-outline"
+            >
+              Quên mật khẩu?
+            </Button>
+          )}
+
+          <View style={styles.divider}>
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: theme.colors.divider },
+              ]}
+            />
+            <Typography
+              variant="caption"
+              style={[
+                styles.dividerText,
+                { color: theme.colors.text.secondary },
+              ]}
+            >
+              HOẶC
+            </Typography>
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: theme.colors.divider },
+              ]}
+            />
+          </View>
+
+          <Button
+            variant="outline"
+            onPress={onToggleAuthMode}
+            style={styles.switchButton}
+            icon={isRegistering ? 'log-in-outline' : 'person-add-outline'}
+          >
+            {isRegistering
+              ? 'Đã có tài khoản? Đăng nhập'
+              : 'Chưa có tài khoản? Đăng ký'}
+          </Button>
+        </Animated.View>
+      </View>
     </View>
   );
 };
@@ -206,12 +243,19 @@ export const AuthForm = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     width: '100%',
+  },
+  logoContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  formWrapper: {
+    width: '100%',
+    position: 'relative',
   },
   formContainer: {
     width: '100%',
-    maxWidth: 400,
   },
   title: {
     fontSize: 24,
@@ -219,12 +263,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   submitButton: {
-    height: 48,
-    borderRadius: 24,
-    marginTop: 24,
+    height: 44,
+    borderRadius: 22,
+    marginTop: 16,
   },
   submitButtonContent: {
     flex: 1,

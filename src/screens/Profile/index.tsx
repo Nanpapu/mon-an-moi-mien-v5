@@ -121,10 +121,10 @@ export default function ProfileScreen() {
         }}
         contentContainerStyle={{
           flexGrow: 1,
-          paddingHorizontal: theme.spacing.lg,
-          paddingTop: user ? theme.spacing.xl : theme.spacing.md,
+          paddingTop: user ? theme.spacing.xl : 0,
           paddingBottom: theme.spacing.xl,
           justifyContent: user ? 'flex-start' : 'center',
+          paddingHorizontal: user ? theme.spacing.lg : 0,
         }}
         showsVerticalScrollIndicator={false}
       >
