@@ -23,7 +23,7 @@ export const createStyles = (theme: Theme) =>
       fontSize: 36,
       fontWeight: 'bold',
       color: theme.colors.text.primary,
-      padding: theme.spacing.sm,
+      paddingTop: theme.spacing.sm,
     },
     starsRow: {
       flexDirection: 'row',
