@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   TouchableOpacity,
   Alert,
   StyleSheet,
   ScrollView,
+  Modal,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading } from '../../components/shared';
@@ -28,6 +29,8 @@ import { FilterOptions } from './types';
 import { QuickFilter } from './components/QuickFilter';
 import { usePinnedFilters } from './contexts/PinnedFiltersContext';
 import { useQuickFilters } from './hooks/useQuickFilters';
+import { SortType } from './types';
+import { getSortLabel } from './utils/sortUtils';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -73,6 +76,8 @@ export default function MenuScreen() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
+  const [sortType, setSortType] = useState<SortType>(SortType.DEFAULT);
+  const [showSortModal, setShowSortModal] = useState(false);
 
   const activeFiltersCount = [
     filterOptions.region,
@@ -209,6 +214,55 @@ export default function MenuScreen() {
     .filter(([_, settings]) => settings.enabled)
     .sort((a, b) => a[1].order - b[1].order);
 
+  const sortedRecipes = useMemo(() => {
+    const recipes = [...filteredRecipes];
+
+    switch (sortType) {
+      case SortType.NAME_ASC:
+        return recipes.sort((a, b) =>
+          a.recipe.name.localeCompare(b.recipe.name)
+        );
+
+      case SortType.NAME_DESC:
+        return recipes.sort((a, b) =>
+          b.recipe.name.localeCompare(a.recipe.name)
+        );
+
+      case SortType.DIFFICULTY_ASC:
+        return recipes.sort(
+          (a, b) => (a.recipe.difficulty || 0) - (b.recipe.difficulty || 0)
+        );
+
+      case SortType.DIFFICULTY_DESC:
+        return recipes.sort(
+          (a, b) => (b.recipe.difficulty || 0) - (a.recipe.difficulty || 0)
+        );
+
+      case SortType.COOKING_TIME_ASC:
+        return recipes.sort(
+          (a, b) => (a.recipe.cookingTime || 0) - (b.recipe.cookingTime || 0)
+        );
+
+      case SortType.COOKING_TIME_DESC:
+        return recipes.sort(
+          (a, b) => (b.recipe.cookingTime || 0) - (a.recipe.cookingTime || 0)
+        );
+
+      case SortType.SERVINGS_ASC:
+        return recipes.sort(
+          (a, b) => (a.recipe.servings || 0) - (b.recipe.servings || 0)
+        );
+
+      case SortType.SERVINGS_DESC:
+        return recipes.sort(
+          (a, b) => (b.recipe.servings || 0) - (a.recipe.servings || 0)
+        );
+
+      default:
+        return recipes;
+    }
+  }, [filteredRecipes, sortType]);
+
   return (
     <View
       style={{
@@ -229,6 +283,39 @@ export default function MenuScreen() {
                 onSubmitEditing={() => {}}
                 recentSearches={[]}
               />
+            </View>
+
+            <View style={styles.filterButtonGroup}>
+              {sortType !== SortType.DEFAULT && (
+                <TouchableOpacity
+                  style={styles.resetSortButton}
+                  onPress={() => setSortType(SortType.DEFAULT)}
+                >
+                  <Ionicons
+                    name="close-circle"
+                    size={20}
+                    color={theme.colors.error.main}
+                  />
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity
+                style={[
+                  styles.filterButton,
+                  sortType !== SortType.DEFAULT && styles.activeFilterButton,
+                ]}
+                onPress={() => setShowSortModal(true)}
+              >
+                <Ionicons
+                  name="funnel-outline"
+                  size={20}
+                  color={
+                    sortType !== SortType.DEFAULT
+                      ? theme.colors.primary.main
+                      : theme.colors.text.primary
+                  }
+                />
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -310,7 +397,7 @@ export default function MenuScreen() {
           <RecipeList
             isRefreshing={isRefreshing}
             isLoading={isLoading}
-            filteredRecipes={filteredRecipes}
+            filteredRecipes={sortedRecipes}
             savedRecipes={savedRecipes}
             onRefresh={refreshSavedRecipes}
             onDeleteRecipe={handleDeleteRecipe}
@@ -334,7 +421,7 @@ export default function MenuScreen() {
         </>
       )}
 
-      {/* Hiển thị số lượng k��t quả nếu có filter active */}
+      {/* Hiển thị số lượng kt quả nếu có filter active */}
       {hasActiveFilters && (
         <Typography
           variant="caption"
@@ -347,6 +434,38 @@ export default function MenuScreen() {
           thức
         </Typography>
       )}
+
+      <Modal
+        visible={showSortModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowSortModal(false)}
+      >
+        <View style={styles.sortModalContainer}>
+          {Object.values(SortType).map((type) => (
+            <TouchableOpacity
+              key={type}
+              style={[
+                styles.sortOption,
+                sortType === type && styles.selectedSortOption,
+              ]}
+              onPress={() => {
+                setSortType(type);
+                setShowSortModal(false);
+              }}
+            >
+              <Typography
+                style={[
+                  styles.sortOptionText,
+                  sortType === type && styles.selectedSortOptionText,
+                ]}
+              >
+                {getSortLabel(type)}
+              </Typography>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
     </View>
   );
 }
