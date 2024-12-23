@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Loading, Typography } from '../../components/shared';
 import { AuthForm } from './components/AuthForm';
@@ -47,6 +53,7 @@ export default function ProfileScreen() {
     isUploading,
     photoURL,
     isImporting,
+    isLoadingUserData,
   } = useProfileActions(user);
 
   const {
@@ -114,24 +121,22 @@ export default function ProfileScreen() {
         onSubmit={handleResetPassword}
       />
 
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: theme.colors.background.default,
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingTop: user ? theme.spacing.xl : 0,
-          paddingBottom: theme.spacing.xl,
-          justifyContent: user ? 'flex-start' : 'center',
-          paddingHorizontal: user ? theme.spacing.lg : 0,
-        }}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={!!user}
-      >
-        {isLoading ? (
-          <Loading text="Đang tải..." />
-        ) : user ? (
+      {isLoading ? (
+        <Loading text="Đang tải..." />
+      ) : user ? (
+        <ScrollView
+          style={{
+            flex: 1,
+            backgroundColor: theme.colors.background.default,
+          }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingTop: theme.spacing.xl,
+            paddingBottom: theme.spacing.xl,
+            paddingHorizontal: theme.spacing.lg,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.container}>
             <Card
               style={[
@@ -160,6 +165,7 @@ export default function ProfileScreen() {
                 photoURL={photoURL}
                 isUploading={isUploading}
                 isImporting={isImporting}
+                isLoadingUserData={isLoadingUserData}
               />
             </Card>
 
@@ -184,8 +190,20 @@ export default function ProfileScreen() {
               </Button>
             </Card> */}
           </View>
-        ) : (
-          <>
+        </ScrollView>
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'center',
+            }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             <AuthForm
               isRegistering={isRegistering}
               email={email}
@@ -209,12 +227,9 @@ export default function ProfileScreen() {
               displayName={displayName}
               onDisplayNameChange={setDisplayName}
             />
-            {/* Tạm ẩn đăng nhập bằng Google 
-            <GoogleSignInButton onPress={signInWithGoogle} />
-            */}
-          </>
-        )}
-      </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
     </>
   );
 }

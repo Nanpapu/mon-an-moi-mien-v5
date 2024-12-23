@@ -45,6 +45,8 @@ export const ResetPasswordModal = ({
           keyboardType="email-address"
           autoCapitalize="none"
           leftIcon="mail-outline"
+          returnKeyType="done"
+          onSubmitEditing={onSubmit}
         />
 
         <View

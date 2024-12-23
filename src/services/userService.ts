@@ -12,6 +12,7 @@ import {
 } from 'firebase/storage';
 import { CacheService, CACHE_KEYS, CACHE_EXPIRY } from './cacheService';
 import { ImageUtils } from '../utils/imageUtils';
+import { UserProfile } from '../types/index';
 
 /**
  * Service quản lý thông tin người dùng
@@ -55,15 +56,37 @@ export const UserService = {
    * @param {object} data - Dữ liệu cần cập nhật
    * @returns {Promise<boolean>} true nếu cập nhật thành công
    */
-  updateProfile: async (userId: string, data: any) => {
+  updateProfile: async (
+    userId: string,
+    data: Partial<
+      Pick<UserProfile, 'displayName' | 'photoURL' | 'avatarUpdatedAt'>
+    >
+  ) => {
     try {
-      await updateDoc(doc(db, 'users', userId), data);
-      // Clear cache khi update
-      await CacheService.clearCache(`${CACHE_KEYS.USER_PROFILE}${userId}`);
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        ...data,
+        updatedAt: new Date(),
+      });
+
+      // Cập nhật cache
+      const cacheKey = CACHE_KEYS.USER_INFO + userId;
+      const currentCache = await CacheService.getCache(
+        cacheKey,
+        CACHE_EXPIRY.USER_INFO
+      );
+      if (currentCache) {
+        await CacheService.setCache(cacheKey, {
+          ...currentCache,
+          ...data,
+          updatedAt: new Date(),
+        });
+      }
+
       return true;
     } catch (error) {
-      console.error('Lỗi khi cập nhật profile:', error);
-      return false;
+      console.error('Error updating profile:', error);
+      throw error;
     }
   },
 
@@ -97,7 +120,7 @@ export const UserService = {
       // Cập nhật URL trong Firestore
       await UserService.updateProfile(userId, {
         photoURL: downloadURL,
-        avatarUpdatedAt: new Date(),
+        avatarUpdatedAt: Date.now(),
       });
 
       // Xóa ảnh cũ nếu có
@@ -184,12 +207,27 @@ export const UserService = {
    * @returns {Promise<object | null>} Dữ liệu người dùng hoặc null nếu không tìm thấy
    * @throws {Error} Lỗi khi lấy dữ liệu
    */
-  async getUserData(userId: string) {
+  getUserData: async (userId: string) => {
     try {
+      // Thử lấy từ cache trước
+      const cacheKey = CACHE_KEYS.USER_INFO + userId;
+      const cachedData = await CacheService.getCache(cacheKey, CACHE_EXPIRY.USER_INFO);
+
+      if (cachedData) {
+        return cachedData;
+      }
+
+      // Nếu không có cache, lấy từ Firestore
       const userDoc = await getDoc(doc(db, 'users', userId));
       if (userDoc.exists()) {
-        return userDoc.data();
+        const userData = userDoc.data();
+
+        // Lưu vào cache
+        await CacheService.setCache(cacheKey, userData);
+
+        return userData;
       }
+
       return null;
     } catch (error) {
       console.error('Error getting user data:', error);

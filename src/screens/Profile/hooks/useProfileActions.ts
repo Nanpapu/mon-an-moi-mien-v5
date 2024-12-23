@@ -10,6 +10,7 @@ import { Alert } from 'react-native';
 
 export const useProfileActions = (user: User | null) => {
   const { showToast } = useToast();
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [isEditing, setIsEditing] = useState(false);
   const [originalDisplayName, setOriginalDisplayName] = useState(
@@ -20,29 +21,29 @@ export const useProfileActions = (user: User | null) => {
   const [isImporting, setIsImporting] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setPhotoURL(user.photoURL || '');
-      setDisplayName(user.displayName || '');
-      setOriginalDisplayName(user.displayName || '');
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
+    const loadUserData = async () => {
       if (!user) return;
 
+      setIsLoadingUserData(true);
       try {
+        setDisplayName(user.displayName || user.email?.split('@')[0] || '');
+        setPhotoURL(user.photoURL || '');
+
         const userData = await UserService.getUserData(user.uid);
-        if (userData && userData.displayName) {
-          setDisplayName(userData.displayName);
-          setOriginalDisplayName(userData.displayName);
+        if (userData) {
+          setDisplayName(
+            userData.displayName || user.email?.split('@')[0] || ''
+          );
+          setPhotoURL(userData.photoURL || '');
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error loading user data:', error);
+      } finally {
+        setIsLoadingUserData(false);
       }
     };
 
-    fetchUserData();
+    loadUserData();
   }, [user]);
 
   const handleStartEditing = () => {
@@ -176,6 +177,7 @@ export const useProfileActions = (user: User | null) => {
   };
 
   return {
+    isLoadingUserData,
     displayName,
     setDisplayName,
     isEditing,

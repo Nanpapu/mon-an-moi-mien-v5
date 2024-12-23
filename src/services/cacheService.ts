@@ -21,6 +21,8 @@ export const CACHE_KEYS = {
   RECIPE_REVIEWS: 'cached_reviews_',
   /** Cache cho công thức yêu thích */
   FAVORITE_RECIPES: 'cached_favorite_recipes_',
+  /** Cache cho thông tin người dùng */
+  USER_INFO: 'user_info_',
 };
 
 /**
@@ -40,6 +42,8 @@ export const CACHE_EXPIRY = {
   RECIPE_REVIEWS: 30 * 60 * 1000,
   /** 6 giờ cho công thức yêu thích */
   FAVORITE_RECIPES: 6 * 60 * 60 * 1000,
+  /** 1 giờ cho thông tin người dùng */
+  USER_INFO: 60 * 60 * 1000,
 };
 
 /**
@@ -85,7 +89,7 @@ export const CacheService = {
 
       return data;
     } catch (error) {
-      console.error('Lỗi khi ��ọc cache:', error);
+      console.error('Lỗi khi ọc cache:', error);
       return null;
     }
   },

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import { Input, Button, Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -57,6 +58,11 @@ export const AuthForm = ({
   onDisplayNameChange,
 }: Props) => {
   const { theme } = useTheme();
+
+  const emailRef = React.useRef<TextInput>(null);
+  const passwordRef = React.useRef<TextInput>(null);
+  const confirmPasswordRef = React.useRef<TextInput>(null);
+  const displayNameRef = React.useRef<TextInput>(null);
 
   return (
     <View style={styles.container}>
@@ -121,6 +127,7 @@ export const AuthForm = ({
 
           {isRegistering && (
             <Input
+              ref={displayNameRef}
               label="Tên hiển thị"
               value={displayName}
               onChangeText={onDisplayNameChange}
@@ -128,10 +135,14 @@ export const AuthForm = ({
               error={errors.displayName}
               placeholder="Nhập tên hiển thị của bạn"
               containerStyle={styles.input}
+              returnKeyType="next"
+              onSubmitEditing={() => emailRef.current?.focus()}
+              blurOnSubmit={false}
             />
           )}
 
           <Input
+            ref={emailRef}
             label="Email"
             value={email}
             onChangeText={onEmailChange}
@@ -141,9 +152,13 @@ export const AuthForm = ({
             error={errors.email}
             placeholder="Nhập email của bạn"
             containerStyle={styles.input}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current?.focus()}
+            blurOnSubmit={false}
           />
 
           <Input
+            ref={passwordRef}
             label="Mật khẩu"
             value={password}
             onChangeText={onPasswordChange}
@@ -154,10 +169,20 @@ export const AuthForm = ({
             error={errors.password}
             placeholder="Nhập mật khẩu"
             containerStyle={styles.input}
+            returnKeyType={isRegistering ? 'next' : 'done'}
+            onSubmitEditing={() => {
+              if (isRegistering) {
+                confirmPasswordRef.current?.focus();
+              } else {
+                onSubmit();
+              }
+            }}
+            blurOnSubmit={!isRegistering}
           />
 
           {isRegistering && (
             <Input
+              ref={confirmPasswordRef}
               label="Xác nhận mật khẩu"
               value={confirmPassword}
               onChangeText={onConfirmPasswordChange}
@@ -170,6 +195,8 @@ export const AuthForm = ({
               error={errors.confirmPassword}
               placeholder="Nhập lại mật khẩu"
               containerStyle={styles.input}
+              returnKeyType="done"
+              onSubmitEditing={onSubmit}
             />
           )}
 
