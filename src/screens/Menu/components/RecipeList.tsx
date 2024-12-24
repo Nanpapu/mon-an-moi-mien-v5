@@ -92,14 +92,8 @@ export const RecipeList = ({
           }
         >
           <View style={styles.grid}>
-            {savedRecipes.map((recipe) => {
-              // Tìm trạng thái visible của recipe
-              const filterResult = filteredRecipes.find(
-                (fr) => fr.recipe.id === recipe.id
-              );
-              const isVisible = filterResult?.visible ?? true;
-
-              if (!isVisible) return null;
+            {filteredRecipes.map(({ recipe, visible }) => {
+              if (!visible) return null;
 
               return (
                 <RecipeGridItem
