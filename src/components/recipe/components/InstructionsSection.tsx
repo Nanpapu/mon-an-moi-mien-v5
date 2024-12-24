@@ -274,6 +274,8 @@ export const InstructionsSection = ({
           progress={completionProgress}
           color={theme.colors.primary.main}
           height={4}
+          completed={checkedSteps.size}
+          total={getTotalSteps()}
         />
       )}
 

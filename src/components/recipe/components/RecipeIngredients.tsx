@@ -188,6 +188,8 @@ export const RecipeIngredients = ({
           progress={completionProgress}
           color={theme.colors.success.main}
           height={4}
+          completed={checkedIngredients.size}
+          total={ingredients.length}
         />
       )}
 
