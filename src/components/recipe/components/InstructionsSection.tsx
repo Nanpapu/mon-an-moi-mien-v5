@@ -6,6 +6,7 @@ import { createStyles } from './InstructionsSection.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
+import { ProgressBar } from '../../shared/ProgressBar';
 
 interface Props {
   instructions: Instructions;
@@ -24,6 +25,7 @@ export const InstructionsSection = ({
     new Set()
   );
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
+  const [completionProgress, setCompletionProgress] = useState(0);
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -129,6 +131,20 @@ export const InstructionsSection = ({
       color: '#8BC34A',
     },
   ];
+
+  const getTotalSteps = () => {
+    return sections.reduce((total, section) => {
+      const steps = instructions[section.key as keyof Instructions] || [];
+      return total + steps.length;
+    }, 0);
+  };
+
+  useEffect(() => {
+    const totalSteps = getTotalSteps();
+    const checkedCount = checkedSteps.size;
+    const progress = (checkedCount / totalSteps) * 100;
+    setCompletionProgress(progress);
+  }, [checkedSteps, instructions]);
 
   const renderStep = (
     step: Step,
@@ -252,6 +268,14 @@ export const InstructionsSection = ({
         />
         <Typography variant="h3">Cách làm</Typography>
       </View>
+
+      {showCheckbox && (
+        <ProgressBar
+          progress={completionProgress}
+          color={theme.colors.primary.main}
+          height={4}
+        />
+      )}
 
       {sections.map(({ key, title, icon, color }) => {
         const steps = instructions[key as keyof Instructions] ?? [];

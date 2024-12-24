@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Ingredient, IngredientType } from '../../../types';
@@ -6,6 +6,7 @@ import { createStyles } from './RecipeIngredients.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
+import { ProgressBar } from '../../shared/ProgressBar';
 
 interface Props {
   ingredients: Ingredient[];
@@ -82,6 +83,7 @@ export const RecipeIngredients = ({
   const [checkedIngredients, setCheckedIngredients] = useState<Set<string>>(
     new Set()
   );
+  const [completionProgress, setCompletionProgress] = useState(0);
 
   // Thêm helper function
   const getThemeColor = (path: string): string => {
@@ -163,6 +165,13 @@ export const RecipeIngredients = ({
     });
   };
 
+  useEffect(() => {
+    const totalIngredients = ingredients.length;
+    const checkedCount = checkedIngredients.size;
+    const progress = (checkedCount / totalIngredients) * 100;
+    setCompletionProgress(progress);
+  }, [checkedIngredients, ingredients]);
+
   return (
     <View style={styles.ingredientsContainer}>
       <View style={styles.header}>
@@ -174,6 +183,13 @@ export const RecipeIngredients = ({
         />
         <Typography variant="h3">Nguyên liệu ({ingredients.length})</Typography>
       </View>
+      {showCheckbox && (
+        <ProgressBar
+          progress={completionProgress}
+          color={theme.colors.success.main}
+          height={4}
+        />
+      )}
 
       {/* Danh sách nguyên liệu theo nhóm */}
       {Object.entries(groupedIngredients).map(([title, { items, config }]) => {
