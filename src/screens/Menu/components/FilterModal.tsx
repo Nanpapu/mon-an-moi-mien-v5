@@ -13,6 +13,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AdvancedFilters } from './AdvancedFilters';
 import { useToast } from '../../../hooks/useToast';
+import { SortOptions } from './SortOptions';
 
 interface Props {
   visible: boolean;
@@ -112,6 +113,12 @@ export const FilterModal = ({
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
+          <SortOptions
+            currentSort={tempFilterOptions.sort}
+            onSortChange={(sort) =>
+              setTempFilterOptions({ ...tempFilterOptions, sort })
+            }
+          />
           <AdvancedFilters
             filterOptions={tempFilterOptions}
             onFilterChange={setTempFilterOptions}

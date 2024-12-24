@@ -1,11 +1,10 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Recipe, IngredientType, DishCategory } from '../../../types';
+import { Recipe, IngredientType } from '../../../types';
+import { SortField, FilterOptions } from '../types';
 import { FavoriteService } from '../../../services/favoriteService';
 import { containsSearchQuery } from '../../../utils/stringUtils';
-import { FilterOptions } from '../types';
 
 export const useRecipeFilter = (savedRecipes: Recipe[]) => {
-  // State cho các filter options
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     searchQuery: '',
     region: null,
@@ -21,6 +20,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       max: null,
     },
     mainIngredientTypes: [],
+    sort: null,
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -32,6 +32,24 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   const loadFavorites = async () => {
     const favorites = await FavoriteService.getFavorites();
     setFavoriteRecipes(favorites);
+  };
+
+  // Thêm hàm helper để lấy giá trị sort
+  const getSortValue = (recipe: Recipe, field: SortField) => {
+    switch (field) {
+      case 'name':
+        return recipe.name.toLowerCase();
+      case 'difficulty':
+        return recipe.difficulty || 0;
+      case 'cookingTime':
+        return recipe.cookingTime || 0;
+      case 'servings':
+        return recipe.servings || 0;
+      case 'favorite':
+        return favoriteRecipes.some((fav) => fav.id === recipe.id) ? 1 : 0;
+      default:
+        return 0;
+    }
   };
 
   // Khai báo kiểu trước khi sử dụng
@@ -89,7 +107,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   };
 
   const filteredRecipes = useMemo(() => {
-    return savedRecipes.map((recipe) => {
+    let results = savedRecipes.map((recipe) => {
       // Thay thế phần kiểm tra search cũ bằng hàm mới
       const matchesSearchResult = matchesSearch(recipe);
 
@@ -152,13 +170,35 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         visible: isVisible,
       };
     });
+
+    // Thêm logic sort
+    if (filterOptions.sort) {
+      const { field, order } = filterOptions.sort;
+      results.sort((a, b) => {
+        const aValue = getSortValue(a.recipe, field);
+        const bValue = getSortValue(b.recipe, field);
+
+        if (order === 'asc') {
+          return aValue > bValue ? 1 : -1;
+        }
+        return aValue < bValue ? 1 : -1;
+      });
+    }
+
+    return results;
   }, [savedRecipes, filterOptions, favoriteRecipes]);
+
+  const regions = useMemo(() => {
+    const uniqueRegions = new Set(savedRecipes.map((recipe) => recipe.region));
+    return Array.from(uniqueRegions).filter(Boolean) as string[];
+  }, [savedRecipes]);
 
   return {
     filterOptions,
     setFilterOptions,
     filteredRecipes,
-    regions: Array.from(new Set(savedRecipes.map((r) => r.region))),
+    favoriteRecipes,
     refreshFavorites: loadFavorites,
+    regions,
   };
 };
