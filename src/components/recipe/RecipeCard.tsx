@@ -24,6 +24,7 @@ interface Props {
   showActions?: boolean;
   showReviews?: boolean;
   mode?: 'compact' | 'detailed';
+  isSaved?: boolean;
 }
 
 export function RecipeCard({
@@ -33,6 +34,7 @@ export function RecipeCard({
   showActions = false,
   showReviews = false,
   mode = 'compact',
+  isSaved = false,
 }: Props) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -128,10 +130,14 @@ export function RecipeCard({
 
         {showDetails && (
           <View style={styles.details}>
-            <RecipeIngredients ingredients={recipe.ingredients} />
+            <RecipeIngredients
+              ingredients={recipe.ingredients}
+              showCheckbox={isSaved}
+            />
             <InstructionsSection
               instructions={recipe.instructions}
               defaultExpanded={mode === 'detailed'}
+              showCheckbox={isSaved}
             />
           </View>
         )}

@@ -10,6 +10,7 @@ import { Checkbox } from '../../shared/Checkbox';
 interface Props {
   ingredients: Ingredient[];
   onIngredientPress?: (ingredient: Ingredient) => void;
+  showCheckbox?: boolean;
 }
 
 interface IngredientGroupConfig {
@@ -73,6 +74,7 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
 export const RecipeIngredients = ({
   ingredients,
   onIngredientPress,
+  showCheckbox = false,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -235,18 +237,20 @@ export const RecipeIngredients = ({
                         {ingredient.note && ` (${ingredient.note})`}
                       </Typography>
                     </View>
-                    <Checkbox
-                      checked={checkedIngredients.has(
-                        `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
-                      )}
-                      onToggle={() =>
-                        toggleIngredient(
+                    {showCheckbox && (
+                      <Checkbox
+                        checked={checkedIngredients.has(
                           `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
-                        )
-                      }
-                      size={22}
-                      color={getThemeColor(config.color)}
-                    />
+                        )}
+                        onToggle={() =>
+                          toggleIngredient(
+                            `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
+                          )
+                        }
+                        size={22}
+                        color={getThemeColor(config.color)}
+                      />
+                    )}
                   </View>
                 ))}
               </View>

@@ -286,6 +286,7 @@ export default function MenuScreen() {
             onLongPress={handleLongPress}
             onToggleSelect={handleToggleSelect}
             isAuthenticated={!!user}
+            isSaved={true}
           />
           {user && (
             <ZoomControls

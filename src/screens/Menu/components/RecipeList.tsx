@@ -33,6 +33,7 @@ interface Props {
   onLongPress?: (recipeId: string) => void;
   onToggleSelect?: (recipeId: string) => void;
   isAuthenticated: boolean;
+  isSaved?: boolean;
 }
 
 export const RecipeList = ({
@@ -50,6 +51,7 @@ export const RecipeList = ({
   onLongPress,
   onToggleSelect,
   isAuthenticated,
+  isSaved,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -149,6 +151,7 @@ export const RecipeList = ({
                 showActions={true}
                 showReviews={true}
                 onDelete={onDeleteRecipe}
+                isSaved={true}
               />
             </ScrollView>
           </View>

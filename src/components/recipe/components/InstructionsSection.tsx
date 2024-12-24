@@ -10,11 +10,13 @@ import { Checkbox } from '../../shared/Checkbox';
 interface Props {
   instructions: Instructions;
   defaultExpanded?: boolean;
+  showCheckbox?: boolean;
 }
 
 export const InstructionsSection = ({
   instructions,
   defaultExpanded = false,
+  showCheckbox = false,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -170,12 +172,14 @@ export const InstructionsSection = ({
           </>
         )}
       </View>
-      <Checkbox
-        checked={checkedSteps.has(`${key}_${index}`)}
-        onToggle={() => toggleStep(`${key}_${index}`)}
-        size={22}
-        color={color}
-      />
+      {showCheckbox && (
+        <Checkbox
+          checked={checkedSteps.has(`${key}_${index}`)}
+          onToggle={() => toggleStep(`${key}_${index}`)}
+          size={22}
+          color={color}
+        />
+      )}
     </View>
   );
 
@@ -344,12 +348,14 @@ export const InstructionsSection = ({
                         </>
                       )}
                     </View>
-                    <Checkbox
-                      checked={checkedSteps.has(`${key}_${index}`)}
-                      onToggle={() => toggleStep(`${key}_${index}`)}
-                      size={22}
-                      color={color}
-                    />
+                    {showCheckbox && (
+                      <Checkbox
+                        checked={checkedSteps.has(`${key}_${index}`)}
+                        onToggle={() => toggleStep(`${key}_${index}`)}
+                        size={22}
+                        color={color}
+                      />
+                    )}
                   </View>
                 ))}
               </View>
