@@ -120,8 +120,15 @@ export const FilterModal = ({
         >
           <SortOptions
             currentSort={tempFilterOptions.sort}
+            showFavoriteFirst={tempFilterOptions.showFavoriteFirst}
             onSortChange={(sort) =>
               setTempFilterOptions({ ...tempFilterOptions, sort })
+            }
+            onFavoriteFirstChange={(value) =>
+              setTempFilterOptions({
+                ...tempFilterOptions,
+                showFavoriteFirst: value,
+              })
             }
           />
           <AdvancedFilters

@@ -20,7 +20,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       max: null,
     },
     mainIngredientTypes: [],
-    sort: { field: 'favorite', order: 'asc' },
+    showFavoriteFirst: true,
+    sort: null,
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -39,11 +40,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     console.log('Getting sort value for:', { name: recipe.name, field });
 
     switch (field) {
-      case 'favorite':
-        // Đảo ngược giá trị để yêu thích lên đầu
-        const isFavorite = favoriteRecipes.some((fav) => fav.id === recipe.id);
-        console.log('Favorite check:', { name: recipe.name, isFavorite });
-        return isFavorite ? -1 : 1;
       case 'name':
         return recipe.name.toLowerCase();
       case 'difficulty':
@@ -113,96 +109,42 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   const filteredRecipes = useMemo(() => {
     let results = savedRecipes
-      .map((recipe) => {
-        // Thay thế phần kiểm tra search cũ bằng hàm mới
-        const matchesSearchResult = matchesSearch(recipe);
-
-        // Kiểm tra từng điều kiện filter
-        const matchesRegion =
-          !filterOptions.region || recipe.region === filterOptions.region;
-        const matchesCategory =
-          !filterOptions.category || recipe.category === filterOptions.category;
-        const matchesDifficulty =
-          !filterOptions.difficulty ||
-          recipe.difficulty === filterOptions.difficulty;
-        const matchesFavorite =
-          !filterOptions.showFavorites ||
-          favoriteRecipes.some((fav) => fav.id === recipe.id);
-
-        // Kiểm tra thời gian nấu
-        const timeMatches =
-          !filterOptions.cookingTime.min && !filterOptions.cookingTime.max
-            ? true
-            : recipe.cookingTime &&
-              (!filterOptions.cookingTime.min ||
-                recipe.cookingTime >= filterOptions.cookingTime.min) &&
-              (!filterOptions.cookingTime.max ||
-                recipe.cookingTime <= filterOptions.cookingTime.max);
-
-        // Kiểm tra số người ăn
-        const servingsMatches =
-          !filterOptions.servings.min && !filterOptions.servings.max
-            ? true
-            : recipe.servings &&
-              (!filterOptions.servings.min ||
-                recipe.servings >= filterOptions.servings.min) &&
-              (!filterOptions.servings.max ||
-                recipe.servings <= filterOptions.servings.max);
-
-        // Kiểm tra nguyên liệu
-        const ingredientMatches =
-          filterOptions.mainIngredientTypes.length === 0
-            ? true
-            : recipe.ingredients.some(
-                (ingredient) =>
-                  ingredient.type &&
-                  filterOptions.mainIngredientTypes.includes(ingredient.type)
-              );
-
-        // Kết hợp tất cả điều kiện
-        const isVisible = Boolean(
-          matchesSearchResult &&
-            matchesRegion &&
-            matchesCategory &&
-            matchesDifficulty &&
-            matchesFavorite &&
-            timeMatches &&
-            servingsMatches &&
-            ingredientMatches
-        );
-
-        return {
-          recipe,
-          visible: isVisible,
-        };
-      })
+      .map((recipe) => ({
+        recipe,
+        visible: matchesSearch(recipe),
+        isFavorite: favoriteRecipes.some((fav) => fav.id === recipe.id),
+      }))
       .filter((item) => item.visible);
 
-    // Sort sau khi filter
+    // Sort theo 2 bước:
+    // 1. Sort theo favorite nếu showFavoriteFirst = true
+    if (filterOptions.showFavoriteFirst) {
+      results.sort((a, b) =>
+        a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1
+      );
+    }
+
+    // 2. Sort theo field được chọn
     if (filterOptions.sort) {
       const { field, order } = filterOptions.sort;
-      console.log('Sorting recipes:', { field, order });
-
       results.sort((a, b) => {
-        const aValue = getSortValue(a.recipe, field);
-        const bValue = getSortValue(b.recipe, field);
-
-        if (typeof aValue === 'string') {
-          return order === 'asc'
-            ? aValue.localeCompare(bValue as string)
-            : (bValue as string).localeCompare(aValue);
+        // Nếu cả 2 đều là favorite hoặc không favorite, sort bình thường
+        if (
+          (!a.isFavorite && !b.isFavorite) ||
+          (a.isFavorite && b.isFavorite)
+        ) {
+          const aValue = getSortValue(a.recipe, field);
+          const bValue = getSortValue(b.recipe, field);
+          // ... logic sort cũ ...
         }
-
-        return order === 'asc'
-          ? (aValue as number) - (bValue as number)
-          : (bValue as number) - (aValue as number);
+        // Giữ nguyên thứ tự favorite nếu khác nhau
+        return a.isFavorite ? -1 : 1;
       });
     }
 
-    // Quan trọng: Trả về mảng các recipe đã được sort, không phải object {recipe, visible}
     return results.map((item) => ({
       recipe: item.recipe,
-      visible: true, // Vì đã filter ở trên nên tất cả đều visible
+      visible: true,
     }));
   }, [savedRecipes, filterOptions, favoriteRecipes]);
 

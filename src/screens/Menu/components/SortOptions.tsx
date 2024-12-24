@@ -4,13 +4,21 @@ import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SortOption, SORT_OPTIONS, SortField, SortOrder } from '../types';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   currentSort: SortOption | null;
+  showFavoriteFirst: boolean;
   onSortChange: (sort: SortOption | null) => void;
+  onFavoriteFirstChange: (value: boolean) => void;
 }
 
-export const SortOptions = ({ currentSort, onSortChange }: Props) => {
+export const SortOptions = ({
+  currentSort,
+  showFavoriteFirst,
+  onSortChange,
+  onFavoriteFirstChange,
+}: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -49,6 +57,35 @@ export const SortOptions = ({ currentSort, onSortChange }: Props) => {
           Sắp xếp theo
         </Typography>
       </View>
+
+      <TouchableOpacity
+        style={[
+          styles.favoriteButton,
+          showFavoriteFirst && styles.activeFavoriteButton,
+        ]}
+        onPress={() => onFavoriteFirstChange(!showFavoriteFirst)}
+      >
+        <Ionicons
+          name={showFavoriteFirst ? 'heart' : 'heart-outline'}
+          size={20}
+          color={
+            showFavoriteFirst
+              ? theme.colors.primary.contrast
+              : theme.colors.text.primary
+          }
+        />
+        <Typography
+          variant="body2"
+          style={[
+            styles.buttonText,
+            showFavoriteFirst && styles.activeButtonText,
+          ]}
+        >
+          Ưu tiên món yêu thích
+        </Typography>
+      </TouchableOpacity>
+
+      <View style={styles.divider} />
 
       <View style={styles.optionsContainer}>
         {SORT_OPTIONS.map((option) => (
@@ -130,5 +167,24 @@ const createStyles = (theme: any) =>
     },
     activeButtonText: {
       color: theme.colors.primary.contrast,
+    },
+    favoriteButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: theme.spacing.md,
+      borderRadius: theme.spacing.lg,
+      backgroundColor: theme.colors.background.default,
+      borderWidth: 1,
+      borderColor: theme.colors.divider,
+      marginBottom: theme.spacing.md,
+    },
+    activeFavoriteButton: {
+      backgroundColor: theme.colors.primary.main,
+      borderColor: theme.colors.primary.main,
+    },
+    divider: {
+      height: 1,
+      backgroundColor: theme.colors.divider,
+      marginVertical: theme.spacing.md,
     },
   });

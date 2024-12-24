@@ -2,12 +2,7 @@ import { IngredientType } from '../../../types';
 
 export type DishCategory = 'vegetarian' | 'non-vegetarian';
 
-export type SortField =
-  | 'favorite'
-  | 'difficulty'
-  | 'cookingTime'
-  | 'servings'
-  | 'name';
+export type SortField = 'difficulty' | 'cookingTime' | 'servings' | 'name';
 export type SortOrder = 'asc' | 'desc';
 
 export interface SortOption {
@@ -35,6 +30,7 @@ export interface FilterOptions {
   mainIngredientTypes: IngredientType[];
 
   // Thêm sort options
+  showFavoriteFirst: boolean;
   sort: SortOption | null;
 }
 
@@ -66,7 +62,6 @@ export const SERVINGS_RANGES: ServingsRange[] = [
 
 export const SORT_OPTIONS: { label: string; field: SortField }[] = [
   { label: 'Tên công thức', field: 'name' },
-  { label: 'Yêu thích', field: 'favorite' },
   { label: 'Độ khó', field: 'difficulty' },
   { label: 'Thời gian nấu', field: 'cookingTime' },
   { label: 'Số người ăn', field: 'servings' },
