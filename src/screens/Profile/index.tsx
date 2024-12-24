@@ -13,6 +13,7 @@ import { ResetPasswordModal } from './components/ResetPasswordModal';
 import { useToast } from '../../hooks/useToast';
 import { Card, Button } from '../../components/shared';
 import { ThemeSelector } from './components/ThemeSelector';
+import { DisplaySettings } from './components/DisplaySettings';
 import { ImportButton } from './components/ImportButton';
 import { useScreenTransition } from './hooks/useScreenTransition';
 
@@ -197,6 +198,7 @@ export default function ProfileScreen() {
                 />
               </Card>
 
+              <DisplaySettings />
               <ThemeSelector />
 
               {/* <Card

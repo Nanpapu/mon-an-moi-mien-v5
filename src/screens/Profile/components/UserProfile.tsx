@@ -5,7 +5,6 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { User } from 'firebase/auth';
 import { ThemeSelector } from './ThemeSelector';
-import { DisplaySettings } from './DisplaySettings';
 
 interface Props {
   user: User;
@@ -129,9 +128,6 @@ export const UserProfile = ({
           </Button>
         </View>
       )}
-
-
-      <DisplaySettings />
 
       <Button
         variant="secondary"
