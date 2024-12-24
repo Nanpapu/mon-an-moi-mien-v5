@@ -21,11 +21,11 @@ export const RecipeGridListSkeleton = ({
   const getSkeletonCount = () => {
     switch (config.columns) {
       case 2: // LEVEL_1
-        return 6; // 2x3 grid
+        return 12; // 2x3 grid
       case 3: // LEVEL_2
-        return 9; // 3x3 grid
+        return 30; // 3x3 grid
       case 4: // LEVEL_3
-        return 12; // 4x3 grid
+        return 60; // 4x3 grid
       default:
         return 6;
     }
