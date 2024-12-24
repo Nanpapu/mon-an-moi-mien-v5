@@ -20,7 +20,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       max: null,
     },
     mainIngredientTypes: [],
-    sort: null,
+    sort: { field: 'favorite', order: 'asc' },
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -39,6 +39,11 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     console.log('Getting sort value for:', { name: recipe.name, field });
 
     switch (field) {
+      case 'favorite':
+        // Đảo ngược giá trị để yêu thích lên đầu
+        const isFavorite = favoriteRecipes.some((fav) => fav.id === recipe.id);
+        console.log('Favorite check:', { name: recipe.name, isFavorite });
+        return isFavorite ? -1 : 1;
       case 'name':
         return recipe.name.toLowerCase();
       case 'difficulty':
@@ -47,11 +52,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         return recipe.cookingTime || 0;
       case 'servings':
         return recipe.servings || 0;
-      case 'favorite':
-        // Đảo ngược giá trị để yêu thích lên đầu
-        const isFavorite = favoriteRecipes.some((fav) => fav.id === recipe.id);
-        console.log('Favorite check:', { name: recipe.name, isFavorite });
-        return isFavorite ? -1 : 1;
       default:
         return 0;
     }
@@ -117,7 +117,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         // Thay thế phần kiểm tra search cũ bằng hàm mới
         const matchesSearchResult = matchesSearch(recipe);
 
-        // Ki��m tra từng điều kiện filter
+        // Kiểm tra từng điều kiện filter
         const matchesRegion =
           !filterOptions.region || recipe.region === filterOptions.region;
         const matchesCategory =
