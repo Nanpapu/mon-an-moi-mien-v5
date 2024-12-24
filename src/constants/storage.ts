@@ -5,4 +5,5 @@ export const STORAGE_KEYS = {
     DEFAULT_DARK: '@theme/defaultDark',
     DEFAULT_SPECIAL: '@theme/defaultSpecial',
   },
+  FOCUS_MODE: '@display/focus_mode',
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useDisplay } from '../../context/DisplayContext';
 import { AuthenticatedAppBar } from './AuthenticatedAppBar';
 import { PublicAppBar } from './PublicAppBar';
 
@@ -9,18 +10,17 @@ interface AppBarProps {
   rightComponent?: React.ReactNode;
 }
 
-// Component điều phối - quyết định hiển thị AppBar nào
 export const AppBar = ({
   title,
   showHeader = true,
   rightComponent,
 }: AppBarProps) => {
   const { user } = useAuth();
+  const { focusMode } = useDisplay();
 
-  if (!showHeader) return null;
+  // Không hiển thị khi ở chế độ focus hoặc showHeader = false
+  if (!showHeader || focusMode) return null;
 
-  // Nếu đã đăng nhập -> hiển thị AuthenticatedAppBar
-  // Nếu chưa đăng nhập -> hiển thị PublicAppBar
   return user ? (
     <AuthenticatedAppBar title={title} rightComponent={rightComponent} />
   ) : (
