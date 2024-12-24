@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { SearchSuggestions } from '../../../components/shared/SearchSuggestions';
+import { containsSearchQuery } from '../../../utils/stringUtils';
 
 // Props interface cho MenuSearchBar
 interface Props {
@@ -36,7 +37,6 @@ export const MenuSearchBar = ({
   // Xử lý suggestions khi người dùng nhập
   useEffect(() => {
     try {
-      // Kiểm tra value và recentSearches tồn tại
       if (!value || !recentSearches) {
         setShowSuggestions(false);
         return;
@@ -48,7 +48,7 @@ export const MenuSearchBar = ({
         const filtered = recentSearches
           .filter((search) => {
             if (!search) return false;
-            return search.toLowerCase().includes(trimmedValue.toLowerCase());
+            return containsSearchQuery(search, trimmedValue);
           })
           .slice(0, 5);
 

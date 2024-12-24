@@ -71,14 +71,27 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     );
   };
 
+  const matchesSearch = (recipe: Recipe): boolean => {
+    if (!filterOptions.searchQuery) return true;
+
+    // Tìm theo tên công thức
+    const matchesName = containsSearchQuery(
+      recipe.name,
+      filterOptions.searchQuery
+    );
+
+    // Tìm theo tên nguyên liệu
+    const matchesIngredients = recipe.ingredients.some((ingredient) =>
+      containsSearchQuery(ingredient.name, filterOptions.searchQuery)
+    );
+
+    return matchesName || matchesIngredients;
+  };
+
   const filteredRecipes = useMemo(() => {
     return savedRecipes.map((recipe) => {
-      // Kiểm tra search query
-      const matchesSearch =
-        !filterOptions.searchQuery ||
-        recipe.name
-          .toLowerCase()
-          .includes(filterOptions.searchQuery.toLowerCase());
+      // Thay thế phần kiểm tra search cũ bằng hàm mới
+      const matchesSearchResult = matchesSearch(recipe);
 
       // Kiểm tra từng điều kiện filter
       const matchesRegion =
@@ -124,7 +137,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
       // Kết hợp tất cả điều kiện
       const isVisible = Boolean(
-        matchesSearch &&
+        matchesSearchResult &&
           matchesRegion &&
           matchesCategory &&
           matchesDifficulty &&
