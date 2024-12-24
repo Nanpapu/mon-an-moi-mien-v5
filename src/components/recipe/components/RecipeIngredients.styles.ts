@@ -46,7 +46,7 @@ export const createStyles = (theme: Theme) =>
     ingredientItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingVertical: 8,
+      paddingVertical: 10,
       paddingHorizontal: 12,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
@@ -68,7 +68,7 @@ export const createStyles = (theme: Theme) =>
     ingredientContent: {
       flex: 1,
       marginLeft: 12,
-      marginRight: 8,
+      marginRight: 12,
     },
     ingredientName: {
       fontSize: 15,

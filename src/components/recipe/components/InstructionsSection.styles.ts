@@ -67,7 +67,7 @@ export const createStyles = (theme: Theme) =>
     instructionContent: {
       flex: 1,
       marginLeft: 12,
-      marginRight: 8,
+      marginRight: 12,
     },
     instructionText: {
       flex: 1,
@@ -167,8 +167,8 @@ export const createStyles = (theme: Theme) =>
       lineHeight: 20,
     },
     checkboxContainer: {
-      paddingTop: 2,
-      minWidth: 32,
+      paddingVertical: 4,
+      minWidth: 38,
       alignItems: 'center',
     },
   });

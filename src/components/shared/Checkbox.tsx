@@ -13,6 +13,10 @@ interface Props {
 export const Checkbox = ({ checked, onToggle, size = 24, color }: Props) => {
   const { theme } = useTheme();
   const styles = StyleSheet.create({
+    touchable: {
+      padding: 8,
+      margin: -8,
+    },
     container: {
       width: size,
       height: size,
@@ -28,7 +32,11 @@ export const Checkbox = ({ checked, onToggle, size = 24, color }: Props) => {
   });
 
   return (
-    <TouchableOpacity onPress={onToggle}>
+    <TouchableOpacity
+      onPress={onToggle}
+      style={styles.touchable}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+    >
       <View style={styles.container}>
         {checked && (
           <Ionicons
