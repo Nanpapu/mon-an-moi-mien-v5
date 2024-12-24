@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -23,6 +24,19 @@ interface Props {
   onApply: (options: FilterOptions) => void;
   regions: string[];
 }
+
+const defaultFilterOptions: FilterOptions = {
+  searchQuery: '',
+  region: null,
+  showFavorites: false,
+  category: null,
+  difficulty: null,
+  cookingTime: { min: null, max: null },
+  servings: { min: null, max: null },
+  mainIngredientTypes: [],
+  showFavoriteFirst: true, // Giữ nguyên setting này
+  sort: null,
+};
 
 export const FilterModal = ({
   visible,
@@ -54,6 +68,29 @@ export const FilterModal = ({
     onClose();
   };
 
+  const handleReset = () => {
+    Alert.alert(
+      'Đặt lại bộ lọc',
+      'Bạn có chắc muốn đặt lại tất cả bộ lọc và sắp xếp về mặc định?',
+      [
+        {
+          text: 'Hủy',
+          style: 'cancel',
+        },
+        {
+          text: 'Đặt lại',
+          style: 'destructive',
+          onPress: () => {
+            setTempFilterOptions({
+              ...defaultFilterOptions,
+              showFavoriteFirst: true, // Giữ nguyên setting này
+            });
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <Modal
       visible={visible}
@@ -74,21 +111,7 @@ export const FilterModal = ({
             <Typography variant="h2" style={styles.title}>
               Bộ lọc nâng cao
             </Typography>
-            <TouchableOpacity
-              style={styles.resetButton}
-              onPress={() => {
-                setTempFilterOptions({
-                  ...tempFilterOptions,
-                  region: null,
-                  category: null,
-                  difficulty: null,
-                  cookingTime: { min: null, max: null },
-                  servings: { min: null, max: null },
-                  mainIngredientTypes: [],
-                  showFavorites: false,
-                });
-              }}
-            >
+            <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <MaterialCommunityIcons
                 name="refresh"
                 size={24}
@@ -118,24 +141,31 @@ export const FilterModal = ({
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          <SortOptions
-            currentSort={tempFilterOptions.sort}
-            showFavoriteFirst={tempFilterOptions.showFavoriteFirst}
-            onSortChange={(sort) =>
-              setTempFilterOptions({ ...tempFilterOptions, sort })
-            }
-            onFavoriteFirstChange={(value) =>
-              setTempFilterOptions({
-                ...tempFilterOptions,
-                showFavoriteFirst: value,
-              })
-            }
-          />
-          <AdvancedFilters
-            filterOptions={tempFilterOptions}
-            onFilterChange={setTempFilterOptions}
-            regions={regions}
-          />
+          <View style={styles.section}>
+            <SortOptions
+              currentSort={tempFilterOptions.sort}
+              showFavoriteFirst={tempFilterOptions.showFavoriteFirst}
+              onSortChange={(sort) =>
+                setTempFilterOptions({ ...tempFilterOptions, sort })
+              }
+              onFavoriteFirstChange={(value) =>
+                setTempFilterOptions({
+                  ...tempFilterOptions,
+                  showFavoriteFirst: value,
+                })
+              }
+            />
+          </View>
+
+          <View style={styles.sectionDivider} />
+
+          <View style={styles.section}>
+            <AdvancedFilters
+              filterOptions={tempFilterOptions}
+              onFilterChange={setTempFilterOptions}
+              regions={regions}
+            />
+          </View>
         </ScrollView>
 
         <View style={styles.footer}>
@@ -227,5 +257,13 @@ const createStyles = (theme: any) =>
     },
     resetButton: {
       padding: theme.spacing.xs,
+    },
+    section: {
+      marginBottom: theme.spacing.lg,
+    },
+    sectionDivider: {
+      height: 8,
+      backgroundColor: theme.colors.background.default,
+      marginVertical: theme.spacing.md,
     },
   });

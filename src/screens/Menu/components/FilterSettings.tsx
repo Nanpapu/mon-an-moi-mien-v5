@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export interface QuickFilterSettings {
   showRegions: boolean;
@@ -69,9 +69,16 @@ export const FilterSettings = ({ settings, onSettingsChange }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Typography variant="subtitle1" style={styles.title}>
-        Bộ lọc nhanh
-      </Typography>
+      <View style={styles.header}>
+        <MaterialCommunityIcons
+          name="filter-variant"
+          size={24}
+          color={theme.colors.text.primary}
+        />
+        <Typography variant="subtitle1" style={styles.title}>
+          Bộ lọc nhanh
+        </Typography>
+      </View>
       <View style={styles.settingsGrid}>
         {renderSettingItem('showRegions', 'Vùng miền', 'map')}
         {renderSettingItem('showCategories', 'Loại món', 'restaurant')}
@@ -119,5 +126,10 @@ const createStyles = (theme: any) =>
       marginLeft: 'auto',
       color: theme.colors.text.secondary,
       fontStyle: 'italic',
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: theme.spacing.md,
     },
   });

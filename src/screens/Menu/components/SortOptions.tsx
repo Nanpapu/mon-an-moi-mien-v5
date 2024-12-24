@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -21,6 +21,23 @@ export const SortOptions = ({
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const animatePress = () => {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
 
   const handleSortPress = (field: SortField) => {
     console.log('Bấm sort với field:', field);
@@ -54,7 +71,7 @@ export const SortOptions = ({
           color={theme.colors.text.primary}
         />
         <Typography variant="subtitle1" style={styles.title}>
-          Sắp xếp theo
+          Sắp xếp và ưu tiên
         </Typography>
       </View>
 
@@ -63,7 +80,10 @@ export const SortOptions = ({
           styles.favoriteButton,
           showFavoriteFirst && styles.activeFavoriteButton,
         ]}
-        onPress={() => onFavoriteFirstChange(!showFavoriteFirst)}
+        onPress={() => {
+          onFavoriteFirstChange(!showFavoriteFirst);
+          animatePress();
+        }}
       >
         <Ionicons
           name={showFavoriteFirst ? 'heart' : 'heart-outline'}
@@ -84,6 +104,9 @@ export const SortOptions = ({
           Ưu tiên món yêu thích
         </Typography>
       </TouchableOpacity>
+      <Typography variant="caption" style={styles.description}>
+        Các món yêu thích sẽ luôn được hiển thị đầu tiên
+      </Typography>
 
       <View style={styles.divider} />
 
@@ -95,7 +118,10 @@ export const SortOptions = ({
               styles.sortButton,
               currentSort?.field === option.field && styles.activeSortButton,
             ]}
-            onPress={() => handleSortPress(option.field)}
+            onPress={() => {
+              handleSortPress(option.field);
+              animatePress();
+            }}
           >
             <Typography
               variant="body2"
@@ -186,5 +212,9 @@ const createStyles = (theme: any) =>
       height: 1,
       backgroundColor: theme.colors.divider,
       marginVertical: theme.spacing.md,
+    },
+    description: {
+      color: theme.colors.text.secondary,
+      marginBottom: theme.spacing.md,
     },
   });
