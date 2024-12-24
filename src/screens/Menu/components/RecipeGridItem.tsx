@@ -98,18 +98,6 @@ export const RecipeGridItem = memo(
       loadImage();
     }, [recipe.image]);
 
-    const renderStars = () => {
-      return [...Array(5)].map((_, index) => (
-        <Ionicons
-          key={index}
-          name={index < stats.averageRating ? 'star' : 'star-outline'}
-          size={12}
-          color={theme.colors.warning.main}
-          style={{ marginRight: 2 }}
-        />
-      ));
-    };
-
     const handlePress = () => {
       if (isSelectionMode) {
         onToggleSelect?.();
@@ -236,19 +224,46 @@ export const RecipeGridItem = memo(
                   {stats.totalReviews > 0 ? (
                     <View style={styles.ratingContainer}>
                       <View style={styles.starsContainer}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Ionicons
-                            key={star}
-                            name={
-                              star <= stats.averageRating
-                                ? 'star'
-                                : 'star-outline'
-                            }
-                            size={12}
-                            color={theme.colors.warning.main}
-                            style={{ marginRight: 2 }}
-                          />
-                        ))}
+                        {(() => {
+                          const fullStars = Math.floor(stats.averageRating);
+                          const hasHalfStar = stats.averageRating % 1 >= 0.5;
+                          const emptyStars =
+                            5 - fullStars - (hasHalfStar ? 1 : 0);
+
+                          return (
+                            <>
+                              {[...Array(fullStars)].map((_, index) => (
+                                <Ionicons
+                                  key={`full-${index}`}
+                                  name="star"
+                                  size={12}
+                                  color={theme.colors.warning.main}
+                                  style={{ marginRight: 2 }}
+                                />
+                              ))}
+
+                              {hasHalfStar && (
+                                <Ionicons
+                                  key="half"
+                                  name="star-half"
+                                  size={12}
+                                  color={theme.colors.warning.main}
+                                  style={{ marginRight: 2 }}
+                                />
+                              )}
+
+                              {[...Array(emptyStars)].map((_, index) => (
+                                <Ionicons
+                                  key={`empty-${index}`}
+                                  name="star-outline"
+                                  size={12}
+                                  color={theme.colors.warning.main}
+                                  style={{ marginRight: 2 }}
+                                />
+                              ))}
+                            </>
+                          );
+                        })()}
                         <Typography
                           variant="caption"
                           style={styles.reviewCount}
