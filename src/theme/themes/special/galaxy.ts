@@ -6,59 +6,59 @@ export const galaxyTheme: ThemeType = {
   icon: 'planet-outline',
   colors: {
     primary: {
-      main: '#9B4DCA', // Tím galaxy
-      light: '#B07DDB',
-      dark: '#7B3DA3',
+      main: '#663399', // Purple
+      light: '#8B63B5',
+      dark: '#52297A',
       contrast: '#FFFFFF',
     },
     secondary: {
-      main: '#4D79CA', // Xanh dương galaxy
-      light: '#7D9DDB',
-      dark: '#3D60A3',
-      contrast: '#FFFFFF',
+      main: '#00FFFF', // Cyan
+      light: '#4DFFFF',
+      dark: '#00CCCC',
+      contrast: '#000000',
     },
     error: {
-      main: '#FF6B6B',
-      light: '#FF9B9B',
-      dark: '#CC5555',
+      main: '#FF1493', // Deep Pink
+      light: '#FF4DA9',
+      dark: '#CC1076',
       contrast: '#FFFFFF',
     },
     warning: {
-      main: '#FFD93D',
-      light: '#FFE47D',
-      dark: '#CCAE31',
+      main: '#FFD700',
+      light: '#FFE44D',
+      dark: '#CCAC00',
       contrast: '#000000',
     },
     success: {
-      main: '#6BCB77',
-      light: '#9BDB9F',
-      dark: '#55A25E',
-      contrast: '#FFFFFF',
+      main: '#7CFC00',
+      light: '#9FFD4D',
+      dark: '#63CA00',
+      contrast: '#000000',
     },
     background: {
-      default: '#0B0B1F', // Xanh đen đậm
-      paper: '#151531',
-      contrast: '#FFFFFF',
+      default: '#0C0C2C', // Deep Blue
+      paper: '#1A1A3A',
+      contrast: '#663399',
     },
     text: {
       primary: '#FFFFFF',
-      secondary: '#B4B4DB',
+      secondary: '#B8B8D1',
       disabled: '#6E6E8F',
-      contrast: '#0B0B1F',
+      contrast: '#000000',
     },
-    divider: '#1F1F3D',
-    border: '#2D2D52',
-    shadow: '#9B4DCA50',
+    divider: '#2D2D4D',
+    border: '#3D3D5D',
+    shadow: '#66339950',
     action: {
       disabled: '#6E6E8F',
-      hover: 'rgba(155, 77, 202, 0.1)',
-      active: 'rgba(155, 77, 202, 0.2)',
+      hover: 'rgba(102, 51, 153, 0.1)',
+      active: 'rgba(102, 51, 153, 0.2)',
     },
     info: {
-      main: '#4D79CA',
-      light: '#7D9DDB',
-      dark: '#3D60A3',
-      contrast: '#FFFFFF',
+      main: '#87CEEB',
+      light: '#A7DEF5',
+      dark: '#6CA5BC',
+      contrast: '#000000',
     },
   },
 };

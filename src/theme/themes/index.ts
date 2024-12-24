@@ -49,6 +49,12 @@ import { galaxyTheme } from './special/galaxy';
 import { sunsetTheme } from './special/sunset';
 import { oceanTheme } from './special/ocean';
 import { forestTheme } from './special/forest';
+import { springTheme } from './special/spring';
+import { summerTheme } from './special/summer';
+import { autumnTheme } from './special/autumn';
+import { winterTheme } from './special/winter';
+import { christmasTheme } from './special/christmas';
+import { sakuraTheme } from './special/sakura';
 
 // Export danh sách theme
 export const themes = [
@@ -79,6 +85,12 @@ export const themes = [
   sunsetTheme,
   oceanTheme,
   forestTheme,
+  springTheme,
+  summerTheme,
+  autumnTheme,
+  winterTheme,
+  christmasTheme,
+  sakuraTheme,
 ];
 
 // Export các theme đặc biệt
