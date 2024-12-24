@@ -25,6 +25,7 @@ import { SearchHistoryService } from '../../services/searchHistoryService';
 import { useAuth } from '../../context/AuthContext';
 import { FilterModal } from './components/FilterModal';
 import { FilterOptions } from './types';
+import { RecipeGridListSkeleton } from '../../components/recipe/components/RecipeGridListSkeleton';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -257,6 +258,13 @@ export default function MenuScreen() {
             />
           </TouchableOpacity>
         </View>
+      )}
+
+      {isLoading && (
+        <RecipeGridListSkeleton
+          config={currentConfig}
+          calculateItemWidth={calculateItemWidth}
+        />
       )}
 
       {isLoading ? (

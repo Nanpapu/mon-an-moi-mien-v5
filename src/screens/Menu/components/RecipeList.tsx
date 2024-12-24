@@ -16,6 +16,7 @@ import { useRecipes } from '../../../context/RecipeContext';
 import { RecipeCard } from '../../../components/recipe/RecipeCard';
 import { Ionicons } from '@expo/vector-icons';
 import { Typography } from '../../../components/shared/Typography';
+import { RecipeGridListSkeleton } from '../../../components/recipe/components/RecipeGridListSkeleton';
 
 interface Props {
   isLoading: boolean;
@@ -75,40 +76,47 @@ export const RecipeList = ({
 
   return (
     <>
-      <ScrollView
-        style={styles.recipeList}
-        contentContainerStyle={styles.gridContainer}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.grid}>
-          {savedRecipes.map((recipe) => {
-            // Tìm trạng thái visible của recipe
-            const filterResult = filteredRecipes.find(
-              (fr) => fr.recipe.id === recipe.id
-            );
-            const isVisible = filterResult?.visible ?? true;
+      {isLoading ? (
+        <RecipeGridListSkeleton
+          config={currentConfig}
+          calculateItemWidth={calculateItemWidth}
+        />
+      ) : (
+        <ScrollView
+          style={styles.recipeList}
+          contentContainerStyle={styles.gridContainer}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }
+        >
+          <View style={styles.grid}>
+            {savedRecipes.map((recipe) => {
+              // Tìm trạng thái visible của recipe
+              const filterResult = filteredRecipes.find(
+                (fr) => fr.recipe.id === recipe.id
+              );
+              const isVisible = filterResult?.visible ?? true;
 
-            if (!isVisible) return null;
+              if (!isVisible) return null;
 
-            return (
-              <RecipeGridItem
-                key={recipe.id}
-                recipe={recipe}
-                onPress={() => handleRecipePress(recipe)}
-                width={calculateItemWidth()}
-                config={currentConfig}
-                onFavoriteChange={onFavoriteChange}
-                isSelectionMode={isSelectionMode}
-                isSelected={selectedRecipes.has(recipe.id)}
-                onLongPress={() => onLongPress?.(recipe.id)}
-                onToggleSelect={() => onToggleSelect?.(recipe.id)}
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
+              return (
+                <RecipeGridItem
+                  key={recipe.id}
+                  recipe={recipe}
+                  onPress={() => handleRecipePress(recipe)}
+                  width={calculateItemWidth()}
+                  config={currentConfig}
+                  onFavoriteChange={onFavoriteChange}
+                  isSelectionMode={isSelectionMode}
+                  isSelected={selectedRecipes.has(recipe.id)}
+                  onLongPress={() => onLongPress?.(recipe.id)}
+                  onToggleSelect={() => onToggleSelect?.(recipe.id)}
+                />
+              );
+            })}
+          </View>
+        </ScrollView>
+      )}
 
       {!isSelectionMode && selectedRecipe && (
         <Modal
