@@ -52,15 +52,51 @@ export const ReviewsList = ({
 
   // Hàm render sao đánh giá
   const renderStars = (rating: number) => {
-    return [...Array(5)].map((_, index) => (
-      <Ionicons
-        key={index}
-        name={index < rating ? 'star' : 'star-outline'}
-        size={16}
-        color={theme.colors.warning.main}
-        style={{ marginRight: theme.spacing.xs }}
-      />
-    ));
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    // Render full stars
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <Ionicons
+          key={`full_${i}`}
+          name="star"
+          size={16}
+          color={theme.colors.warning.main}
+          style={{ marginRight: theme.spacing.xs }}
+        />
+      );
+    }
+
+    // Render half star if needed
+    if (hasHalfStar) {
+      stars.push(
+        <Ionicons
+          key="half"
+          name="star-half"
+          size={16}
+          color={theme.colors.warning.main}
+          style={{ marginRight: theme.spacing.xs }}
+        />
+      );
+    }
+
+    // Render empty stars
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(
+        <Ionicons
+          key={`empty_${i}`}
+          name="star-outline"
+          size={16}
+          color={theme.colors.warning.main}
+          style={{ marginRight: theme.spacing.xs }}
+        />
+      );
+    }
+
+    return stars;
   };
 
   // Thêm hàm xử lý like
@@ -87,7 +123,7 @@ export const ReviewsList = ({
     if (currentVote === 'up') {
       newScore = currentScore - 1;
     } else {
-      // Nếu ch��a like -> like
+      // Nếu chưa like -> like
       newScore = currentScore + 1;
     }
 

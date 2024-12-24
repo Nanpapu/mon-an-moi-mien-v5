@@ -23,6 +23,41 @@ interface Props {
   recipe: Recipe;
 }
 
+const renderStars = (rating: number, size: number = 16, color: string) => {
+  const stars = [];
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+
+  // Render full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(
+      <Ionicons key={`full_${i}`} name="star" size={size} color={color} />
+    );
+  }
+
+  // Render half star if needed
+  if (hasHalfStar) {
+    stars.push(
+      <Ionicons key="half" name="star-half" size={size} color={color} />
+    );
+  }
+
+  // Render empty stars
+  const emptyStars = 5 - Math.ceil(rating);
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(
+      <Ionicons
+        key={`empty_${i}`}
+        name="star-outline"
+        size={size}
+        color={color}
+      />
+    );
+  }
+
+  return stars;
+};
+
 export const RecipeReviews = ({ recipe }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -116,16 +151,7 @@ export const RecipeReviews = ({ recipe }: Props) => {
                 </View>
 
                 <View style={styles.starsRow}>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Ionicons
-                      key={star}
-                      name={
-                        star <= stats.averageRating ? 'star' : 'star-outline'
-                      }
-                      size={16}
-                      color="#FFD700"
-                    />
-                  ))}
+                  {renderStars(stats.averageRating, 16, '#FFD700')}
                 </View>
                 <View>
                   <Typography
