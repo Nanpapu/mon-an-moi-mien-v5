@@ -17,13 +17,33 @@ export const RecipeGridListSkeleton = ({
   const itemWidth = calculateItemWidth();
   const styles = createStyles(theme, config.spacing);
 
-  // Tạo mảng 6 phần tử để render skeleton
-  const skeletonItems = Array(6).fill(null);
+  // Tính số lượng skeleton items dựa trên zoom level
+  const getSkeletonCount = () => {
+    switch (config.columns) {
+      case 2: // LEVEL_1
+        return 6; // 2x3 grid
+      case 3: // LEVEL_2
+        return 9; // 3x3 grid
+      case 4: // LEVEL_3
+        return 12; // 4x3 grid
+      default:
+        return 6;
+    }
+  };
+
+  const skeletonItems = Array(getSkeletonCount()).fill(null);
 
   return (
     <View style={styles.container}>
       {skeletonItems.map((_, index) => (
-        <RecipeGridItemSkeleton key={index} width={itemWidth} />
+        <RecipeGridItemSkeleton
+          key={index}
+          width={itemWidth}
+          showTitle={config.showTitle}
+          showRating={config.showRating}
+          minTitleHeight={config.minTitleHeight}
+          minRatingHeight={config.minRatingHeight}
+        />
       ))}
     </View>
   );

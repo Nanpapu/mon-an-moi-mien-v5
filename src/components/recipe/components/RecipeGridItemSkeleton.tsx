@@ -5,11 +5,19 @@ import { useTheme } from '../../../theme/ThemeContext';
 interface Props {
   width: number;
   height?: number;
+  showTitle?: boolean;
+  showRating?: boolean;
+  minTitleHeight?: number;
+  minRatingHeight?: number;
 }
 
 export const RecipeGridItemSkeleton = ({
   width,
   height = width * 1.2,
+  showTitle = true,
+  showRating = true,
+  minTitleHeight = 40,
+  minRatingHeight = 25,
 }: Props) => {
   const { theme } = useTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -39,16 +47,20 @@ export const RecipeGridItemSkeleton = ({
   const styles = createStyles(theme, width, height);
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.image, { opacity }]} />
-      <View style={styles.content}>
-        <Animated.View style={[styles.title, { opacity }]} />
-        <Animated.View style={[styles.region, { opacity }]} />
-        <View style={styles.metaRow}>
-          <Animated.View style={[styles.rating, { opacity }]} />
-          <Animated.View style={[styles.time, { opacity }]} />
+    <View style={[styles.container, { width }]}>
+      <Animated.View style={[styles.image, { opacity, height: width }]} />
+
+      {showTitle && (
+        <View style={[styles.content, { minHeight: minTitleHeight }]}>
+          <Animated.View style={[styles.title, { opacity }]} />
         </View>
-      </View>
+      )}
+
+      {showRating && (
+        <View style={[styles.ratingContainer, { minHeight: minRatingHeight }]}>
+          <Animated.View style={[styles.rating, { opacity }]} />
+        </View>
+      )}
     </View>
   );
 };
@@ -100,5 +112,9 @@ const createStyles = (theme: any, width: number, height: number) =>
       width: '25%',
       backgroundColor: theme.isDark ? '#2A2A2A' : '#E1E9EE',
       borderRadius: theme.spacing.xs,
+    },
+    ratingContainer: {
+      padding: theme.spacing.sm,
+      minHeight: 25,
     },
   });
