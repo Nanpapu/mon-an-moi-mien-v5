@@ -45,9 +45,12 @@ export const createStyles = (theme: Theme) =>
     },
     ingredientItem: {
       flexDirection: 'row',
-      padding: theme.spacing.sm,
+      alignItems: 'center',
+      paddingVertical: 8,
+      paddingHorizontal: 12,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
+      gap: 8,
     },
     ingredientNumber: {
       width: 24,

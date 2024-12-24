@@ -5,6 +5,7 @@ import { Ingredient, IngredientType } from '../../../types';
 import { createStyles } from './RecipeIngredients.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
+import { Checkbox } from '../../shared/Checkbox';
 
 interface Props {
   ingredients: Ingredient[];
@@ -76,6 +77,9 @@ export const RecipeIngredients = ({
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [checkedIngredients, setCheckedIngredients] = useState<Set<string>>(
+    new Set()
+  );
 
   // Thêm helper function
   const getThemeColor = (path: string): string => {
@@ -145,6 +149,18 @@ export const RecipeIngredients = ({
     });
   };
 
+  const toggleIngredient = (ingredientKey: string) => {
+    setCheckedIngredients((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(ingredientKey)) {
+        newSet.delete(ingredientKey);
+      } else {
+        newSet.add(ingredientKey);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <View style={styles.ingredientsContainer}>
       <View style={styles.header}>
@@ -200,6 +216,18 @@ export const RecipeIngredients = ({
                       index === items.length - 1 && { borderBottomWidth: 0 },
                     ]}
                   >
+                    <Checkbox
+                      checked={checkedIngredients.has(
+                        `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
+                      )}
+                      onToggle={() =>
+                        toggleIngredient(
+                          `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
+                        )
+                      }
+                      size={20}
+                      color={getThemeColor(config.color)}
+                    />
                     <View
                       style={[
                         styles.ingredientNumber,

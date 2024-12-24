@@ -43,9 +43,12 @@ export const createStyles = (theme: Theme) =>
     },
     instructionItem: {
       flexDirection: 'row',
-      padding: theme.spacing.sm,
+      alignItems: 'flex-start',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
+      gap: 8,
     },
     instructionNumber: {
       width: 24,

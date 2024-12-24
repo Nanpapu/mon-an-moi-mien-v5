@@ -5,6 +5,7 @@ import { Instructions, Step } from '../../../types';
 import { createStyles } from './InstructionsSection.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
+import { Checkbox } from '../../shared/Checkbox';
 
 interface Props {
   instructions: Instructions;
@@ -20,6 +21,7 @@ export const InstructionsSection = ({
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set()
   );
+  const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -40,6 +42,18 @@ export const InstructionsSection = ({
         newSet.delete(key);
       } else {
         newSet.add(key);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleStep = (stepKey: string) => {
+    setCheckedSteps((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(stepKey)) {
+        newSet.delete(stepKey);
+      } else {
+        newSet.add(stepKey);
       }
       return newSet;
     });
@@ -265,6 +279,12 @@ export const InstructionsSection = ({
                       index === steps.length - 1 && { borderBottomWidth: 0 },
                     ]}
                   >
+                    <Checkbox
+                      checked={checkedSteps.has(`${key}_${index}`)}
+                      onToggle={() => toggleStep(`${key}_${index}`)}
+                      size={20}
+                      color={color}
+                    />
                     <View
                       style={[
                         styles.instructionNumber,
