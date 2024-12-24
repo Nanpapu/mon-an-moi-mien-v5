@@ -119,6 +119,7 @@ export const DisplaySettings = () => {
           styles.header,
           {
             backgroundColor: theme.colors.background.paper,
+            borderBottomWidth: 1,
             borderBottomColor: theme.colors.divider,
           },
         ]}

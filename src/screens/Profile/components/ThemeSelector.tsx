@@ -19,7 +19,12 @@ const isCurrentTheme = (themeId: string, currentThemeId: string) => {
 };
 
 // Helper function để kiểm tra theme có phải là theme mặc định không
-const isDefaultTheme = (themeId: string, defaultLightId: string, defaultDarkId: string, defaultSpecialId: string) => {
+const isDefaultTheme = (
+  themeId: string,
+  defaultLightId: string,
+  defaultDarkId: string,
+  defaultSpecialId: string
+) => {
   if (themeId.includes('-special')) {
     return themeId === defaultSpecialId;
   }
@@ -40,10 +45,7 @@ const getThemeButtonStyle = (theme: any, currentThemeId: string) => {
 // Component hiển thị chấm theme mặc định
 const DefaultThemeDot = ({ theme }: { theme: any }) => (
   <View
-    style={[
-      styles.defaultDot,
-      { backgroundColor: theme.colors.primary.main },
-    ]}
+    style={[styles.defaultDot, { backgroundColor: theme.colors.primary.main }]}
   />
 );
 
@@ -96,10 +98,7 @@ export const ThemeSelector = () => {
   const renderThemeButton = (theme: any) => (
     <TouchableOpacity
       key={theme.id}
-      style={[
-        styles.themeButton,
-        getThemeButtonStyle(theme, currentTheme.id),
-      ]}
+      style={[styles.themeButton, getThemeButtonStyle(theme, currentTheme.id)]}
       onPress={() => handleThemePress(theme)}
     >
       <View
@@ -114,19 +113,19 @@ export const ThemeSelector = () => {
       >
         {theme.name}
       </Typography>
-      {isDefaultTheme(theme.id, defaultLightTheme, defaultDarkTheme, defaultSpecialTheme) && (
-        <DefaultThemeDot theme={theme} />
-      )}
+      {isDefaultTheme(
+        theme.id,
+        defaultLightTheme,
+        defaultDarkTheme,
+        defaultSpecialTheme
+      ) && <DefaultThemeDot theme={theme} />}
     </TouchableOpacity>
   );
 
   const handleThemePress = (theme: any) => {
     setTheme(theme.id);
     setDefaultTheme(theme.id);
-    showToast(
-      'success',
-      `Đã chuyển sang ${theme.name}`
-    );
+    showToast('success', `Đã chuyển sang ${theme.name}`);
   };
 
   return (
@@ -136,6 +135,8 @@ export const ThemeSelector = () => {
           styles.header,
           {
             backgroundColor: currentTheme.colors.background.paper,
+            borderBottomWidth: 1,
+            borderBottomColor: currentTheme.colors.divider,
           },
         ]}
         onPress={toggleExpand}
