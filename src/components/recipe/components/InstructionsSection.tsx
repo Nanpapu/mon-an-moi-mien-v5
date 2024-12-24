@@ -6,6 +6,7 @@ import { createStyles } from './InstructionsSection.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
+import { ProgressCategories } from '../../shared/ProgressCategories';
 import { ProgressBar } from '../../shared/ProgressBar';
 
 interface Props {
@@ -270,13 +271,42 @@ export const InstructionsSection = ({
       </View>
 
       {showCheckbox && (
-        <ProgressBar
-          progress={completionProgress}
-          color={theme.colors.primary.main}
-          height={4}
-          completed={checkedSteps.size}
-          total={getTotalSteps()}
-        />
+        <>
+          <ProgressBar
+            progress={completionProgress}
+            color={theme.colors.primary.main}
+            height={4}
+            completed={checkedSteps.size}
+            total={getTotalSteps()}
+          />
+
+          <View style={{ marginTop: 8 }}>
+            <ProgressCategories
+              categories={sections
+                .filter(
+                  (section) =>
+                    (instructions[section.key as keyof Instructions] ?? [])
+                      .length > 0
+                )
+                .map((section) => {
+                  const steps =
+                    instructions[section.key as keyof Instructions] ?? [];
+                  return {
+                    key: section.key,
+                    title: section.title,
+                    icon: section.icon,
+                    color: section.color,
+                    total: steps.length,
+                    completed: steps.filter((_, index) =>
+                      checkedSteps.has(`${section.key}_${index}`)
+                    ).length,
+                    isExpanded: expandedSections.has(section.key),
+                    onPress: () => toggleSection(section.key),
+                  };
+                })}
+            />
+          </View>
+        </>
       )}
 
       {sections.map(({ key, title, icon, color }) => {

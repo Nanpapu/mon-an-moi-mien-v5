@@ -6,6 +6,7 @@ import { createStyles } from './RecipeIngredients.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
+import { ProgressCategories } from '../../shared/ProgressCategories';
 import { ProgressBar } from '../../shared/ProgressBar';
 
 interface Props {
@@ -65,7 +66,7 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
     types: ['spice/fresh', 'spice/dried', 'spice/sauce', 'spice/powder'],
   },
   {
-    title: 'Nguyên liệu khác',
+    title: 'Nguyên liệu kh��c',
     icon: 'apps-outline',
     color: 'text.secondary',
     types: ['other/egg', 'other/tofu', 'other/dried', 'other'],
@@ -183,14 +184,38 @@ export const RecipeIngredients = ({
         />
         <Typography variant="h3">Nguyên liệu ({ingredients.length})</Typography>
       </View>
+
       {showCheckbox && (
-        <ProgressBar
-          progress={completionProgress}
-          color={theme.colors.success.main}
-          height={4}
-          completed={checkedIngredients.size}
-          total={ingredients.length}
-        />
+        <>
+          <ProgressBar
+            progress={completionProgress}
+            color={theme.colors.success.main}
+            height={4}
+            completed={checkedIngredients.size}
+            total={ingredients.length}
+          />
+
+          <View style={{ marginTop: 8 }}>
+            <ProgressCategories
+              categories={Object.entries(groupedIngredients).map(
+                ([title, { items, config }]) => ({
+                  key: title,
+                  title,
+                  icon: config.icon,
+                  color: getThemeColor(config.color),
+                  total: items.length,
+                  completed: items.filter((item) =>
+                    checkedIngredients.has(
+                      `${item.name}_${item.amount}_${item.unit}`
+                    )
+                  ).length,
+                  isExpanded: expandedGroups.has(title),
+                  onPress: () => toggleGroup(title),
+                })
+              )}
+            />
+          </View>
+        </>
       )}
 
       {/* Danh sách nguyên liệu theo nhóm */}
