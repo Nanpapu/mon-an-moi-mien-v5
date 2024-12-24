@@ -162,9 +162,10 @@ export default function MenuScreen() {
     setShowFilterModal(false);
   };
 
-  const handleApplyFilter = (newFilterOptions: FilterOptions) => {
-    setFilterOptions(newFilterOptions);
-    setShowFilterModal(false);
+  const handleApplyFilter = (newOptions: FilterOptions) => {
+    console.log('Áp dụng filter mới:', newOptions);
+    setFilterOptions(newOptions);
+    setTempFilterOptions(newOptions);
   };
 
   return (

@@ -15,12 +15,16 @@ export const SortOptions = ({ currentSort, onSortChange }: Props) => {
   const styles = createStyles(theme);
 
   const handleSortPress = (field: SortField) => {
+    console.log('Bấm sort với field:', field);
     if (!currentSort || currentSort.field !== field) {
+      console.log('Set sort mới:', { field, order: 'asc' });
       onSortChange({ field, order: 'asc' });
     } else {
       if (currentSort.order === 'asc') {
+        console.log('Đổi sang desc:', { field, order: 'desc' });
         onSortChange({ field, order: 'desc' });
       } else {
+        console.log('Hủy sort');
         onSortChange(null);
       }
     }

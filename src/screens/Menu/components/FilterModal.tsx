@@ -49,17 +49,22 @@ export const FilterModal = ({
     tempFilterOptions.showFavorites,
   ].filter(Boolean).length;
 
+  const handleClose = () => {
+    onApply(tempFilterOptions);
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons
                 name="close"
                 size={24}
@@ -130,6 +135,7 @@ export const FilterModal = ({
           <TouchableOpacity
             style={styles.applyButton}
             onPress={() => {
+              console.log('Áp dụng filter với options:', tempFilterOptions);
               onApply(tempFilterOptions);
               onClose();
             }}
