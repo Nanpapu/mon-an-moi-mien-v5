@@ -66,7 +66,7 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
     types: ['spice/fresh', 'spice/dried', 'spice/sauce', 'spice/powder'],
   },
   {
-    title: 'Nguyên liệu kh��c',
+    title: 'Nguyên liệu khác',
     icon: 'apps-outline',
     color: 'text.secondary',
     types: ['other/egg', 'other/tofu', 'other/dried', 'other'],
