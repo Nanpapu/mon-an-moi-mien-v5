@@ -50,23 +50,19 @@ export const createStyles = (theme: Theme) =>
     dateText: {
       marginLeft: theme.spacing.md,
     },
-    votingContainer: {
+    likeContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: theme.spacing.sm,
       gap: theme.spacing.xs,
     },
-    voteButton: {
+    likeButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: theme.spacing.sm,
+      padding: theme.spacing.xs,
     },
-    voteCount: {
-      minWidth: 32,
-      textAlign: 'center',
-      backgroundColor: theme.colors.primary.main,
-      borderRadius: 20,
-      paddingHorizontal: theme.spacing.xs,
-      paddingVertical: theme.spacing.xs,
+    likeCount: {
+      marginLeft: theme.spacing.xs,
+      color: theme.colors.text.secondary,
     },
   });

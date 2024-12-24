@@ -79,6 +79,7 @@ export const RecipeReviews = ({ recipe }: Props) => {
     try {
       const reviewsList = await ReviewService.getRecipeReviews(recipe.id);
       setAllReviews(reviewsList);
+      setShowReviewsList(true);
     } catch (error) {
       console.error('Lỗi khi tải đánh giá:', error);
     }
@@ -110,10 +111,10 @@ export const RecipeReviews = ({ recipe }: Props) => {
               <>
                 <View>
                   <Typography variant="h2" style={styles.averageRating}>
-                  {stats.averageRating.toFixed(1)}
-                </Typography>
+                    {stats.averageRating.toFixed(1)}
+                  </Typography>
                 </View>
-                
+
                 <View style={styles.starsRow}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Ionicons
@@ -127,7 +128,11 @@ export const RecipeReviews = ({ recipe }: Props) => {
                   ))}
                 </View>
                 <View>
-                  <Typography variant="caption" color="secondary" numberOfLines={1}>
+                  <Typography
+                    variant="caption"
+                    color="secondary"
+                    numberOfLines={1}
+                  >
                     {stats.totalReviews} đánh giá
                   </Typography>
                 </View>
@@ -172,13 +177,7 @@ export const RecipeReviews = ({ recipe }: Props) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          style={styles.viewAllButton}
-          onPress={() => {
-            loadReviews();
-            setShowReviewsList(true);
-          }}
-        >
+        <TouchableOpacity style={styles.viewAllButton} onPress={loadReviews}>
           <Typography variant="body1" style={styles.viewAllText}>
             Xem tất cả {stats.totalReviews} đánh giá
           </Typography>

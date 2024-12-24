@@ -38,26 +38,15 @@ export const ReviewsList = ({
   // State để lưu trạng thái vote cho mỗi review
   const [votes, setVotes] = useState<Record<string, VoteState>>({});
 
-  // Load trạng thái vote ban đầu
+  // Load trạng thái vote ban đầu và cập nhật khi reviews thay đổi
   useEffect(() => {
-    // Debug: Log dữ liệu từ server
-    console.log('Reviews from server:', reviews);
-
-    // Khởi tạo state votes từ dữ liệu reviews
     const initialVotes: Record<string, VoteState> = {};
     reviews.forEach((review) => {
-      const score = (review.upvotes || 0) - (review.downvotes || 0);
-      console.log(
-        `Review ${review.id} - upvotes: ${review.upvotes}, downvotes: ${review.downvotes}, score: ${score}`
-      );
-
       initialVotes[review.id] = {
         voteType: review.votes?.[user?.uid || ''] || null,
-        score: score,
+        score: review.upvotes || 0,
       };
     });
-    console.log('Initial votes state:', initialVotes);
-
     setVotes(initialVotes);
   }, [reviews, user?.uid]);
 
@@ -74,15 +63,12 @@ export const ReviewsList = ({
     ));
   };
 
-  // Thêm hàm xử lý vote
-  const handleVote = async (
-    reviewId: string,
-    voteType: 'up' | 'down' | null
-  ) => {
-    console.log('handleVote called:', { reviewId, voteType }); // Debug
+  // Thêm hàm xử lý like
+  const handleLike = async (reviewId: string) => {
+    console.log('handleLike called:', { reviewId }); // Debug
 
     if (!user) {
-      showToast('warning', 'Vui lòng đăng nhập để vote');
+      showToast('warning', 'Vui lòng đăng nhập để thích');
       return;
     }
 
@@ -92,40 +78,31 @@ export const ReviewsList = ({
 
     console.log('Current state:', { currentVote, currentScore }); // Debug
 
-    // Tính toán score mới dựa trên hành động vote
+    // Tính toán score mới dựa trên hành động like
+    // Note: Vẫn giữ logic upvote/downvote phía sau nhưng chỉ sử dụng 'up'
     let newScore = currentScore;
-    let newVoteType = voteType;
+    let newVoteType: 'up' | null = currentVote === 'up' ? null : 'up';
 
-    if (currentVote === voteType) {
-      // Nếu click lại vote cũ -> hủy vote
-      newScore = currentScore + (voteType === 'up' ? -1 : 1);
-      newVoteType = null;
-    } else if (currentVote === null) {
-      // Nếu chưa vote -> vote mới
-      newScore = currentScore + (voteType === 'up' ? 1 : -1);
+    // Nếu đang like -> unlike
+    if (currentVote === 'up') {
+      newScore = currentScore - 1;
     } else {
-      // Nếu đã vote khác -> đổi vote
-      newScore = currentScore + (voteType === 'up' ? 2 : -2);
+      // Nếu ch��a like -> like
+      newScore = currentScore + 1;
     }
 
     console.log('New state:', { newVoteType, newScore }); // Debug
 
     // Update state ngay lập tức
-    setVotes((prev) => {
-      console.log('Updating votes state:', {
-        old: prev[reviewId],
-        new: { voteType: newVoteType, score: newScore },
-      });
-      return {
-        ...prev,
-        [reviewId]: {
-          voteType: newVoteType,
-          score: newScore,
-        },
-      };
-    });
+    setVotes((prev) => ({
+      ...prev,
+      [reviewId]: {
+        voteType: newVoteType,
+        score: newScore,
+      },
+    }));
 
-    // Gọi API trong background
+    // Gọi API trong background (vẫn giữ nguyên service cũ)
     try {
       await ReviewVoteService.vote(reviewId, user.uid, newVoteType);
       console.log('API call successful'); // Debug
@@ -139,54 +116,34 @@ export const ReviewsList = ({
           score: currentScore,
         },
       }));
-      showToast('error', 'Không thể vote lúc này, vui lòng thử lại sau');
+      showToast('error', 'Không thể thích lúc này, vui lòng thử lại sau');
     }
   };
 
-  const renderVoteButtons = (review: Review) => {
+  const renderLikeButton = (review: Review) => {
     const voteState = votes[review.id] || {
       voteType: review.votes?.[user?.uid || ''] || null,
-      score: (review.upvotes || 0) - (review.downvotes || 0),
+      score: review.upvotes || 0, // Chỉ hiển thị upvotes
     };
 
     return (
-      <View style={styles.votingContainer}>
+      <View style={styles.likeContainer}>
         <TouchableOpacity
-          onPress={() => handleVote(review.id, 'up')}
-          style={styles.voteButton}
+          onPress={() => handleLike(review.id)}
+          style={styles.likeButton}
         >
           <Ionicons
-            name={voteState.voteType === 'up' ? 'arrow-up' : 'arrow-up-outline'}
-            size={20}
+            name={voteState.voteType === 'up' ? 'heart' : 'heart-outline'}
+            size={24}
             color={
               voteState.voteType === 'up'
-                ? theme.colors.primary.main
-                : theme.colors.text.secondary
-            }
-          />
-        </TouchableOpacity>
-
-        <Typography variant="body2" style={styles.voteCount}>
-          {voteState.score}
-        </Typography>
-
-        <TouchableOpacity
-          onPress={() => handleVote(review.id, 'down')}
-          style={styles.voteButton}
-        >
-          <Ionicons
-            name={
-              voteState.voteType === 'down'
-                ? 'arrow-down'
-                : 'arrow-down-outline'
-            }
-            size={20}
-            color={
-              voteState.voteType === 'down'
                 ? theme.colors.error.main
                 : theme.colors.text.secondary
             }
           />
+          <Typography variant="body2" style={styles.likeCount}>
+            {voteState.score}
+          </Typography>
         </TouchableOpacity>
       </View>
     );
@@ -285,8 +242,8 @@ export const ReviewsList = ({
             <Typography variant="body2">{review.comment}</Typography>
           </View>
 
-          {/* Thêm phần voting UI */}
-          {renderVoteButtons(review)}
+          {/* Thay thế phần voting UI cũ bằng like button */}
+          {renderLikeButton(review)}
         </View>
       ))}
     </ScrollView>
