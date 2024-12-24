@@ -17,6 +17,8 @@ export const DisplaySettings = () => {
   const { theme } = useTheme();
   const { focusMode, toggleFocusMode } = useDisplay();
   const [expanded, setExpanded] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const [notifications, setNotifications] = useState(false);
   const animatedHeight = useRef(new Animated.Value(0)).current;
   const contentHeight = useRef(0);
 
@@ -43,19 +45,30 @@ export const DisplaySettings = () => {
     description: string,
     value: boolean,
     onToggle: () => void,
-    icon: string
+    icon: string,
+    isDisabled: boolean = false,
+    developmentNote?: string
   ) => (
-    <View style={styles.section}>
+    <View style={[styles.section, isDisabled && styles.disabledSection]}>
       <View style={styles.sectionHeader}>
         <Ionicons
           name={icon as any}
           size={18}
-          color={theme.colors.text.primary}
+          color={
+            isDisabled ? theme.colors.text.disabled : theme.colors.text.primary
+          }
           style={{ marginRight: 6 }}
         />
         <Typography
           variant="subtitle1"
-          style={[styles.sectionTitle, { color: theme.colors.text.primary }]}
+          style={[
+            styles.sectionTitle,
+            {
+              color: isDisabled
+                ? theme.colors.text.disabled
+                : theme.colors.text.primary,
+            },
+          ]}
         >
           {title}
         </Typography>
@@ -64,18 +77,34 @@ export const DisplaySettings = () => {
         <View style={{ flex: 1 }}>
           <Typography
             variant="body2"
-            color="secondary"
+            color={isDisabled ? 'disabled' : 'secondary'}
             style={{ fontSize: 13 }}
           >
             {description}
           </Typography>
+          {developmentNote && (
+            <Typography
+              variant="caption"
+              style={[
+                styles.developmentNote,
+                { color: theme.colors.error.main },
+              ]}
+            >
+              {developmentNote}
+            </Typography>
+          )}
         </View>
         <Switch
           value={value}
           onValueChange={onToggle}
+          disabled={isDisabled}
           trackColor={{
-            false: theme.colors.divider,
-            true: theme.colors.primary.main,
+            false: isDisabled
+              ? theme.colors.text.disabled
+              : theme.colors.divider,
+            true: isDisabled
+              ? theme.colors.text.disabled
+              : theme.colors.primary.main,
           }}
           thumbColor={theme.colors.background.paper}
         />
@@ -135,21 +164,26 @@ export const DisplaySettings = () => {
             'Ẩn các thông tin phụ để tập trung vào nấu ăn',
             focusMode,
             toggleFocusMode,
-            'eye-outline'
+            'eye-outline',
+            false
           )}
           {renderSettingItem(
             'Hiển thị số liệu',
             'Hiển thị thông tin chi tiết về thời gian và khối lượng',
-            focusMode,
-            toggleFocusMode,
-            'stats-chart-outline'
+            showStats,
+            () => setShowStats(!showStats),
+            'stats-chart-outline',
+            true,
+            'Tính năng đang phát triển'
           )}
           {renderSettingItem(
             'Thông báo',
             'Nhận thông báo về công thức mới và cập nhật',
-            focusMode,
-            toggleFocusMode,
-            'notifications-outline'
+            notifications,
+            () => setNotifications(!notifications),
+            'notifications-outline',
+            true,
+            'Tính năng đang phát triển'
           )}
         </View>
       </Animated.View>
@@ -206,5 +240,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 4,
+  },
+  disabledSection: {
+    opacity: 0.6,
+  },
+  developmentNote: {
+    fontSize: 12,
+    marginTop: 4,
+    fontStyle: 'italic',
   },
 });
