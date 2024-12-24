@@ -216,18 +216,6 @@ export const RecipeIngredients = ({
                       index === items.length - 1 && { borderBottomWidth: 0 },
                     ]}
                   >
-                    <Checkbox
-                      checked={checkedIngredients.has(
-                        `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
-                      )}
-                      onToggle={() =>
-                        toggleIngredient(
-                          `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
-                        )
-                      }
-                      size={20}
-                      color={getThemeColor(config.color)}
-                    />
                     <View
                       style={[
                         styles.ingredientNumber,
@@ -247,6 +235,18 @@ export const RecipeIngredients = ({
                         {ingredient.note && ` (${ingredient.note})`}
                       </Typography>
                     </View>
+                    <Checkbox
+                      checked={checkedIngredients.has(
+                        `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
+                      )}
+                      onToggle={() =>
+                        toggleIngredient(
+                          `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`
+                        )
+                      }
+                      size={22}
+                      color={getThemeColor(config.color)}
+                    />
                   </View>
                 ))}
               </View>

@@ -50,7 +50,6 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 12,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
-      gap: 8,
     },
     ingredientNumber: {
       width: 24,
@@ -68,6 +67,8 @@ export const createStyles = (theme: Theme) =>
     },
     ingredientContent: {
       flex: 1,
+      marginLeft: 12,
+      marginRight: 8,
     },
     ingredientName: {
       fontSize: 15,

@@ -48,7 +48,6 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 16,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.divider,
-      gap: 8,
     },
     instructionNumber: {
       width: 24,
@@ -67,6 +66,8 @@ export const createStyles = (theme: Theme) =>
     },
     instructionContent: {
       flex: 1,
+      marginLeft: 12,
+      marginRight: 8,
     },
     instructionText: {
       flex: 1,
@@ -164,5 +165,10 @@ export const createStyles = (theme: Theme) =>
       color: theme.colors.text.secondary,
       fontSize: 14,
       lineHeight: 20,
+    },
+    checkboxContainer: {
+      paddingTop: 2,
+      minWidth: 32,
+      alignItems: 'center',
     },
   });

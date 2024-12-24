@@ -128,27 +128,54 @@ export const InstructionsSection = ({
     },
   ];
 
-  const renderStep = (step: Step, index: number, color: string) => (
-    <View key={index} style={styles.instructionItem}>
+  const renderStep = (
+    step: Step,
+    index: number,
+    color: string,
+    key: string
+  ) => (
+    <View
+      key={index}
+      style={[
+        styles.instructionItem,
+        index === (typeof step === 'string' ? 0 : step.details.length - 1) && {
+          borderBottomWidth: 0,
+        },
+      ]}
+    >
       <View style={[styles.instructionNumber, { backgroundColor: color }]}>
         <Typography style={styles.instructionNumberText}>
           {index + 1}
         </Typography>
       </View>
       <View style={styles.instructionContent}>
-        <Typography variant="subtitle1" style={styles.stepTitle}>
-          {step.title}
-        </Typography>
-        {step.details.map((detail, detailIndex) => (
-          <Typography
-            key={detailIndex}
-            style={styles.instructionText}
-            variant="body2"
-          >
-            • {detail}
+        {typeof step === 'string' ? (
+          <Typography style={styles.instructionText} variant="body2">
+            {step}
           </Typography>
-        ))}
+        ) : (
+          <>
+            <Typography variant="subtitle1" style={styles.stepTitle}>
+              {step.title}
+            </Typography>
+            {step.details.map((detail, detailIndex) => (
+              <Typography
+                key={detailIndex}
+                style={styles.instructionText}
+                variant="body2"
+              >
+                • {detail}
+              </Typography>
+            ))}
+          </>
+        )}
       </View>
+      <Checkbox
+        checked={checkedSteps.has(`${key}_${index}`)}
+        onToggle={() => toggleStep(`${key}_${index}`)}
+        size={22}
+        color={color}
+      />
     </View>
   );
 
@@ -279,12 +306,6 @@ export const InstructionsSection = ({
                       index === steps.length - 1 && { borderBottomWidth: 0 },
                     ]}
                   >
-                    <Checkbox
-                      checked={checkedSteps.has(`${key}_${index}`)}
-                      onToggle={() => toggleStep(`${key}_${index}`)}
-                      size={20}
-                      color={color}
-                    />
                     <View
                       style={[
                         styles.instructionNumber,
@@ -323,6 +344,12 @@ export const InstructionsSection = ({
                         </>
                       )}
                     </View>
+                    <Checkbox
+                      checked={checkedSteps.has(`${key}_${index}`)}
+                      onToggle={() => toggleStep(`${key}_${index}`)}
+                      size={22}
+                      color={color}
+                    />
                   </View>
                 ))}
               </View>
