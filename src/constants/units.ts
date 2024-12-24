@@ -34,8 +34,8 @@ export const UNITS = {
   },
   /** Đơn vị số lượng */
   QUANTITY: {
-    /** Cái/Chiếc */
-    PIECE: 'cái',
+    /** Đơn vị - từ chung cho mọi loại (củ, trái, cái, v.v.) */
+    PIECE: 'đơn vị',
     /** Củ */
     BULB: 'củ',
     /** Cây */

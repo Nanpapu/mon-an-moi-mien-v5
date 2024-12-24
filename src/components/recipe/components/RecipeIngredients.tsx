@@ -20,7 +20,7 @@ interface IngredientGroupConfig {
 
 const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
   {
-    title: 'Thịt các loại',
+    title: 'Thịt & Hải sản',
     icon: 'nutrition-outline',
     color: 'error.main',
     types: [
@@ -29,13 +29,6 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
       'meat/chicken',
       'meat/duck',
       'meat/processed',
-    ],
-  },
-  {
-    title: 'Hải sản',
-    icon: 'fish-outline',
-    color: 'info.main',
-    types: [
       'seafood/fish',
       'seafood/shrimp',
       'seafood/crab',
@@ -57,19 +50,19 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
     ],
   },
   {
-    title: 'Gia vị',
-    icon: 'flask-outline',
-    color: 'warning.main',
-    types: ['spice/fresh', 'spice/dried', 'spice/sauce', 'spice/powder'],
-  },
-  {
     title: 'Ngũ cốc & Tinh bột',
     icon: 'basket-outline',
     color: 'primary.main',
     types: ['grain/rice', 'grain/noodle', 'grain/flour'],
   },
   {
-    title: 'Khác',
+    title: 'Gia vị & Nước chấm',
+    icon: 'flask-outline',
+    color: 'warning.main',
+    types: ['spice/fresh', 'spice/dried', 'spice/sauce', 'spice/powder'],
+  },
+  {
+    title: 'Nguyên liệu khác',
     icon: 'apps-outline',
     color: 'text.secondary',
     types: ['other/egg', 'other/tofu', 'other/dried', 'other'],
@@ -93,7 +86,8 @@ export const RecipeIngredients = ({
 
   // Nhóm nguyên liệu theo loại
   const groupedIngredients = useMemo(() => {
-    return ingredients.reduce(
+    // Bước 1: Tạo object chứa các nhóm
+    const groups = ingredients.reduce(
       (groups, ingredient) => {
         const type = ingredient.type || 'other';
         const group = INGREDIENT_GROUPS.find((g) => g.types.includes(type));
@@ -102,6 +96,9 @@ export const RecipeIngredients = ({
             groups[group.title] = {
               items: [],
               config: group,
+              order: INGREDIENT_GROUPS.findIndex(
+                (g) => g.title === group.title
+              ), // Thêm order để sắp xếp
             };
           }
           groups[group.title].items.push(ingredient);
@@ -110,9 +107,30 @@ export const RecipeIngredients = ({
       },
       {} as Record<
         string,
-        { items: Ingredient[]; config: IngredientGroupConfig }
+        {
+          items: Ingredient[];
+          config: IngredientGroupConfig;
+          order: number;
+        }
       >
     );
+
+    // Bước 2: Chuyển object thành mảng và sắp xếp theo order
+    return Object.entries(groups)
+      .sort((a, b) => a[1].order - b[1].order)
+      .reduce(
+        (sorted, [title, data]) => {
+          sorted[title] = {
+            items: data.items,
+            config: data.config,
+          };
+          return sorted;
+        },
+        {} as Record<
+          string,
+          { items: Ingredient[]; config: IngredientGroupConfig }
+        >
+      );
   }, [ingredients]);
 
   const toggleGroup = (title: string) => {
