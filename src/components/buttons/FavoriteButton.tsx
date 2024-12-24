@@ -8,12 +8,11 @@ import { Recipe } from '../../types';
 // Props interface cho FavoriteButton component
 interface Props {
   recipe: Recipe;      // Thông tin công thức nấu ăn
-  size?: number;       // Kích thước của icon heart
-  style?: any;         // Custom styles cho button
   onToggle?: () => void; // Callback khi toggle trạng thái yêu thích
+  iconSize?: number;    // Thêm prop mới
 }
 
-export function FavoriteButton({ recipe, size = 24, style, onToggle }: Props) {
+export function FavoriteButton({ recipe, onToggle, iconSize = 20 }: Props) {
   const { theme } = useTheme();
   // State quản lý trạng thái yêu thích
   const [isFavorite, setIsFavorite] = useState(false); // Trạng thái yêu thích
@@ -55,21 +54,14 @@ export function FavoriteButton({ recipe, size = 24, style, onToggle }: Props) {
 
   return (
     <TouchableOpacity
-      style={[styles.button, style]}
       onPress={toggleFavorite}
-      disabled={isLoading}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
     >
-      {isLoading ? (
-        <ActivityIndicator size="small" color={theme.colors.primary.main} />
-      ) : (
-        <Ionicons
-          name={isFavorite ? 'heart' : 'heart-outline'}
-          size={size}
-          color={
-            isFavorite ? theme.colors.error.main : theme.colors.text.primary
-          }
-        />
-      )}
+      <Ionicons
+        name={isFavorite ? 'heart' : 'heart-outline'}
+        size={iconSize}
+        color={theme.colors.error.main}
+      />
     </TouchableOpacity>
   );
 }

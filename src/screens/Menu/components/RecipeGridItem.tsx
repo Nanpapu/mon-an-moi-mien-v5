@@ -27,6 +27,15 @@ interface Props {
   visible?: boolean;
 }
 
+interface FavoriteButtonStyleProps {
+  size: number;
+  iconSize: number;
+  position: {
+    top: number;
+    right: number;
+  };
+}
+
 export const RecipeGridItem = memo(
   ({
     recipe,
@@ -109,6 +118,39 @@ export const RecipeGridItem = memo(
       }
     };
 
+    const getFavoriteButtonStyle = (): FavoriteButtonStyleProps => {
+      if (config.columns === 4) {
+        return {
+          size: 28,
+          iconSize: 14,
+          position: {
+            top: 4,
+            right: 4,
+          },
+        };
+      }
+      if (config.columns === 3) {
+        return {
+          size: 32,
+          iconSize: 16,
+          position: {
+            top: 6,
+            right: 6,
+          },
+        };
+      }
+      return {
+        size: 36,
+        iconSize: 20,
+        position: {
+          top: 8,
+          right: 8,
+        },
+      };
+    };
+
+    const favoriteButtonStyle = getFavoriteButtonStyle();
+
     return (
       <TouchableOpacity
         style={[styles.container, { width }, !visible && { display: 'none' }]}
@@ -131,7 +173,24 @@ export const RecipeGridItem = memo(
           </View>
         )}
 
-        <FavoriteButton recipe={recipe} onToggle={onFavoriteChange} />
+        <View
+          style={[
+            styles.favoriteButtonContainer,
+            {
+              top: favoriteButtonStyle.position.top,
+              right: favoriteButtonStyle.position.right,
+              width: favoriteButtonStyle.size,
+              height: favoriteButtonStyle.size,
+            },
+          ]}
+        >
+          <FavoriteButton
+            recipe={recipe}
+            onToggle={onFavoriteChange}
+            iconSize={favoriteButtonStyle.iconSize}
+          />
+        </View>
+
         <Image
           source={imageUrl || require('../../../../assets/default-avatar.png')}
           style={[styles.image, { width, height: width }]}
@@ -305,6 +364,15 @@ const createStyles = (
       backgroundColor: theme.colors.background.paper,
       borderRadius: 20,
       padding: 4,
+      ...theme.shadows.sm,
+    },
+    favoriteButtonContainer: {
+      position: 'absolute',
+      zIndex: 1,
+      backgroundColor: theme.colors.background.paper,
+      borderRadius: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
       ...theme.shadows.sm,
     },
   });
