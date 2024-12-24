@@ -38,6 +38,51 @@ export const DisplaySettings = () => {
     }
   };
 
+  const renderSettingItem = (
+    title: string,
+    description: string,
+    value: boolean,
+    onToggle: () => void,
+    icon: string
+  ) => (
+    <View style={styles.section}>
+      <View style={styles.sectionHeader}>
+        <Ionicons
+          name={icon as any}
+          size={18}
+          color={theme.colors.text.primary}
+          style={{ marginRight: 6 }}
+        />
+        <Typography
+          variant="subtitle1"
+          style={[styles.sectionTitle, { color: theme.colors.text.primary }]}
+        >
+          {title}
+        </Typography>
+      </View>
+      <View style={styles.settingItem}>
+        <View style={{ flex: 1 }}>
+          <Typography
+            variant="body2"
+            color="secondary"
+            style={{ fontSize: 13 }}
+          >
+            {description}
+          </Typography>
+        </View>
+        <Switch
+          value={value}
+          onValueChange={onToggle}
+          trackColor={{
+            false: theme.colors.divider,
+            true: theme.colors.primary.main,
+          }}
+          thumbColor={theme.colors.background.paper}
+        />
+      </View>
+    </View>
+  );
+
   return (
     <View style={[styles.container, { borderRadius: 16, overflow: 'hidden' }]}>
       <TouchableOpacity
@@ -45,6 +90,7 @@ export const DisplaySettings = () => {
           styles.header,
           {
             backgroundColor: theme.colors.background.paper,
+            borderBottomColor: theme.colors.divider,
           },
         ]}
         onPress={toggleExpand}
@@ -80,37 +126,31 @@ export const DisplaySettings = () => {
           {
             height: animatedHeight,
             backgroundColor: theme.colors.background.paper,
-            opacity: animatedHeight.interpolate({
-              inputRange: [0, contentHeight.current],
-              outputRange: [0, 1],
-            }),
           },
         ]}
       >
         <View style={styles.content} onLayout={onLayout}>
-          <View style={styles.settingItem}>
-            <View style={{ flex: 1 }}>
-              <Typography variant="subtitle1" style={{ marginBottom: 4 }}>
-                Chế độ tập trung
-              </Typography>
-              <Typography
-                variant="body2"
-                color="secondary"
-                style={{ fontSize: 12 }}
-              >
-                Ẩn thanh tiêu đề để tập trung vào nội dung
-              </Typography>
-            </View>
-            <Switch
-              value={focusMode}
-              onValueChange={toggleFocusMode}
-              trackColor={{
-                false: theme.colors.divider,
-                true: theme.colors.primary.main,
-              }}
-              thumbColor={theme.colors.background.paper}
-            />
-          </View>
+          {renderSettingItem(
+            'Chế độ tập trung',
+            'Ẩn các thông tin phụ để tập trung vào nấu ăn',
+            focusMode,
+            toggleFocusMode,
+            'eye-outline'
+          )}
+          {renderSettingItem(
+            'Hiển thị số liệu',
+            'Hiển thị thông tin chi tiết về thời gian và khối lượng',
+            focusMode,
+            toggleFocusMode,
+            'stats-chart-outline'
+          )}
+          {renderSettingItem(
+            'Thông báo',
+            'Nhận thông báo về công thức mới và cập nhật',
+            focusMode,
+            toggleFocusMode,
+            'notifications-outline'
+          )}
         </View>
       </Animated.View>
     </View>
@@ -149,9 +189,22 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
   },
+  section: {
+    marginBottom: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingVertical: 4,
   },
 });
