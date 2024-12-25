@@ -7,7 +7,7 @@ const CAMERA_BOUNDS = {
   west: 102.148224,
   east: 109.469469,
   minZoom: 5.6,
-  maxZoom: 9,
+  maxZoom: 11,
 };
 
 const VIETNAM_REGION = {
@@ -38,28 +38,66 @@ const MAJOR_CITIES = [
 
 const MAP_STYLE = [
   {
-    // Ẩn các điểm POI và labels không cần thiết
+    // Ẩn POI không cần thiết
     featureType: 'poi',
     elementType: 'labels',
     stylers: [{ visibility: 'off' }],
   },
   {
-    // Ẩn đường đi
+    // Đường đi như những đường chỉ thêu rõ nét
     featureType: 'road',
     elementType: 'geometry',
-    stylers: [{ visibility: 'off' }],
+    stylers: [
+      { color: '#ffccbc' }, // Màu san hô nhẹ
+      { weight: 1 }, // Tăng độ dày
+      { visibility: 'simplified' },
+    ],
   },
   {
-    // Làm đậm biên giới quốc gia
-    featureType: 'administrative.country',
-    elementType: 'geometry.stroke',
-    stylers: [{ color: '#000000' }, { weight: 2 }],
+    // Đất liền màu kem nhẹ
+    featureType: 'landscape',
+    elementType: 'geometry',
+    stylers: [
+      { color: '#fff8e1' }, // Màu kem dịu
+    ],
   },
   {
-    // Làm đậm ranh giới tỉnh thành
+    // Nước màu xanh ngọc dịu mắt
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [
+      { color: '#b2dfdb' }, // Xanh ngọc nhạt
+    ],
+  },
+  {
+    // Viền tỉnh thành đậm và rõ
     featureType: 'administrative.province',
     elementType: 'geometry.stroke',
-    stylers: [{ color: '#000000' }, { weight: 1.5 }],
+    stylers: [
+      { color: '#795548' }, // Màu nâu đất
+      { weight: 2 }, // Tăng độ dày
+      { visibility: 'on' },
+    ],
+  },
+  {
+    // Tên tỉnh thành dễ đọc
+    featureType: 'administrative.province',
+    elementType: 'labels.text',
+    stylers: [
+      { color: '#4e342e' }, // Nâu đậm
+      { weight: 1.5 },
+      { visibility: 'on' },
+    ],
+  },
+  {
+    // Biên giới quốc gia đậm nét
+    featureType: 'administrative.country',
+    elementType: 'geometry.stroke',
+    stylers: [
+      { color: '#3e2723' }, // Nâu sẫm
+      { weight: 3 }, // Tăng độ dày
+      { visibility: 'on' },
+    ],
   },
 ];
 
