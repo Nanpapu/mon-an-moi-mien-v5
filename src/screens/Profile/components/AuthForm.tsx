@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 0,
   },
   formWrapper: {
     width: '100%',
