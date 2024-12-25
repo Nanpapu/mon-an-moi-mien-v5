@@ -510,3 +510,45 @@ export function getAveragePriceForType(type: string): number {
 
   return Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
 }
+
+// Định nghĩa thời gian Tết và các mùa vụ
+const SEASONAL_PERIODS = {
+  TET: {
+    // Tết thường rơi vào khoảng tháng 1-2
+    months: [1, 2] as number[],
+    // Xác định khoảng thời gian trước và sau Tết
+    tetRange: 15, // ±15 ngày trước và sau mùng 1 Tết
+  },
+  ABUNDANT: {
+    // Mùa thu hoạch chính: tháng 6-8
+    months: [6, 7, 8] as number[],
+  },
+  SCARCITY: {
+    // Mùa khan hiếm: tháng 11-1
+    months: [11, 12, 1] as number[],
+  },
+} as const;
+
+// Helper function để lấy hệ số theo mùa
+export function getCurrentSeasonalAdjustment(): number {
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1; // getMonth() trả về 0-11
+
+  // Kiểm tra thời gian Tết (tạm tính theo tháng 1-2)
+  if (SEASONAL_PERIODS.TET.months.includes(currentMonth)) {
+    return SEASONAL_ADJUSTMENTS.TET;
+  }
+
+  // Kiểm tra mùa thu hoạch
+  if (SEASONAL_PERIODS.ABUNDANT.months.includes(currentMonth)) {
+    return SEASONAL_ADJUSTMENTS.ABUNDANT;
+  }
+
+  // Kiểm tra mùa khan hiếm
+  if (SEASONAL_PERIODS.SCARCITY.months.includes(currentMonth)) {
+    return SEASONAL_ADJUSTMENTS.SCARCITY;
+  }
+
+  // Mặc định là giá bình thường
+  return SEASONAL_ADJUSTMENTS.NORMAL;
+}

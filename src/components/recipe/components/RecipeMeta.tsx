@@ -6,6 +6,7 @@ import { createStyles } from './RecipeMeta.styles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Typography } from '../../shared';
 import { PriceEstimationService } from '../../../services/priceEstimationService';
+import { SEASONAL_ADJUSTMENTS } from '../../../constants/ingredientPrices';
 
 interface Props {
   recipe: Recipe;
@@ -17,7 +18,8 @@ export const RecipeMeta = ({ recipe }: Props) => {
   const styles = createStyles(theme);
 
   const priceInfo = PriceEstimationService.calculateRecipePrice(
-    recipe.ingredients
+    recipe.ingredients,
+    recipe.servings || 1
   );
 
   return (

@@ -4,6 +4,7 @@ import {
   UNIT_CONVERSIONS,
   SEASONAL_ADJUSTMENTS,
   getAveragePriceForType,
+  getCurrentSeasonalAdjustment,
 } from '../constants/ingredientPrices';
 
 export const PriceEstimationService = {
@@ -43,14 +44,11 @@ export const PriceEstimationService = {
   /**
    * Tính giá ước lượng cho một nguyên liệu
    * @param ingredient Thông tin nguyên liệu
-   * @param seasonalFactor Hệ số điều chỉnh theo mùa
    * @returns Giá ước lượng (VND)
    */
-  calculateIngredientPrice(
-    ingredient: Ingredient,
-    seasonalFactor: number = SEASONAL_ADJUSTMENTS.NORMAL
-  ): number {
+  calculateIngredientPrice(ingredient: Ingredient): number {
     const basePrice = getAveragePriceForType(ingredient.type || 'other');
+    const seasonalFactor = getCurrentSeasonalAdjustment();
 
     // Tính hệ số quy đổi đơn vị
     let conversionFactor = 1;
@@ -86,12 +84,12 @@ export const PriceEstimationService = {
   /**
    * Tính tổng giá ước lượng cho công thức
    * @param ingredients Danh sách nguyên liệu
-   * @param seasonalFactor Hệ số điều chỉnh theo mùa
+   * @param servings Số lượng món ăn
    * @returns Thông tin giá ước lượng
    */
   calculateRecipePrice(
     ingredients: Ingredient[],
-    seasonalFactor: number = SEASONAL_ADJUSTMENTS.NORMAL
+    servings: number = 1
   ): {
     totalPrice: number;
     priceRange: { min: number; max: number };
@@ -105,7 +103,7 @@ export const PriceEstimationService = {
     // Tính giá từng nguyên liệu
     const ingredientPrices = ingredients.map((ingredient) => ({
       name: ingredient.name,
-      price: this.calculateIngredientPrice(ingredient, seasonalFactor),
+      price: this.calculateIngredientPrice(ingredient),
     }));
 
     // Tính tổng giá
@@ -126,13 +124,18 @@ export const PriceEstimationService = {
       max: Math.round(totalPrice * 1.2),
     };
 
-    // Xác định mức giá
+    // Xác định mức giá dựa trên giá/khẩu phần
     let priceLevel: 'Rẻ' | 'Trung bình' | 'Cao';
-    if (totalPrice < 100000) {
+    const pricePerServing = totalPrice / servings;
+
+    if (pricePerServing < 30000) {
+      // Dưới 30k/người
       priceLevel = 'Rẻ';
-    } else if (totalPrice < 200000) {
+    } else if (pricePerServing < 70000) {
+      // 30k-70k/người
       priceLevel = 'Trung bình';
     } else {
+      // Trên 70k/người
       priceLevel = 'Cao';
     }
 
