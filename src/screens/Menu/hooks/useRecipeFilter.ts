@@ -57,19 +57,20 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     setFavoriteRecipes(favorites);
   };
 
-  // Thêm log để debug giá trị sort
+  // Thêm hàm helper để lấy giá trị sort
   const getSortValue = (recipe: Recipe, field: SortField) => {
     switch (field) {
       case 'name':
-        return recipe.name.toLowerCase();
+        // Sử dụng Intl.Collator để sort tiếng Việt chính xác
+        return recipe.name;
       case 'difficulty':
-        return recipe.difficulty ?? Number.MAX_VALUE;
+        return recipe.difficulty;
       case 'cookingTime':
-        return recipe.cookingTime ?? Number.MAX_VALUE;
+        return recipe.cookingTime;
       case 'servings':
-        return recipe.servings ?? Number.MAX_VALUE;
+        return recipe.servings;
       default:
-        return '';
+        return null;
     }
   };
 
@@ -177,9 +178,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         return true;
       });
 
-    // Combine sort và favorite first
+    // Tạo collator cho tiếng Việt
+    const vietnameseCollator = new Intl.Collator('vi', {
+      sensitivity: 'base',
+      ignorePunctuation: true,
+    });
+
     results.sort((a, b) => {
-      // Sort by favorite first nếu ��ược bật
+      // Sort by favorite first nếu được bật
       if (filterOptions.showFavoriteFirst) {
         if (a.isFavorite !== b.isFavorite) {
           return a.isFavorite ? -1 : 1;
@@ -192,12 +198,18 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         const aValue = getSortValue(a.recipe, field);
         const bValue = getSortValue(b.recipe, field);
 
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-          return order === 'asc'
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue);
+        if (aValue === null || bValue === null) return 0;
+
+        // Xử lý đặc biệt cho sort theo tên
+        if (field === 'name') {
+          // Kiểm tra và ép kiểu string
+          const aString = String(aValue || '');
+          const bString = String(bValue || '');
+          const compareResult = vietnameseCollator.compare(aString, bString);
+          return order === 'asc' ? compareResult : -compareResult;
         }
 
+        // Xử lý các trường hợp khác
         if (typeof aValue === 'number' && typeof bValue === 'number') {
           return order === 'asc' ? aValue - bValue : bValue - aValue;
         }
