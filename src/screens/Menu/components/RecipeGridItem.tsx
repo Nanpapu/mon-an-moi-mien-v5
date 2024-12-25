@@ -194,19 +194,14 @@ export const RecipeGridItem = memo(
               ]}
             >
               <Typography
-                variant="body2"
-                numberOfLines={config.titleLines || 2}
-                style={[
-                  styles.name,
-                  {
-                    fontSize: config.adjustableFontSize
-                      ? fontSize
-                      : styles.name.fontSize,
-                  },
-                ]}
-                onTextLayout={
-                  config.adjustableFontSize ? onTextLayout : undefined
-                }
+                variant="caption"
+                numberOfLines={config.titleLines}
+                style={{
+                  fontSize: config.titleFontSize || 12,
+                  marginTop: 4,
+                  textAlign: 'center',
+                  height: config.minTitleHeight,
+                }}
               >
                 {recipe.name}
               </Typography>
