@@ -35,6 +35,9 @@ export interface FilterOptions {
 
   // Thêm field mới
   groupBySearch: boolean;
+
+  // Thêm option mới
+  showDuplicateResults: boolean; // Cho phép hiển thị kết quả trùng lặp
 }
 
 export interface CookingTimeRange {

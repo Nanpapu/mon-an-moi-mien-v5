@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Switch } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -321,6 +321,46 @@ export const AdvancedFilters = ({
           ))}
         </View>
       </View>
+
+      <View style={styles.divider} />
+
+      {/* Tùy chọn hiển thị kết quả trùng lặp */}
+      <View style={styles.filterGroup}>
+        <View style={styles.groupHeader}>
+          <MaterialCommunityIcons
+            name="content-copy"
+            size={24}
+            color={theme.colors.text.primary}
+          />
+          <Typography variant="subtitle1" style={styles.groupTitle}>
+            Tùy chọn tìm kiếm
+          </Typography>
+        </View>
+        <TouchableOpacity
+          style={styles.switchContainer}
+          onPress={() =>
+            onFilterChange({
+              ...filterOptions,
+              showDuplicateResults: !filterOptions.showDuplicateResults,
+            })
+          }
+        >
+          <Typography variant="body1">Hiển thị kết quả trùng lặp</Typography>
+          <Switch
+            value={filterOptions.showDuplicateResults}
+            onValueChange={(value) =>
+              onFilterChange({
+                ...filterOptions,
+                showDuplicateResults: value,
+              })
+            }
+            trackColor={{
+              false: theme.colors.text.disabled,
+              true: theme.colors.primary.main,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -401,5 +441,12 @@ const createStyles = (theme: any) =>
     },
     activeChipText: {
       color: theme.colors.primary.contrast,
+    },
+    switchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
     },
   });

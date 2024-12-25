@@ -23,6 +23,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     showFavoriteFirst: true,
     sort: null,
     groupBySearch: true,
+    showDuplicateResults: false,
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -171,10 +172,21 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         containsSearchQuery(ingredient.name, filterOptions.searchQuery)
       );
 
-      if (matchesName) {
-        byName.push(item);
-      } else if (matchesIngredients) {
-        byIngredients.push(item);
+      // Nếu cho phép hiển thị kết quả trùng lặp
+      if (filterOptions.showDuplicateResults) {
+        if (matchesName) {
+          byName.push(item);
+        }
+        if (matchesIngredients) {
+          byIngredients.push(item);
+        }
+      } else {
+        // Logic cũ - chỉ hiển thị ở section phù hợp nhất
+        if (matchesName) {
+          byName.push(item);
+        } else if (matchesIngredients) {
+          byIngredients.push(item);
+        }
       }
     });
 

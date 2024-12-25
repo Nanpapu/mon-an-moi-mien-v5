@@ -37,6 +37,7 @@ const defaultFilterOptions: FilterOptions = {
   showFavoriteFirst: true,
   sort: null,
   groupBySearch: true,
+  showDuplicateResults: false,
 };
 
 export const FilterModal = ({
