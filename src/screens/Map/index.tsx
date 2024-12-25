@@ -96,12 +96,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     if (!user) {
       Alert.alert('Yêu cầu đăng nhập', 'Bạn cần đăng nhập để lưu công thức.', [
         {
-          text: 'Để sau',
+          text: 'Đóng',
           style: 'cancel',
-        },
-        {
-          text: 'Đăng nhập',
-          onPress: () => navigation.navigate('Cá nhân'),
         },
       ]);
       return false;
