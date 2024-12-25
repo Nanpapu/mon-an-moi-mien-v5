@@ -106,6 +106,7 @@ export const MenuSearchBar = ({
           {
             backgroundColor: theme.colors.background.paper,
             borderColor: theme.colors.divider,
+            color: theme.colors.text.primary,
             height: 32,
             textAlignVertical: 'center',
           },
