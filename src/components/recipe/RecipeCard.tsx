@@ -15,6 +15,7 @@ import {
   RecipeIngredients,
   RecipeActions,
   RecipeReviews,
+  SeasonalAlert,
 } from './components';
 
 interface Props {
@@ -130,6 +131,7 @@ export function RecipeCard({
 
         {showDetails && (
           <View style={styles.details}>
+            <SeasonalAlert />
             <RecipeIngredients
               ingredients={recipe.ingredients}
               showCheckbox={isSaved}

@@ -8,6 +8,7 @@ import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
 import { ProgressCategories } from '../../shared/ProgressCategories';
 import { ProgressBar } from '../../shared/ProgressBar';
+import { SeasonalAlert } from './SeasonalAlert';
 
 interface Props {
   instructions: Instructions;

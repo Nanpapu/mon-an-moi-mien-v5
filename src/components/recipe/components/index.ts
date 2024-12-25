@@ -6,3 +6,4 @@ export * from './RecipeActions';
 export * from './RecipeReviews';
 export * from './RecipeGridItemSkeleton';
 export * from './RecipeGridListSkeleton';
+export * from './SeasonalAlert';
