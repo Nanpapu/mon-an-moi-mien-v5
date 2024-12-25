@@ -36,6 +36,33 @@ const MAJOR_CITIES = [
   '95', // Bạc Liêu
 ];
 
+const MAP_STYLE = [
+  {
+    // Ẩn các điểm POI và labels không cần thiết
+    featureType: 'poi',
+    elementType: 'labels',
+    stylers: [{ visibility: 'off' }],
+  },
+  {
+    // Ẩn đường đi
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ visibility: 'off' }],
+  },
+  {
+    // Làm đậm biên giới quốc gia
+    featureType: 'administrative.country',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#000000' }, { weight: 2 }],
+  },
+  {
+    // Làm đậm ranh giới tỉnh thành
+    featureType: 'administrative.province',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#000000' }, { weight: 1.5 }],
+  },
+];
+
 export const useMapInteraction = () => {
   // Khởi tạo zoom ban đầu dựa trên VIETNAM_REGION
   const initialZoom = Math.round(
@@ -95,5 +122,6 @@ export const useMapInteraction = () => {
     VIETNAM_REGION,
     ZOOM_LEVELS,
     CAMERA_BOUNDS,
+    MAP_STYLE,
   };
 };

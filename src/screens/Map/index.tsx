@@ -51,6 +51,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     setCurrentZoom,
     viewVietnam,
     CAMERA_BOUNDS,
+    MAP_STYLE,
   } = useMapInteraction();
 
   const { showToast } = useToast();
@@ -194,7 +195,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
           text={
             retryCount > 0
               ? `Đang tải lại lần ${retryCount}/${MAX_RETRIES}...`
-              : 'Đang tải dữ li���u vùng miền...'
+              : 'Đang t��i dữ liệu vùng miền...'
           }
         />
       </View>
@@ -208,6 +209,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         provider="google"
         style={{ flex: 1 }}
         initialRegion={region}
+        customMapStyle={MAP_STYLE}
         minZoomLevel={CAMERA_BOUNDS.minZoom}
         maxZoomLevel={CAMERA_BOUNDS.maxZoom}
         mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
