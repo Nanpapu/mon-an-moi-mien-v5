@@ -512,7 +512,7 @@ export function getAveragePriceForType(type: string): number {
 }
 
 // Định nghĩa thời gian Tết và các mùa vụ
-const SEASONAL_PERIODS = {
+ export const SEASONAL_PERIODS = {
   TET: {
     // Tết thường rơi vào khoảng tháng 1-2
     months: [1, 2] as number[],
