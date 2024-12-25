@@ -34,8 +34,9 @@ const defaultFilterOptions: FilterOptions = {
   cookingTime: { min: null, max: null },
   servings: { min: null, max: null },
   mainIngredientTypes: [],
-  showFavoriteFirst: true, // Giữ nguyên setting này
+  showFavoriteFirst: true,
   sort: null,
+  groupBySearch: true,
 };
 
 export const FilterModal = ({
@@ -83,7 +84,7 @@ export const FilterModal = ({
           onPress: () => {
             setTempFilterOptions({
               ...defaultFilterOptions,
-              showFavoriteFirst: true, // Giữ nguyên setting này
+              showFavoriteFirst: true,
             });
           },
         },
