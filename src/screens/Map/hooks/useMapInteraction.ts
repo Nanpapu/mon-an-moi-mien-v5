@@ -1,11 +1,21 @@
 import { useState, useRef } from 'react';
 import MapView from 'react-native-maps';
 
+const CAMERA_BOUNDS = {
+  north: 23.393395,
+  south: 8.559615,
+  west: 102.148224,
+  east: 109.469469,
+  minZoom: 5.6,
+  maxZoom: 9,
+};
+
 const VIETNAM_REGION = {
   latitude: 16.047079,
-  longitude: 108.20623,
+  longitude: 107.5,
   latitudeDelta: 12,
   longitudeDelta: 12,
+  ...CAMERA_BOUNDS,
 };
 
 // Điều chỉnh lại các mức zoom phù hợp hơn
@@ -32,7 +42,12 @@ export const useMapInteraction = () => {
     Math.log(360 / VIETNAM_REGION.latitudeDelta) / Math.LN2
   );
   const [currentZoom, setCurrentZoom] = useState(initialZoom);
-  const [region, setRegion] = useState(VIETNAM_REGION);
+  const [region, setRegion] = useState({
+    latitude: VIETNAM_REGION.latitude,
+    longitude: VIETNAM_REGION.longitude,
+    latitudeDelta: VIETNAM_REGION.latitudeDelta,
+    longitudeDelta: VIETNAM_REGION.longitudeDelta,
+  });
 
   // Tính toán mức zoom dựa trên latitudeDelta
   const calculateZoom = (latitudeDelta: number) => {
@@ -79,5 +94,6 @@ export const useMapInteraction = () => {
     resetToVietnam,
     VIETNAM_REGION,
     ZOOM_LEVELS,
+    CAMERA_BOUNDS,
   };
 };

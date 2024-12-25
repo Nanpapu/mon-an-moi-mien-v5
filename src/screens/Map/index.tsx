@@ -50,6 +50,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     shouldShowMarker,
     setCurrentZoom,
     viewVietnam,
+    CAMERA_BOUNDS,
   } = useMapInteraction();
 
   const { showToast } = useToast();
@@ -193,7 +194,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
           text={
             retryCount > 0
               ? `Đang tải lại lần ${retryCount}/${MAX_RETRIES}...`
-              : 'Đang tải dữ liệu vùng miền...'
+              : 'Đang tải dữ li���u vùng miền...'
           }
         />
       </View>
@@ -207,13 +208,32 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         provider="google"
         style={{ flex: 1 }}
         initialRegion={region}
+        minZoomLevel={CAMERA_BOUNDS.minZoom}
+        maxZoomLevel={CAMERA_BOUNDS.maxZoom}
+        mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
         onRegionChange={(newRegion) => {
           if (mapInitialized) {
-            setRegion(newRegion);
+            const limitedRegion = {
+              latitude: Math.min(
+                Math.max(newRegion.latitude, CAMERA_BOUNDS.south),
+                CAMERA_BOUNDS.north
+              ),
+              longitude: Math.min(
+                Math.max(newRegion.longitude, CAMERA_BOUNDS.west),
+                CAMERA_BOUNDS.east
+              ),
+              latitudeDelta: newRegion.latitudeDelta,
+              longitudeDelta: newRegion.longitudeDelta,
+            };
+
+            setRegion(limitedRegion);
             const newZoom = calculateZoom(newRegion.latitudeDelta);
             setCurrentZoom(newZoom);
           }
         }}
+        rotateEnabled={false}
+        pitchEnabled={false}
+        moveOnMarkerPress={false}
         onMapReady={() => {
           console.log('Map is ready');
           setIsMapReady(true);
