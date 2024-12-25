@@ -13,6 +13,7 @@ interface Props {
   ingredients: Ingredient[];
   onIngredientPress?: (ingredient: Ingredient) => void;
   showCheckbox?: boolean;
+  defaultExpanded?: boolean;
 }
 
 interface IngredientGroupConfig {
@@ -77,6 +78,7 @@ export const RecipeIngredients = ({
   ingredients,
   onIngredientPress,
   showCheckbox = false,
+  defaultExpanded = false,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -172,6 +174,13 @@ export const RecipeIngredients = ({
     const progress = (checkedCount / totalIngredients) * 100;
     setCompletionProgress(progress);
   }, [checkedIngredients, ingredients]);
+
+  useEffect(() => {
+    if (defaultExpanded) {
+      const allGroups = Object.keys(groupedIngredients);
+      setExpandedGroups(new Set(allGroups));
+    }
+  }, [defaultExpanded, groupedIngredients]);
 
   return (
     <View style={styles.ingredientsContainer}>
