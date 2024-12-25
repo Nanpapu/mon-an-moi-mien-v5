@@ -4,7 +4,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { Animated } from 'react-native';
+import { Animated, Keyboard, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemedStatusBar } from './src/components/shared/ThemedStatusBar';
 import { useTheme } from './src/theme/ThemeContext';
@@ -20,12 +20,14 @@ import { DisplayProvider } from './src/context/DisplayContext';
 import { AppBar } from './src/components/shared/AppBar';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { ImageCacheService } from './src/services/imageCacheService';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Khởi tạo Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
   useEffect(() => {
     const initializeApp = async () => {
       try {
@@ -36,6 +38,26 @@ export default function App() {
     };
 
     initializeApp();
+  }, []);
+
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
   }, []);
 
   return (
@@ -57,6 +79,13 @@ export default function App() {
                           header: () => {
                             if (!user) return null;
                             return <AppBar title={route.name} />;
+                          },
+                          tabBarStyle: {
+                            height: 60,
+                            paddingBottom: 5,
+                            backgroundColor: theme.colors.background.paper,
+                            borderTopColor: theme.colors.divider,
+                            display: isKeyboardVisible ? 'none' : 'flex',
                           },
                           tabBarIcon: ({ focused, size }) => {
                             let iconName: keyof typeof Ionicons.glyphMap;
@@ -80,12 +109,6 @@ export default function App() {
                                 />
                               </Animated.View>
                             );
-                          },
-                          tabBarStyle: {
-                            height: 60,
-                            paddingBottom: 5,
-                            backgroundColor: theme.colors.background.paper,
-                            borderTopColor: theme.colors.divider,
                           },
                           tabBarActiveTintColor: theme.colors.primary.main,
                           tabBarInactiveTintColor: theme.colors.text.secondary,
