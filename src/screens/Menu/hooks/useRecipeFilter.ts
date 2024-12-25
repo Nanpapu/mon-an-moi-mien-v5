@@ -39,8 +39,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   // Thêm log để debug giá trị sort
   const getSortValue = (recipe: Recipe, field: SortField) => {
-    console.log('Getting sort value for:', { name: recipe.name, field });
-
     switch (field) {
       case 'name':
         return recipe.name.toLowerCase();
@@ -51,7 +49,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       case 'servings':
         return recipe.servings || 0;
       default:
-        return 0;
+        return '';
     }
   };
 
@@ -92,54 +90,110 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     );
   };
 
-  const matchesSearch = (recipe: Recipe): boolean => {
-    if (!filterOptions.searchQuery) return true;
-
-    // Tìm theo tên công thức
-    const matchesName = containsSearchQuery(
-      recipe.name,
-      filterOptions.searchQuery
-    );
-
-    // Tìm theo tên nguyên liệu
-    const matchesIngredients = recipe.ingredients.some((ingredient) =>
-      containsSearchQuery(ingredient.name, filterOptions.searchQuery)
-    );
-
-    return matchesName || matchesIngredients;
-  };
-
   const filteredRecipes = useMemo(() => {
     let results = savedRecipes
-      .map((recipe) => ({
-        recipe,
-        visible: matchesSearch(recipe),
-        isFavorite: favoriteRecipes.some((fav) => fav.id === recipe.id),
-      }))
-      .filter((item) => item.visible);
+      .map((recipe) => {
+        const isFavorite = favoriteRecipes.some((fav) => fav.id === recipe.id);
+        return { recipe, isFavorite };
+      })
+      .filter((item) => {
+        // Lọc theo yêu thích
+        if (filterOptions.showFavorites && !item.isFavorite) {
+          return false;
+        }
 
-    // Sort theo 2 bước:
-    // 1. Sort theo favorite nếu showFavoriteFirst = true
-    if (filterOptions.showFavoriteFirst) {
-      results.sort((a, b) =>
-        a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1
-      );
-    }
+        // Lọc theo vùng miền
+        if (
+          filterOptions.region &&
+          item.recipe.region !== filterOptions.region
+        ) {
+          return false;
+        }
 
-    // 2. Sort theo field được chọn
+        // Lọc theo category (chay/mặn)
+        if (filterOptions.category) {
+          // Nếu là món chay
+          if (
+            filterOptions.category === 'vegetarian' &&
+            item.recipe.category !== 'vegetarian'
+          ) {
+            return false;
+          }
+          // Nếu là món mặn
+          if (
+            filterOptions.category === 'non-vegetarian' &&
+            item.recipe.category !== 'non-vegetarian'
+          ) {
+            return false;
+          }
+        }
+
+        // Lọc theo độ khó
+        if (
+          filterOptions.difficulty !== null &&
+          item.recipe.difficulty !== filterOptions.difficulty
+        ) {
+          return false;
+        }
+
+        // Lọc theo thời gian nấu
+        if (!matchesCookingTime(item.recipe)) {
+          return false;
+        }
+
+        // Lọc theo số người ăn
+        if (!matchesServings(item.recipe)) {
+          return false;
+        }
+
+        // Lọc theo loại nguyên liệu chính
+        if (!matchesIngredientTypes(item.recipe)) {
+          return false;
+        }
+
+        // Lọc theo từ khóa tìm kiếm
+        if (filterOptions.searchQuery) {
+          const matchesName = containsSearchQuery(
+            item.recipe.name,
+            filterOptions.searchQuery
+          );
+          const matchesIngredients = item.recipe.ingredients.some(
+            (ingredient) =>
+              containsSearchQuery(ingredient.name, filterOptions.searchQuery)
+          );
+          return matchesName || matchesIngredients;
+        }
+
+        return true;
+      });
+
+    // Xử lý sort
     if (filterOptions.sort) {
       const { field, order } = filterOptions.sort;
       results.sort((a, b) => {
-        // Nếu cả 2 đều là favorite hoặc không favorite, sort bình thường
-        if (
-          (!a.isFavorite && !b.isFavorite) ||
-          (a.isFavorite && b.isFavorite)
-        ) {
-          const aValue = getSortValue(a.recipe, field);
-          const bValue = getSortValue(b.recipe, field);
-          // ... logic sort cũ ...
+        const aValue = getSortValue(a.recipe, field);
+        const bValue = getSortValue(b.recipe, field);
+
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          return order === 'asc'
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
         }
-        // Giữ nguyên thứ tự favorite nếu khác nhau
+
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return order === 'asc' ? aValue - bValue : bValue - aValue;
+        }
+
+        return 0;
+      });
+    }
+
+    // Xử lý ưu tiên yêu thích sau khi đã sort
+    if (filterOptions.showFavoriteFirst) {
+      results.sort((a, b) => {
+        if (a.isFavorite === b.isFavorite) {
+          return 0;
+        }
         return a.isFavorite ? -1 : 1;
       });
     }
