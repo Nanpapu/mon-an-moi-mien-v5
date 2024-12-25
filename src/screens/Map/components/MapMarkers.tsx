@@ -7,7 +7,11 @@ interface Props {
   isMapReady: boolean;
   currentZoom: number;
   shouldShowMarker: (regionId: string, zoom: number) => boolean;
-  onMarkerPress: (recipes: Recipe[], regionName: string) => void;
+  onMarkerPress: (
+    recipes: Recipe[],
+    regionName: string,
+    coordinate: { latitude: number; longitude: number }
+  ) => void;
 }
 
 export const MapMarkers = memo(
@@ -49,7 +53,9 @@ export const MapMarkers = memo(
               identifier={region.id}
               coordinate={region.coordinate}
               title={region.name}
-              onPress={() => onMarkerPress(region.recipes, region.name)}
+              onPress={() =>
+                onMarkerPress(region.recipes, region.name, region.coordinate)
+              }
               tracksViewChanges={false}
               zIndex={1}
             />

@@ -24,6 +24,13 @@ import {
   MAX_RETRIES,
 } from '../../constants/timeout';
 
+// Thêm hằng số cho animation
+const MARKER_ZOOM_ANIMATION = {
+  DURATION: 500, // Thời gian animation (ms)
+  ZOOM_LEVEL: 8, // Mức zoom khi bấm marker
+  DELAY_MODAL: 600, // Delay hiện modal sau khi zoom xong (ms)
+};
+
 export default function MapScreen({ navigation }: { navigation: any }) {
   const { theme } = useTheme();
   const { refreshSavedRecipes } = useRecipes();
@@ -188,6 +195,46 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     }, 1000);
   };
 
+  // Thêm hàm xử lý zoom animation
+  const animateToMarker = (latitude: number, longitude: number) => {
+    const currentRegion = mapRef.current?.getCamera();
+    if (!currentRegion) return;
+
+    // Tính toán zoom level phù hợp
+    const targetZoom = Math.min(
+      MARKER_ZOOM_ANIMATION.ZOOM_LEVEL,
+      CAMERA_BOUNDS.maxZoom
+    );
+
+    // Tạo region mới với zoom level được kiểm soát
+    const newRegion: MapRegion = {
+      latitude,
+      longitude,
+      latitudeDelta: Math.max(region.latitudeDelta / 2, 0.01),
+      longitudeDelta: Math.max(region.longitudeDelta / 2, 0.01),
+    };
+
+    // Thực hiện animation
+    mapRef.current?.animateToRegion(newRegion, MARKER_ZOOM_ANIMATION.DURATION);
+  };
+
+  // Cập nhật lại phần xử lý marker press
+  const handleMarkerPress = (
+    recipes: Recipe[],
+    regionName: string,
+    coordinate: { latitude: number; longitude: number }
+  ) => {
+    // Thực hiện animation zoom trước
+    animateToMarker(coordinate.latitude, coordinate.longitude);
+
+    // Delay hiện modal để đợi animation hoàn thành
+    setTimeout(() => {
+      setSelectedRecipes(recipes);
+      setSelectedRegionName(regionName);
+      setModalVisible(true);
+    }, MARKER_ZOOM_ANIMATION.DELAY_MODAL);
+  };
+
   if (!regions || regions.length === 0) {
     return (
       <View style={styles.loadingContainer}>
@@ -195,7 +242,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
           text={
             retryCount > 0
               ? `Đang tải lại lần ${retryCount}/${MAX_RETRIES}...`
-              : 'Đang t��i dữ liệu vùng miền...'
+              : 'Đang tải dữ liệu vùng miền...'
           }
         />
       </View>
@@ -255,10 +302,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
             isMapReady={true}
             currentZoom={currentZoom}
             shouldShowMarker={shouldShowMarker}
-            onMarkerPress={(recipes, regionName) => {
-              setSelectedRecipes(recipes);
-              setSelectedRegionName(regionName);
-              setModalVisible(true);
+            onMarkerPress={(recipes, regionName, coordinate) => {
+              handleMarkerPress(recipes, regionName, coordinate);
             }}
           />
         )}
