@@ -162,7 +162,7 @@ export const DisplaySettings = () => {
         <View style={styles.content} onLayout={onLayout}>
           {renderSettingItem(
             'Chế độ tập trung',
-            'Ẩn các thông tin phụ để tập trung vào nấu ăn',
+            'Ẩn thanh điều hướng (App Bar) để tập trung vào nội dung chính',
             focusMode,
             toggleFocusMode,
             'eye-outline',

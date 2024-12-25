@@ -336,6 +336,11 @@ export const AdvancedFilters = ({
             Tùy chọn tìm kiếm
           </Typography>
         </View>
+
+        <Typography variant="body2" style={styles.description}>
+          Hiển thị món ăn trong cả kết quả tìm theo tên và tìm theo nguyên liệu.
+        </Typography>
+
         <TouchableOpacity
           style={styles.switchContainer}
           onPress={() =>
@@ -345,7 +350,11 @@ export const AdvancedFilters = ({
             })
           }
         >
-          <Typography variant="body1">Hiển thị kết quả trùng lặp</Typography>
+          <Typography variant="body1">
+            {filterOptions.showDuplicateResults
+              ? 'Đang hiện kết quả trùng lặp'
+              : 'Ẩn kết quả trùng lặp'}
+          </Typography>
           <Switch
             value={filterOptions.showDuplicateResults}
             onValueChange={(value) =>
@@ -400,9 +409,9 @@ const createStyles = (theme: any) =>
       marginVertical: theme.spacing.xs,
     },
     filterGroup: {
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
       backgroundColor: theme.colors.background.paper,
-      padding: theme.spacing.md,
+      padding: theme.spacing.sm,
       borderRadius: theme.spacing.lg,
       borderWidth: 1,
       borderColor: theme.colors.divider,
@@ -446,7 +455,14 @@ const createStyles = (theme: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.sm,
+    },
+    description: {
+      color: theme.colors.text.secondary,
+      fontSize: 12,
+      marginBottom: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.xs,
+      fontStyle: 'italic',
     },
   });
