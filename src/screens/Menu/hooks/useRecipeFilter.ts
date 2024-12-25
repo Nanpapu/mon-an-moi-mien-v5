@@ -43,11 +43,11 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       case 'name':
         return recipe.name.toLowerCase();
       case 'difficulty':
-        return recipe.difficulty || 0;
+        return recipe.difficulty ?? Number.MAX_VALUE;
       case 'cookingTime':
-        return recipe.cookingTime || 0;
+        return recipe.cookingTime ?? Number.MAX_VALUE;
       case 'servings':
-        return recipe.servings || 0;
+        return recipe.servings ?? Number.MAX_VALUE;
       default:
         return '';
     }
@@ -111,21 +111,11 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         }
 
         // Lọc theo category (chay/mặn)
-        if (filterOptions.category) {
-          // Nếu là món chay
-          if (
-            filterOptions.category === 'vegetarian' &&
-            item.recipe.category !== 'vegetarian'
-          ) {
-            return false;
-          }
-          // Nếu là món mặn
-          if (
-            filterOptions.category === 'non-vegetarian' &&
-            item.recipe.category !== 'non-vegetarian'
-          ) {
-            return false;
-          }
+        if (
+          filterOptions.category &&
+          item.recipe.category !== filterOptions.category
+        ) {
+          return false;
         }
 
         // Lọc theo độ khó
@@ -167,10 +157,18 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         return true;
       });
 
-    // Xử lý sort
-    if (filterOptions.sort) {
-      const { field, order } = filterOptions.sort;
-      results.sort((a, b) => {
+    // Combine sort và favorite first
+    results.sort((a, b) => {
+      // Sort by favorite first nếu được bật
+      if (filterOptions.showFavoriteFirst) {
+        if (a.isFavorite !== b.isFavorite) {
+          return a.isFavorite ? -1 : 1;
+        }
+      }
+
+      // Sau đó mới sort theo field
+      if (filterOptions.sort) {
+        const { field, order } = filterOptions.sort;
         const aValue = getSortValue(a.recipe, field);
         const bValue = getSortValue(b.recipe, field);
 
@@ -183,20 +181,10 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         if (typeof aValue === 'number' && typeof bValue === 'number') {
           return order === 'asc' ? aValue - bValue : bValue - aValue;
         }
+      }
 
-        return 0;
-      });
-    }
-
-    // Xử lý ưu tiên yêu thích sau khi đã sort
-    if (filterOptions.showFavoriteFirst) {
-      results.sort((a, b) => {
-        if (a.isFavorite === b.isFavorite) {
-          return 0;
-        }
-        return a.isFavorite ? -1 : 1;
-      });
-    }
+      return 0;
+    });
 
     return results.map((item) => ({
       recipe: item.recipe,
