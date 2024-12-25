@@ -90,33 +90,23 @@ export const RecipeList = ({
       ) : (
         <ScrollView
           style={styles.recipeList}
-          contentContainerStyle={{
-            paddingHorizontal: theme.spacing.md,
-            paddingBottom: insets.bottom + theme.spacing.xl,
-          }}
+          contentContainerStyle={styles.gridContainer}
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         >
-          {sections.map((section) => (
+          {sections.map((section, index) => (
             <View
-              key={section.title}
-              style={{
-                marginBottom: theme.spacing.xl,
-              }}
+              key={index}
+              style={index > 0 ? { marginTop: theme.spacing.md } : undefined}
             >
-              <SectionHeader
-                title={section.title}
-                count={section.data.length}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  gap: currentConfig.spacing,
-                  marginTop: theme.spacing.md,
-                }}
-              >
+              {section.title && (
+                <SectionHeader
+                  title={section.title}
+                  count={section.data.length}
+                />
+              )}
+              <View style={styles.grid}>
                 {section.data.map(({ recipe, visible }) => {
                   if (!visible) return null;
                   return (
