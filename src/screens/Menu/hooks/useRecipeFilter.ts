@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Recipe, IngredientType } from '../../../types';
-import { SortField, FilterOptions } from '../types';
+import { SortField, FilterOptions, RecipeSection } from '../types';
 import { FavoriteService } from '../../../services/favoriteService';
 import { containsSearchQuery } from '../../../utils/stringUtils';
 
@@ -22,6 +22,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     mainIngredientTypes: [],
     showFavoriteFirst: true,
     sort: null,
+    groupBySearch: true,
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -153,6 +154,41 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     return Array.from(uniqueRegions).filter(Boolean) as string[];
   }, [savedRecipes]);
 
+  const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
+    if (!filterOptions.searchQuery || !filterOptions.groupBySearch) {
+      return [{ title: '', data: recipes }];
+    }
+
+    const byName: { recipe: Recipe; visible: boolean }[] = [];
+    const byIngredients: { recipe: Recipe; visible: boolean }[] = [];
+
+    recipes.forEach((item) => {
+      const matchesName = containsSearchQuery(
+        item.recipe.name,
+        filterOptions.searchQuery
+      );
+      const matchesIngredients = item.recipe.ingredients.some((ingredient) =>
+        containsSearchQuery(ingredient.name, filterOptions.searchQuery)
+      );
+
+      if (matchesName) {
+        byName.push(item);
+      } else if (matchesIngredients) {
+        byIngredients.push(item);
+      }
+    });
+
+    const sections: RecipeSection[] = [];
+    if (byName.length > 0) {
+      sections.push({ title: 'Tìm theo tên', data: byName });
+    }
+    if (byIngredients.length > 0) {
+      sections.push({ title: 'Tìm theo nguyên liệu', data: byIngredients });
+    }
+
+    return sections;
+  };
+
   return {
     filterOptions,
     setFilterOptions,
@@ -160,5 +196,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     favoriteRecipes,
     refreshFavorites: loadFavorites,
     regions,
+    sections: groupRecipes(filteredRecipes),
   };
 };

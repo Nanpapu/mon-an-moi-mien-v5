@@ -17,6 +17,8 @@ import { RecipeCard } from '../../../components/recipe/RecipeCard';
 import { Ionicons } from '@expo/vector-icons';
 import { Typography } from '../../../components/shared/Typography';
 import { RecipeGridListSkeleton } from '../../../components/recipe/components/RecipeGridListSkeleton';
+import { SectionHeader } from './SectionHeader';
+import { RecipeSection } from '../types';
 
 interface Props {
   isLoading: boolean;
@@ -34,6 +36,7 @@ interface Props {
   onToggleSelect?: (recipeId: string) => void;
   isAuthenticated: boolean;
   isSaved?: boolean;
+  sections: RecipeSection[];
 }
 
 export const RecipeList = ({
@@ -52,6 +55,7 @@ export const RecipeList = ({
   onToggleSelect,
   isAuthenticated,
   isSaved,
+  sections,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -91,26 +95,35 @@ export const RecipeList = ({
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         >
-          <View style={styles.grid}>
-            {filteredRecipes.map(({ recipe, visible }) => {
-              if (!visible) return null;
-
-              return (
-                <RecipeGridItem
-                  key={recipe.id}
-                  recipe={recipe}
-                  onPress={() => handleRecipePress(recipe)}
-                  width={calculateItemWidth()}
-                  config={currentConfig}
-                  onFavoriteChange={onFavoriteChange}
-                  isSelectionMode={isSelectionMode}
-                  isSelected={selectedRecipes.has(recipe.id)}
-                  onLongPress={() => onLongPress?.(recipe.id)}
-                  onToggleSelect={() => onToggleSelect?.(recipe.id)}
+          {sections.map((section, index) => (
+            <View key={index}>
+              {section.title && (
+                <SectionHeader
+                  title={section.title}
+                  count={section.data.length}
                 />
-              );
-            })}
-          </View>
+              )}
+              <View style={styles.grid}>
+                {section.data.map(({ recipe, visible }) => {
+                  if (!visible) return null;
+                  return (
+                    <RecipeGridItem
+                      key={recipe.id}
+                      recipe={recipe}
+                      onPress={() => handleRecipePress(recipe)}
+                      width={calculateItemWidth()}
+                      config={currentConfig}
+                      onFavoriteChange={onFavoriteChange}
+                      isSelectionMode={isSelectionMode}
+                      isSelected={selectedRecipes.has(recipe.id)}
+                      onLongPress={() => onLongPress?.(recipe.id)}
+                      onToggleSelect={() => onToggleSelect?.(recipe.id)}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+          ))}
         </ScrollView>
       )}
 

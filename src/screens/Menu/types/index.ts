@@ -1,4 +1,4 @@
-import { IngredientType } from '../../../types';
+import { IngredientType, Recipe } from '../../../types';
 
 export type DishCategory = 'vegetarian' | 'non-vegetarian';
 
@@ -32,6 +32,9 @@ export interface FilterOptions {
   // Thêm sort options
   showFavoriteFirst: boolean;
   sort: SortOption | null;
+
+  // Thêm field mới
+  groupBySearch: boolean;
 }
 
 export interface CookingTimeRange {
@@ -66,3 +69,8 @@ export const SORT_OPTIONS: { label: string; field: SortField }[] = [
   { label: 'Thời gian nấu', field: 'cookingTime' },
   { label: 'Số người ăn', field: 'servings' },
 ];
+
+export interface RecipeSection {
+  title: string;
+  data: { recipe: Recipe; visible: boolean }[];
+}

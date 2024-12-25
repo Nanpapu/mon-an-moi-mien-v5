@@ -49,6 +49,7 @@ export default function MenuScreen() {
     filterOptions,
     setFilterOptions,
     filteredRecipes,
+    sections,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -288,6 +289,7 @@ export default function MenuScreen() {
             onToggleSelect={handleToggleSelect}
             isAuthenticated={!!user}
             isSaved={true}
+            sections={sections}
           />
           {user && (
             <ZoomControls
