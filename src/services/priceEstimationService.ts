@@ -3,6 +3,7 @@ import {
   INGREDIENT_PRICES,
   UNIT_CONVERSIONS,
   SEASONAL_ADJUSTMENTS,
+  getAveragePriceForType,
 } from '../constants/ingredientPrices';
 
 export const PriceEstimationService = {
@@ -49,9 +50,7 @@ export const PriceEstimationService = {
     ingredient: Ingredient,
     seasonalFactor: number = SEASONAL_ADJUSTMENTS.NORMAL
   ): number {
-    const priceInfo =
-      INGREDIENT_PRICES[ingredient.type as keyof typeof INGREDIENT_PRICES] ||
-      INGREDIENT_PRICES.other;
+    const basePrice = getAveragePriceForType(ingredient.type || 'other');
 
     // Tính hệ số quy đổi đơn vị
     let conversionFactor = 1;
@@ -78,10 +77,7 @@ export const PriceEstimationService = {
 
     // Tính giá = (số lượng * hệ số quy đổi * giá cơ bản * hệ số mùa vụ) / 1000
     const price =
-      (ingredient.amount *
-        conversionFactor *
-        priceInfo.basePrice *
-        seasonalFactor) /
+      (ingredient.amount * conversionFactor * basePrice * seasonalFactor) /
       1000;
 
     return Math.round(price);

@@ -398,3 +398,115 @@ export const SEASONAL_ADJUSTMENTS = {
   ABUNDANT: 0.8, // Mùa thu hoạch giá giảm 20%
   SCARCITY: 1.3, // Mùa khan hiếm tăng 30%
 } as const;
+
+// Map type cũ với giá mới
+const TYPE_PRICE_MAPPING = {
+  // Thịt
+  'meat/pork': [
+    'meat/pork',
+    'meat/pork_ground',
+    'meat/pork_rib',
+    'meat/pork_belly',
+  ],
+  'meat/beef': ['meat/beef', 'meat/beef_ground', 'meat/beef_tenderloin'],
+  'meat/chicken': ['meat/chicken', 'meat/chicken_breast', 'meat/chicken_thigh'],
+  'meat/duck': ['meat/duck', 'meat/duck_breast'],
+  'meat/processed': [
+    'meat/processed/ham',
+    'meat/processed/sausage',
+    'meat/processed/pate',
+  ],
+
+  // Hải sản
+  'seafood/fish': [
+    'seafood/fish/snapper',
+    'seafood/fish/mackerel',
+    'seafood/fish/salmon',
+    'seafood/fish/tuna',
+    'seafood/fish/seabass',
+  ],
+  'seafood/shrimp': ['seafood/shrimp/white', 'seafood/shrimp/black_tiger'],
+  'seafood/crab': ['seafood/crab/mud', 'seafood/crab/soft_shell'],
+  'seafood/squid': ['seafood/squid/fresh', 'seafood/squid/tube'],
+  'seafood/shellfish': [
+    'seafood/shellfish/clam',
+    'seafood/shellfish/oyster',
+    'seafood/shellfish/mussel',
+  ],
+  'seafood/dried': [
+    'seafood/dried/shrimp',
+    'seafood/dried/squid',
+    'seafood/dried/anchovy',
+  ],
+
+  // Rau củ
+  'vegetable/leafy': [
+    'vegetable/leafy/morning_glory',
+    'vegetable/leafy/spinach',
+    'vegetable/leafy/mustard',
+    'vegetable/leafy/cabbage',
+  ],
+  'vegetable/root': [
+    'vegetable/root/carrot',
+    'vegetable/root/potato',
+    'vegetable/root/radish',
+    'vegetable/root/taro',
+  ],
+  'vegetable/mushroom': [
+    'vegetable/mushroom/straw',
+    'vegetable/mushroom/shiitake',
+    'vegetable/mushroom/enoki',
+  ],
+  'vegetable/fruit': [
+    'vegetable/fruit/tomato',
+    'vegetable/fruit/eggplant',
+    'vegetable/fruit/chili',
+  ],
+  'vegetable/sprout': ['vegetable/sprout/bean', 'vegetable/sprout/bamboo'],
+
+  // Gia vị
+  'spice/fresh': [
+    'spice/fresh/garlic',
+    'spice/fresh/ginger',
+    'spice/fresh/turmeric',
+    'spice/fresh/lemongrass',
+    'spice/fresh/chili',
+  ],
+  'spice/dried': [
+    'spice/dried/pepper',
+    'spice/dried/cinnamon',
+    'spice/dried/star_anise',
+    'spice/dried/cardamom',
+  ],
+  'spice/sauce': [
+    'spice/sauce/fish_sauce',
+    'spice/sauce/soy_sauce',
+    'spice/sauce/oyster_sauce',
+    'spice/sauce/chili_sauce',
+  ],
+  'spice/powder': ['spice/powder/five_spice', 'spice/powder/curry'],
+
+  // Khác
+  'other/egg': ['other/egg/chicken', 'other/egg/duck', 'other/egg/quail'],
+  'other/tofu': ['other/tofu/white', 'other/tofu/fried'],
+  'other/dried': [
+    'other/dried/wood_ear',
+    'other/dried/vermicelli',
+    'other/dried/seaweed',
+  ],
+  other: ['other'],
+} as const;
+
+// Helper function để lấy giá trung bình cho type cũ
+export function getAveragePriceForType(type: string): number {
+  const subtypes = TYPE_PRICE_MAPPING[type as keyof typeof TYPE_PRICE_MAPPING];
+  if (!subtypes) return INGREDIENT_PRICES.other.basePrice;
+
+  const prices = subtypes.map(
+    (subtype) =>
+      INGREDIENT_PRICES[subtype as keyof typeof INGREDIENT_PRICES]?.basePrice ??
+      0
+  );
+
+  return Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+}
