@@ -26,9 +26,10 @@ import {
 
 // Thêm hằng số cho animation
 const MARKER_ZOOM_ANIMATION = {
-  DURATION: 500, // Thời gian animation (ms)
-  ZOOM_LEVEL: 8, // Mức zoom khi bấm marker
-  DELAY_MODAL: 600, // Delay hiện modal sau khi zoom xong (ms)
+  DURATION: 500,
+  LATITUDE_DELTA: 3,
+  LONGITUDE_DELTA: 3,
+  DELAY_MODAL: 600,
 };
 
 export default function MapScreen({ navigation }: { navigation: any }) {
@@ -197,21 +198,12 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
   // Thêm hàm xử lý zoom animation
   const animateToMarker = (latitude: number, longitude: number) => {
-    const currentRegion = mapRef.current?.getCamera();
-    if (!currentRegion) return;
-
-    // Tính toán zoom level phù hợp
-    const targetZoom = Math.min(
-      MARKER_ZOOM_ANIMATION.ZOOM_LEVEL,
-      CAMERA_BOUNDS.maxZoom
-    );
-
-    // Tạo region mới với zoom level được kiểm soát
+    // Tạo region mới với delta cố định
     const newRegion: MapRegion = {
       latitude,
       longitude,
-      latitudeDelta: Math.max(region.latitudeDelta / 2, 0.01),
-      longitudeDelta: Math.max(region.longitudeDelta / 2, 0.01),
+      latitudeDelta: MARKER_ZOOM_ANIMATION.LATITUDE_DELTA,
+      longitudeDelta: MARKER_ZOOM_ANIMATION.LONGITUDE_DELTA,
     };
 
     // Thực hiện animation
