@@ -209,7 +209,8 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         provider="google"
         style={{ flex: 1 }}
         initialRegion={region}
-        customMapStyle={MAP_STYLE}
+        // Chỉnh màu cho map
+        // customMapStyle={MAP_STYLE}
         minZoomLevel={CAMERA_BOUNDS.minZoom}
         maxZoomLevel={CAMERA_BOUNDS.maxZoom}
         mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
