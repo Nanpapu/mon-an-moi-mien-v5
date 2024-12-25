@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { Recipe, IngredientType } from '../../../types';
 import { SortField, FilterOptions, RecipeSection } from '../types';
 import { FavoriteService } from '../../../services/favoriteService';
@@ -27,6 +27,26 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   });
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
+
+  // Thêm state riêng cho search query
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterOptions((prev) => ({
+        ...prev,
+        searchQuery: searchQuery,
+      }));
+    }, 300); // Delay 300ms
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Tạo hàm update search riêng
+  const updateSearchQuery = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
 
   useEffect(() => {
     loadFavorites();
@@ -159,7 +179,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
     // Combine sort và favorite first
     results.sort((a, b) => {
-      // Sort by favorite first nếu được bật
+      // Sort by favorite first nếu ��ược bật
       if (filterOptions.showFavoriteFirst) {
         if (a.isFavorite !== b.isFavorite) {
           return a.isFavorite ? -1 : 1;
@@ -246,6 +266,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   return {
     filterOptions,
     setFilterOptions,
+    searchQuery, // Export searchQuery state
+    updateSearchQuery, // Export update function
     filteredRecipes,
     favoriteRecipes,
     refreshFavorites: loadFavorites,

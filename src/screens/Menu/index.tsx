@@ -50,6 +50,8 @@ export default function MenuScreen() {
     setFilterOptions,
     filteredRecipes,
     sections,
+    searchQuery,
+    updateSearchQuery,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -181,10 +183,8 @@ export default function MenuScreen() {
           <View style={styles.headerControls}>
             <View style={styles.searchBarContainer}>
               <MenuSearchBar
-                value={filterOptions.searchQuery}
-                onChangeText={(text) =>
-                  setFilterOptions({ ...filterOptions, searchQuery: text })
-                }
+                value={searchQuery}
+                onChangeText={updateSearchQuery}
                 placeholder="Tìm theo tên hoặc nguyên liệu..."
                 onSubmitEditing={() => {}}
                 recentSearches={[]}
