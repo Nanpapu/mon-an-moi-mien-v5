@@ -171,6 +171,10 @@ export default function MenuScreen() {
     setTempFilterOptions(newOptions);
   };
 
+  const handleAddToCooking = () => {
+    console.log('Thêm vào danh sách nấu');
+  };
+
   return (
     <View
       style={{
@@ -290,6 +294,7 @@ export default function MenuScreen() {
             isAuthenticated={!!user}
             isSaved={true}
             sections={sections}
+            onAddToCooking={handleAddToCooking}
           />
           {user && (
             <ZoomControls

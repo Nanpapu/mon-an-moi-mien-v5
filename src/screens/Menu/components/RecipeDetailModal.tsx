@@ -13,6 +13,7 @@ interface Props {
   onClose: () => void;
   onDelete?: (recipe: Recipe) => void;
   onSave?: () => Promise<boolean>;
+  onAddToCooking?: () => void;
   showReviews?: boolean;
   isSaved?: boolean;
 }
@@ -23,6 +24,7 @@ export const RecipeDetailModal = ({
   onClose,
   onDelete,
   onSave,
+  onAddToCooking,
   showReviews = true,
   isSaved = false,
 }: Props) => {
@@ -105,6 +107,7 @@ export const RecipeDetailModal = ({
               recipe={recipe}
               onSave={onSave}
               onDelete={onDelete ? () => onDelete(recipe) : undefined}
+              onAddToCooking={onAddToCooking}
               showActions={true}
               showReviews={showReviews}
               mode="detailed"

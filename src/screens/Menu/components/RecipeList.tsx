@@ -37,6 +37,7 @@ interface Props {
   isAuthenticated: boolean;
   isSaved?: boolean;
   sections: RecipeSection[];
+  onAddToCooking?: () => void;
 }
 
 export const RecipeList = ({
@@ -56,6 +57,7 @@ export const RecipeList = ({
   isAuthenticated,
   isSaved,
   sections,
+  onAddToCooking,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -162,6 +164,7 @@ export const RecipeList = ({
                 showReviews={true}
                 onDelete={onDeleteRecipe}
                 isSaved={true}
+                onAddToCooking={onAddToCooking}
               />
             </ScrollView>
           </View>

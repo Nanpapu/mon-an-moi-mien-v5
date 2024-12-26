@@ -44,4 +44,14 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.primary.light,
       opacity: 0.8,
     },
+    cookingButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: theme.colors.success.main,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm,
+      borderRadius: theme.spacing.sm,
+      marginRight: theme.spacing.sm,
+      ...theme.shadows.sm,
+    },
   });

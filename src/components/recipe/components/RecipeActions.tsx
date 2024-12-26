@@ -10,9 +10,15 @@ interface Props {
   recipe: Recipe;
   onSave?: () => Promise<boolean>;
   onDelete?: (recipe: Recipe) => void;
+  onAddToCooking?: () => void;
 }
 
-export const RecipeActions = ({ recipe, onSave, onDelete }: Props) => {
+export const RecipeActions = ({
+  recipe,
+  onSave,
+  onDelete,
+  onAddToCooking,
+}: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const [isSaving, setIsSaving] = useState(false);
@@ -87,6 +93,20 @@ export const RecipeActions = ({ recipe, onSave, onDelete }: Props) => {
               style={{ marginLeft: 8 }}
             />
           )}
+        </TouchableOpacity>
+      )}
+
+      {onAddToCooking && (
+        <TouchableOpacity style={styles.cookingButton} onPress={onAddToCooking}>
+          <Ionicons
+            name="restaurant-outline"
+            size={20}
+            color={theme.colors.background.default}
+            style={{ marginRight: 8 }}
+          />
+          <Typography variant="body1" style={styles.buttonText}>
+            Thêm vào danh sách nấu
+          </Typography>
         </TouchableOpacity>
       )}
 
