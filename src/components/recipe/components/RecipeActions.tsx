@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '../../../types';
 import { createStyles } from './RecipeActions.styles';
@@ -34,7 +34,24 @@ export const RecipeActions = ({
       {onDelete && (
         <TouchableOpacity
           style={styles.deleteButton}
-          onPress={() => onDelete(recipe)}
+          onPress={() => {
+            Alert.alert(
+              'Xác nhận xóa công thức',
+              `Bạn có chắc muốn xóa "${recipe.name}" khỏi danh sách đã lưu?\n\nLưu ý: Hành động này không thể hoàn tác và công thức sẽ bị xóa vĩnh viễn khỏi danh sách đã lưu của bạn.`,
+              [
+                {
+                  text: 'Hủy',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Xóa vĩnh viễn',
+                  style: 'destructive',
+                  onPress: () => onDelete(recipe),
+                },
+              ],
+              { cancelable: true }
+            );
+          }}
         >
           <Ionicons
             name="trash-outline"
@@ -51,7 +68,27 @@ export const RecipeActions = ({
       {isCooking && onRemoveFromCooking ? (
         <TouchableOpacity
           style={[styles.cookingButton, styles.removeCookingButton]}
-          onPress={() => onRemoveFromCooking(recipe)}
+          onPress={() => {
+            Alert.alert(
+              'Xác nhận dừng nấu',
+              `Bạn có chắc muốn dừng nấu "${recipe.name}"?\n\nLưu ý: 
+              - Công thức vẫn được lưu trong danh sách yêu thích của bạn
+              - Chỉ bỏ khỏi danh sách đang nấu
+              - Bạn có thể thêm lại vào danh sách đang nấu bất cứ lúc nào`,
+              [
+                {
+                  text: 'Hủy',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Dừng nấu',
+                  style: 'destructive',
+                  onPress: () => onRemoveFromCooking(recipe),
+                },
+              ],
+              { cancelable: true }
+            );
+          }}
         >
           <Ionicons
             name="close-circle-outline"
@@ -60,7 +97,7 @@ export const RecipeActions = ({
             style={{ marginRight: 8 }}
           />
           <Typography variant="body1" style={styles.buttonText}>
-            Bỏ nấu
+            Dừng nấu
           </Typography>
         </TouchableOpacity>
       ) : (
