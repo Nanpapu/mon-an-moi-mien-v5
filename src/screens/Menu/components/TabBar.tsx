@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export type TabType = 'cooking' | 'saved';
 
@@ -58,86 +59,131 @@ export const TabBar = ({
     : 0;
 
   return (
-    <View ref={containerRef} onLayout={onLayout} style={styles.container}>
-      {/* Tab Đã lưu */}
-      <TouchableOpacity style={styles.tab} onPress={() => onTabChange('saved')}>
-        <Typography
-          variant="body1"
-          style={[
-            styles.tabText,
-            activeTab === 'saved' && styles.activeTabText,
-          ]}
+    <View style={styles.wrapper}>
+      <View ref={containerRef} onLayout={onLayout} style={styles.container}>
+        {/* Tab Đã lưu */}
+        <TouchableOpacity
+          style={styles.tab}
+          onPress={() => onTabChange('saved')}
+          activeOpacity={0.7}
         >
-          Đã lưu ({savedCount})
-        </Typography>
-      </TouchableOpacity>
+          <Ionicons
+            name="bookmark-outline"
+            size={20}
+            color={
+              activeTab === 'saved'
+                ? theme.colors.primary.contrast
+                : theme.colors.text.primary
+            }
+            style={styles.tabIcon}
+          />
+          <Typography
+            variant="body1"
+            style={[
+              styles.tabText,
+              activeTab === 'saved' && styles.activeTabText,
+            ]}
+          >
+            Đã lưu
+          </Typography>
+          <View style={styles.badgeContainer}>
+            <Typography variant="caption" style={styles.badgeText}>
+              {savedCount}
+            </Typography>
+          </View>
+        </TouchableOpacity>
 
-      {/* Tab Đang nấu */}
-      <TouchableOpacity
-        style={styles.tab}
-        onPress={() => onTabChange('cooking')}
-      >
-        <Typography
-          variant="body1"
-          style={[
-            styles.tabText,
-            activeTab === 'cooking' && styles.activeTabText,
-          ]}
+        {/* Tab Đang nấu */}
+        <TouchableOpacity
+          style={styles.tab}
+          onPress={() => onTabChange('cooking')}
+          activeOpacity={0.7}
         >
-          Đang nấu ({cookingCount})
-        </Typography>
-      </TouchableOpacity>
+          <Ionicons
+            name="restaurant-outline"
+            size={20}
+            color={
+              activeTab === 'cooking'
+                ? theme.colors.primary.contrast
+                : theme.colors.text.primary
+            }
+            style={styles.tabIcon}
+          />
+          <Typography
+            variant="body1"
+            style={[
+              styles.tabText,
+              activeTab === 'cooking' && styles.activeTabText,
+            ]}
+          >
+            Đang nấu
+          </Typography>
+          <View style={styles.badgeContainer}>
+            <Typography variant="caption" style={styles.badgeText}>
+              {cookingCount}
+            </Typography>
+          </View>
+        </TouchableOpacity>
 
-      {/* Animated Indicator */}
-      <Animated.View
-        style={[
-          styles.indicator,
-          {
-            width: indicatorWidth,
-            transform: [
-              {
-                translateX: translateX.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [
-                    theme.spacing.xs,
-                    indicatorWidth + theme.spacing.xs,
-                  ],
-                }),
-              },
-            ],
-          },
-        ]}
-      />
+        {/* Animated Indicator */}
+        <Animated.View
+          style={[
+            styles.indicator,
+            {
+              width: indicatorWidth,
+              transform: [
+                {
+                  translateX: translateX.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [
+                      theme.spacing.xs,
+                      indicatorWidth + theme.spacing.xs,
+                    ],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+      </View>
     </View>
   );
 };
 
 const createStyles = (theme: any) =>
   StyleSheet.create({
+    wrapper: {
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm,
+      backgroundColor: theme.colors.background.default,
+    },
     container: {
       flexDirection: 'row',
       backgroundColor: theme.colors.background.paper,
-      borderRadius: theme.spacing.sm,
-      padding: theme.spacing.xs,
-      marginHorizontal: theme.spacing.md,
-      marginVertical: theme.spacing.sm,
+      borderRadius: 28,
+      padding: 4,
       position: 'relative',
-      height: 48,
+      height: 56,
       alignItems: 'center',
-      ...theme.shadows.sm,
+      ...theme.shadows.md,
     },
     tab: {
       flex: 1,
+      flexDirection: 'row',
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: theme.spacing.xs,
+      borderRadius: 24,
       zIndex: 1,
       paddingHorizontal: theme.spacing.sm,
+    },
+    tabIcon: {
+      marginRight: 6,
     },
     tabText: {
       color: theme.colors.text.primary,
       fontWeight: '500',
+      fontSize: 15,
     },
     activeTabText: {
       color: theme.colors.primary.contrast,
@@ -146,9 +192,31 @@ const createStyles = (theme: any) =>
     indicator: {
       position: 'absolute',
       top: 4,
-      height: 40,
+      height: 48,
       backgroundColor: theme.colors.primary.main,
-      borderRadius: theme.spacing.xs,
+      borderRadius: 24,
       zIndex: 0,
+      elevation: 2,
+      shadowColor: theme.colors.primary.main,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+    },
+    badgeContainer: {
+      backgroundColor: theme.colors.background.default,
+      borderRadius: 12,
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      marginLeft: 6,
+      minWidth: 24,
+      alignItems: 'center',
+    },
+    badgeText: {
+      color: theme.colors.text.primary,
+      fontSize: 12,
+      fontWeight: '500',
     },
   });
