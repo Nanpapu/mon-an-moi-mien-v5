@@ -120,15 +120,17 @@ export const CookingRecipesService = {
     recipeId: string
   ): Promise<boolean> => {
     try {
+      // 1. Xóa local
       const localData = await AsyncStorage.getItem(COOKING_RECIPES_KEY(userId));
       const recipes = localData ? JSON.parse(localData) : [];
-
       const updatedRecipes = recipes.filter((r: Recipe) => r.id !== recipeId);
+
       await AsyncStorage.setItem(
         COOKING_RECIPES_KEY(userId),
         JSON.stringify(updatedRecipes)
       );
 
+      // 2. Kiểm tra kết nối
       const networkState = await NetInfo.fetch();
       if (!networkState.isConnected) {
         await SyncQueueService.addToQueue({
@@ -140,8 +142,27 @@ export const CookingRecipesService = {
         return true;
       }
 
-      const recipeIds = updatedRecipes.map((r: Recipe) => r.id);
-      await CookingRecipesService.saveCookingRecipes(userId, updatedRecipes);
+      // 3. Sync với cloud
+      const docRef = doc(db, COLLECTIONS.USER_SAVED_RECIPES, userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const cookingRecipeIds = data.cookingRecipeIds || [];
+
+        await setDoc(
+          docRef,
+          {
+            ...data,
+            cookingRecipeIds: cookingRecipeIds.filter(
+              (id: string) => id !== recipeId
+            ),
+            updatedAt: Timestamp.now(),
+            version: (data.version || 0) + 1,
+          },
+          { merge: true }
+        );
+      }
 
       return true;
     } catch (error) {

@@ -6,6 +6,8 @@ import { UserSavedRecipesService } from '../services/userSavedRecipesService';
 import { CacheService } from '../services/cacheService';
 import { CACHE_KEYS } from '../constants/cacheKeys';
 import { ImageCacheService } from '../services/imageCacheService';
+import { FavoriteService } from '../services/favoriteService';
+import { CookingRecipesService } from '../services/cookingRecipesService';
 
 // Khóa lưu trữ cho danh sách công thức
 const SAVED_RECIPES_KEY = (userId: string) => `saved_recipes_${userId}`;
@@ -66,6 +68,7 @@ export const removeRecipe = async (
   userId: string
 ): Promise<boolean> => {
   try {
+    // 1. Xóa khỏi danh sách đã lưu
     const key = SAVED_RECIPES_KEY(userId);
     const savedRecipesStr = await AsyncStorage.getItem(key);
     if (!savedRecipesStr) return false;
@@ -75,16 +78,22 @@ export const removeRecipe = async (
       (recipe) => recipe.id !== recipeId
     );
 
-    // Xóa cache ảnh
+    // 2. Xóa khỏi yêu thích
+    await FavoriteService.removeFavorite(recipeId);
+
+    // 3. Xóa khỏi đang nấu
+    await CookingRecipesService.removeCookingRecipe(userId, recipeId);
+
+    // 4. Xóa cache ảnh
     await ImageCacheService.clearImageCache(recipeId);
 
-    // Update local storage
+    // 5. Update local storage
     await AsyncStorage.setItem(key, JSON.stringify(updatedRecipes));
 
-    // Clear cache
+    // 6. Clear cache
     await CacheService.clearCache(`${CACHE_KEYS.SAVED_RECIPES}${userId}`);
 
-    // Sync to cloud
+    // 7. Sync to cloud
     const recipeIds = updatedRecipes.map((r: Recipe) => r.id);
     await UserSavedRecipesService.syncToCloud(userId, recipeIds);
 
