@@ -153,9 +153,11 @@ export const RecipeReviews = ({ recipe }: Props) => {
                 <View style={styles.starsRow}>
                   {renderStars(stats.averageRating, 16, '#FFD700')}
                 </View>
-                <View>
+                <View
+                  style={{ minWidth: 80, alignItems: 'center', width: '100%' }}
+                >
                   <Typography
-                    variant="caption"
+                    variant="subtitle2"
                     color="secondary"
                     numberOfLines={1}
                   >
