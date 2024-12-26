@@ -58,6 +58,8 @@ export default function MenuScreen() {
     addToCooking,
     isRecipeInCooking,
     removeFromCooking,
+    activeTab,
+    setActiveTab,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -77,7 +79,6 @@ export default function MenuScreen() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
-  const [activeTab, setActiveTab] = useState<TabType>('saved');
 
   const activeFiltersCount = [
     filterOptions.region,
@@ -186,10 +187,8 @@ export default function MenuScreen() {
     setShowFilterModal(false);
   };
 
-  const handleApplyFilter = (newOptions: FilterOptions) => {
-    console.log('Áp dụng filter mới:', newOptions);
-    setFilterOptions(newOptions);
-    setTempFilterOptions(newOptions);
+  const handleApplyFilter = (newFilterOptions: FilterOptions) => {
+    setFilterOptions(newFilterOptions);
   };
 
   const handleAddToCooking = useCallback(
@@ -254,11 +253,12 @@ export default function MenuScreen() {
 
           <FilterModal
             visible={showFilterModal}
-            onClose={handleCloseFilterModal}
-            filterOptions={tempFilterOptions}
-            onFilterChange={setTempFilterOptions}
+            onClose={() => setShowFilterModal(false)}
+            filterOptions={filterOptions}
+            onFilterChange={setFilterOptions}
             onApply={handleApplyFilter}
             regions={regions}
+            activeTab={activeTab}
           />
         </>
       )}

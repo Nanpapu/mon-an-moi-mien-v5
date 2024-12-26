@@ -168,7 +168,7 @@ export const DisplaySettings = () => {
             'eye-outline',
             false
           )}
-          {renderSettingItem(
+          {/* {renderSettingItem(
             'Hiển thị số liệu',
             'Hiển thị thông tin chi tiết về thời gian và khối lượng',
             showStats,
@@ -176,7 +176,7 @@ export const DisplaySettings = () => {
             'stats-chart-outline',
             true,
             'Tính năng đang phát triển'
-          )}
+          )} */}
           {renderSettingItem(
             'Thông báo',
             'Nhận thông báo về công thức mới và cập nhật',

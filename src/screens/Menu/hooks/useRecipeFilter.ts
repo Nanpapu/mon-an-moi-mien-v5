@@ -5,30 +5,63 @@ import { FavoriteService } from '../../../services/favoriteService';
 import { containsSearchQuery } from '../../../utils/stringUtils';
 import { CookingRecipesService } from '../../../services/cookingRecipesService';
 import { useAuth } from '../../../context/AuthContext';
+import { TabType } from '../components/TabBar';
+
+// Thêm interface cho filter options của từng tab
+interface TabFilterOptions {
+  cooking: FilterOptions;
+  saved: FilterOptions;
+}
 
 export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<TabType>('saved');
 
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
-    searchQuery: '',
-    region: null,
-    showFavorites: false,
-    category: null,
-    difficulty: null,
-    cookingTime: {
-      min: null,
-      max: null,
+  // Thay đổi state để lưu filter options cho từng tab
+  const [filterOptions, setFilterOptions] = useState<TabFilterOptions>({
+    cooking: {
+      searchQuery: '',
+      region: null,
+      showFavorites: false,
+      category: null,
+      difficulty: null,
+      cookingTime: { min: null, max: null },
+      servings: { min: null, max: null },
+      mainIngredientTypes: [],
+      showFavoriteFirst: true,
+      sort: null,
+      groupBySearch: true,
+      showDuplicateResults: false,
     },
-    servings: {
-      min: null,
-      max: null,
+    saved: {
+      searchQuery: '',
+      region: null,
+      showFavorites: false,
+      category: null,
+      difficulty: null,
+      cookingTime: { min: null, max: null },
+      servings: { min: null, max: null },
+      mainIngredientTypes: [],
+      showFavoriteFirst: true,
+      sort: null,
+      groupBySearch: true,
+      showDuplicateResults: false,
     },
-    mainIngredientTypes: [],
-    showFavoriteFirst: true,
-    sort: null,
-    groupBySearch: true,
-    showDuplicateResults: false,
   });
+
+  // Helper để lấy filter options của tab hiện tại
+  const currentFilterOptions = filterOptions[activeTab];
+
+  // Cập nhật hàm setFilterOptions
+  const updateFilterOptions = (newOptions: Partial<FilterOptions>) => {
+    setFilterOptions((prev) => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        ...newOptions,
+      },
+    }));
+  };
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
 
@@ -83,11 +116,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   // Khai báo kiểu trước khi sử dụng
   const matchesCookingTime: (recipe: Recipe) => boolean = (recipe) => {
-    if (!filterOptions.cookingTime.min && !filterOptions.cookingTime.max)
+    if (
+      !currentFilterOptions.cookingTime.min &&
+      !currentFilterOptions.cookingTime.max
+    )
       return true;
     if (!recipe.cookingTime) return false;
 
-    const { min, max } = filterOptions.cookingTime;
+    const { min, max } = currentFilterOptions.cookingTime;
     if (min && max)
       return recipe.cookingTime >= min && recipe.cookingTime <= max;
     if (min) return recipe.cookingTime >= min;
@@ -97,10 +133,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   // Hàm helper để kiểm tra số người ăn
   const matchesServings = (recipe: Recipe): boolean => {
-    if (!filterOptions.servings.min && !filterOptions.servings.max) return true;
+    if (
+      !currentFilterOptions.servings.min &&
+      !currentFilterOptions.servings.max
+    )
+      return true;
     if (!recipe.servings) return false;
 
-    const { min, max } = filterOptions.servings;
+    const { min, max } = currentFilterOptions.servings;
     if (min && max) return recipe.servings >= min && recipe.servings <= max;
     if (min) return recipe.servings >= min;
     if (max) return recipe.servings <= max;
@@ -109,12 +149,12 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   // Hàm helper để kiểm tra nguyên liệu chính
   const matchesIngredientTypes = (recipe: Recipe): boolean => {
-    if (filterOptions.mainIngredientTypes.length === 0) return true;
+    if (currentFilterOptions.mainIngredientTypes.length === 0) return true;
 
     return recipe.ingredients.some(
       (ingredient) =>
         ingredient.type &&
-        filterOptions.mainIngredientTypes.includes(ingredient.type)
+        currentFilterOptions.mainIngredientTypes.includes(ingredient.type)
     );
   };
 
@@ -126,30 +166,30 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       })
       .filter((item) => {
         // Lọc theo yêu thích
-        if (filterOptions.showFavorites && !item.isFavorite) {
+        if (currentFilterOptions.showFavorites && !item.isFavorite) {
           return false;
         }
 
         // Lọc theo vùng miền
         if (
-          filterOptions.region &&
-          item.recipe.region !== filterOptions.region
+          currentFilterOptions.region &&
+          item.recipe.region !== currentFilterOptions.region
         ) {
           return false;
         }
 
         // Lọc theo category (chay/mặn)
         if (
-          filterOptions.category &&
-          item.recipe.category !== filterOptions.category
+          currentFilterOptions.category &&
+          item.recipe.category !== currentFilterOptions.category
         ) {
           return false;
         }
 
         // Lọc theo độ khó
         if (
-          filterOptions.difficulty !== null &&
-          item.recipe.difficulty !== filterOptions.difficulty
+          currentFilterOptions.difficulty !== null &&
+          item.recipe.difficulty !== currentFilterOptions.difficulty
         ) {
           return false;
         }
@@ -170,14 +210,17 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
         }
 
         // Lọc theo từ khóa tìm kiếm
-        if (filterOptions.searchQuery) {
+        if (currentFilterOptions.searchQuery) {
           const matchesName = containsSearchQuery(
             item.recipe.name,
-            filterOptions.searchQuery
+            currentFilterOptions.searchQuery
           );
           const matchesIngredients = item.recipe.ingredients.some(
             (ingredient) =>
-              containsSearchQuery(ingredient.name, filterOptions.searchQuery)
+              containsSearchQuery(
+                ingredient.name,
+                currentFilterOptions.searchQuery
+              )
           );
           return matchesName || matchesIngredients;
         }
@@ -193,15 +236,15 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
     results.sort((a, b) => {
       // Sort by favorite first nếu được bật
-      if (filterOptions.showFavoriteFirst) {
+      if (currentFilterOptions.showFavoriteFirst) {
         if (a.isFavorite !== b.isFavorite) {
           return a.isFavorite ? -1 : 1;
         }
       }
 
       // Sau đó mới sort theo field
-      if (filterOptions.sort) {
-        const { field, order } = filterOptions.sort;
+      if (currentFilterOptions.sort) {
+        const { field, order } = currentFilterOptions.sort;
         const aValue = getSortValue(a.recipe, field);
         const bValue = getSortValue(b.recipe, field);
 
@@ -229,7 +272,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       recipe: item.recipe,
       visible: true,
     }));
-  }, [savedRecipes, filterOptions, favoriteRecipes]);
+  }, [savedRecipes, currentFilterOptions, favoriteRecipes]);
 
   const regions = useMemo(() => {
     const uniqueRegions = new Set(savedRecipes.map((recipe) => recipe.region));
@@ -307,8 +350,10 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   );
 
   return {
-    filterOptions,
-    setFilterOptions,
+    filterOptions: currentFilterOptions, // Trả về filter của tab hiện tại
+    setFilterOptions: updateFilterOptions,
+    activeTab,
+    setActiveTab,
     searchQuery, // Export searchQuery state
     updateSearchQuery, // Export update function
     filteredRecipes,

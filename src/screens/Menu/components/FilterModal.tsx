@@ -23,6 +23,7 @@ interface Props {
   onFilterChange: (options: FilterOptions) => void;
   onApply: (options: FilterOptions) => void;
   regions: string[];
+  activeTab: string;
 }
 
 const defaultFilterOptions: FilterOptions = {
@@ -47,6 +48,7 @@ export const FilterModal = ({
   onFilterChange,
   onApply,
   regions,
+  activeTab,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -71,33 +73,34 @@ export const FilterModal = ({
   };
 
   const handleReset = () => {
-    Alert.alert(
-      'Đặt lại bộ lọc',
-      'Bạn có chắc muốn đặt lại tất cả bộ lọc và sắp xếp về mặc định?',
-      [
-        {
-          text: 'Hủy',
-          style: 'cancel',
-        },
-        {
-          text: 'Đặt lại',
-          style: 'destructive',
-          onPress: () => {
-            setTempFilterOptions({
-              ...defaultFilterOptions,
-              showFavoriteFirst: true,
-            });
-          },
-        },
-      ]
-    );
+    const defaultOptions = {
+      searchQuery: '',
+      region: null,
+      showFavorites: false,
+      category: null,
+      difficulty: null,
+      cookingTime: { min: null, max: null },
+      servings: { min: null, max: null },
+      mainIngredientTypes: [],
+      showFavoriteFirst: true,
+      sort: null,
+      groupBySearch: true,
+      showDuplicateResults: false,
+    };
+    setTempFilterOptions(defaultOptions);
+  };
+
+  const getModalTitle = () => {
+    return activeTab === 'cooking'
+      ? 'Lọc công thức đang nấu'
+      : 'Lọc công thức đã lưu';
   };
 
   return (
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      transparent={true}
       onRequestClose={handleClose}
     >
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -111,7 +114,7 @@ export const FilterModal = ({
               />
             </TouchableOpacity>
             <Typography variant="h2" style={styles.title}>
-              Bộ lọc nâng cao
+              {getModalTitle()}
             </Typography>
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <MaterialCommunityIcons
