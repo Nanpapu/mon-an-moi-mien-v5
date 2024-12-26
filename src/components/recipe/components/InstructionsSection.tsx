@@ -14,12 +14,14 @@ interface Props {
   instructions: Instructions;
   defaultExpanded?: boolean;
   showCheckbox?: boolean;
+  isCooking?: boolean;
 }
 
 export const InstructionsSection = ({
   instructions,
   defaultExpanded = false,
   showCheckbox = false,
+  isCooking = false,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -28,6 +30,8 @@ export const InstructionsSection = ({
   );
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
   const [completionProgress, setCompletionProgress] = useState(0);
+
+  const shouldShowProgress = isCooking;
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -190,7 +194,7 @@ export const InstructionsSection = ({
           </>
         )}
       </View>
-      {showCheckbox && (
+      {shouldShowProgress && showCheckbox && (
         <Checkbox
           checked={checkedSteps.has(`${key}_${index}`)}
           onToggle={() => toggleStep(`${key}_${index}`)}
@@ -271,7 +275,7 @@ export const InstructionsSection = ({
         <Typography variant="h3">Cách làm</Typography>
       </View>
 
-      {showCheckbox && (
+      {shouldShowProgress && (
         <>
           <ProgressBar
             progress={completionProgress}
@@ -405,7 +409,7 @@ export const InstructionsSection = ({
                         </>
                       )}
                     </View>
-                    {showCheckbox && (
+                    {shouldShowProgress && showCheckbox && (
                       <Checkbox
                         checked={checkedSteps.has(`${key}_${index}`)}
                         onToggle={() => toggleStep(`${key}_${index}`)}

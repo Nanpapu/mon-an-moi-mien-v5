@@ -13,6 +13,7 @@ interface Props {
   ingredients: Ingredient[];
   onIngredientPress?: (ingredient: Ingredient) => void;
   showCheckbox?: boolean;
+  isCooking?: boolean;
   defaultExpanded?: boolean;
 }
 
@@ -78,6 +79,7 @@ export const RecipeIngredients = ({
   ingredients,
   onIngredientPress,
   showCheckbox = false,
+  isCooking = false,
   defaultExpanded = false,
 }: Props) => {
   const { theme } = useTheme();
@@ -182,6 +184,9 @@ export const RecipeIngredients = ({
     }
   }, [defaultExpanded, groupedIngredients]);
 
+  // Thêm điều kiện hiển thị cho progress bar và checkbox
+  const shouldShowProgress = isCooking;
+
   return (
     <View style={styles.ingredientsContainer}>
       <View style={styles.header}>
@@ -194,7 +199,7 @@ export const RecipeIngredients = ({
         <Typography variant="h3">Nguyên liệu ({ingredients.length})</Typography>
       </View>
 
-      {showCheckbox && (
+      {shouldShowProgress && (
         <>
           <ProgressBar
             progress={completionProgress}
@@ -289,7 +294,7 @@ export const RecipeIngredients = ({
                         {ingredient.note && ` (${ingredient.note})`}
                       </Typography>
                     </View>
-                    {showCheckbox && (
+                    {shouldShowProgress && showCheckbox && (
                       <Checkbox
                         checked={checkedIngredients.has(
                           `${ingredient.name}_${ingredient.amount}_${ingredient.unit}`

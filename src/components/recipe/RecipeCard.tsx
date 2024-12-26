@@ -158,12 +158,14 @@ export function RecipeCard({
             <RecipeIngredients
               ingredients={recipe.ingredients}
               showCheckbox={isSaved}
+              isCooking={isCooking}
               defaultExpanded={mode === 'detailed'}
             />
             <InstructionsSection
               instructions={recipe.instructions}
               defaultExpanded={mode === 'detailed'}
               showCheckbox={isSaved}
+              isCooking={isCooking}
             />
           </View>
         )}
