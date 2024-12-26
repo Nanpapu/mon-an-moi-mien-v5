@@ -58,7 +58,10 @@ export const UserProfile = ({
         width: '100%',
       }}
     >
-      <TouchableOpacity onPress={onPickImage}>
+      <TouchableOpacity
+        onPress={isEditing ? onPickImage : undefined}
+        disabled={!isEditing}
+      >
         <View
           style={{
             width: 100,
@@ -67,6 +70,12 @@ export const UserProfile = ({
             backgroundColor: theme.colors.background.paper,
             ...theme.shadows.md,
             marginBottom: theme.spacing.md,
+            opacity: isEditing ? 1 : 0.8,
+            ...(isEditing && {
+              borderWidth: 2,
+              borderColor: theme.colors.primary.main,
+              borderStyle: 'dashed',
+            }),
           }}
         >
           {photoURL ? (
@@ -91,6 +100,26 @@ export const UserProfile = ({
                 name="person"
                 size={40}
                 color={theme.colors.text.secondary}
+              />
+            </View>
+          )}
+
+          {isEditing && (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                backgroundColor: theme.colors.primary.main,
+                borderRadius: 15,
+                padding: 5,
+                ...theme.shadows.sm,
+              }}
+            >
+              <Ionicons
+                name="camera"
+                size={16}
+                color={theme.colors.primary.contrast}
               />
             </View>
           )}
