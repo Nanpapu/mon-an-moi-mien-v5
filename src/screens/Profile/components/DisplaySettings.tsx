@@ -116,14 +116,14 @@ export const DisplaySettings = () => {
 
   const getFocusModeDescription = (isFocusMode: boolean) => {
     if (isFocusMode) {
-      return 'Đã bật chế độ tập trung - Thanh điều hướng đã được ẩn để tối ưu không gian hiển thị. Nhấn để tắt chế độ này';
+      return 'Đã bật chế độ tập trung - Thanh điều hướng được ẩn để tối ưu không gian hiển thị. Nhấn để tắt chế độ này';
     }
-    return 'Ẩn thanh điều hướng (App Bar) để tối ưu không gian hiển thị và tập trung vào nội dung';
+    return 'Ẩn App Bar để tối ưu không gian hiển thị và tập trung vào nội dung';
   };
 
   const getMapModeDescription = (isSimpleMode: boolean) => {
     if (isSimpleMode) {
-      return 'Đã bật chế độ đơn giản - Đường xá và tên đường đã được ẩn, biên giới được làm nổi bật. Nhấn để tắt chế độ này';
+      return 'Chế độ đơn giản - Đường xá và tên đường được ẩn, biên giới được làm nổi bật. Nhấn để tắt chế độ này';
     }
     return 'Ẩn đường xá và tên đường, tăng độ nổi bật cho biên giới và ranh giới hành chính';
   };
