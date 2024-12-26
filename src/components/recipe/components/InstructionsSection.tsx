@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Instructions, Step } from '../../../types';
@@ -9,8 +9,10 @@ import { Checkbox } from '../../shared/Checkbox';
 import { ProgressCategories } from '../../shared/ProgressCategories';
 import { ProgressBar } from '../../shared/ProgressBar';
 import { SeasonalAlert } from './SeasonalAlert';
+import { CookingProgressService } from '../../../services/CookingProgressService';
 
 interface Props {
+  recipeId: string;
   instructions: Instructions;
   defaultExpanded?: boolean;
   showCheckbox?: boolean;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 export const InstructionsSection = ({
+  recipeId,
   instructions,
   defaultExpanded = false,
   showCheckbox = false,
@@ -57,17 +60,26 @@ export const InstructionsSection = ({
     });
   };
 
-  const toggleStep = (stepKey: string) => {
-    setCheckedSteps((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(stepKey)) {
-        newSet.delete(stepKey);
-      } else {
-        newSet.add(stepKey);
-      }
-      return newSet;
-    });
-  };
+  const toggleStep = useCallback(
+    (stepKey: string) => {
+      setCheckedSteps((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(stepKey)) {
+          newSet.delete(stepKey);
+        } else {
+          newSet.add(stepKey);
+        }
+
+        CookingProgressService.saveInstructionsProgress(
+          recipeId,
+          Array.from(newSet)
+        );
+
+        return newSet;
+      });
+    },
+    [recipeId]
+  );
 
   const sections = [
     {

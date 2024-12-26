@@ -156,12 +156,14 @@ export function RecipeCard({
           <View style={styles.details}>
             <SeasonalAlert />
             <RecipeIngredients
+              recipeId={recipe.id}
               ingredients={recipe.ingredients}
               showCheckbox={isSaved}
               isCooking={isCooking}
               defaultExpanded={mode === 'detailed'}
             />
             <InstructionsSection
+              recipeId={recipe.id}
               instructions={recipe.instructions}
               defaultExpanded={mode === 'detailed'}
               showCheckbox={isSaved}

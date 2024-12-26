@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Ingredient, IngredientType } from '../../../types';
@@ -8,8 +8,10 @@ import { Typography } from '../../shared';
 import { Checkbox } from '../../shared/Checkbox';
 import { ProgressCategories } from '../../shared/ProgressCategories';
 import { ProgressBar } from '../../shared/ProgressBar';
+import { CookingProgressService } from '../../../services/CookingProgressService';
 
 interface Props {
+  recipeId: string;
   ingredients: Ingredient[];
   onIngredientPress?: (ingredient: Ingredient) => void;
   showCheckbox?: boolean;
@@ -76,6 +78,7 @@ const INGREDIENT_GROUPS: IngredientGroupConfig[] = [
 ];
 
 export const RecipeIngredients = ({
+  recipeId,
   ingredients,
   onIngredientPress,
   showCheckbox = false,
@@ -158,17 +161,27 @@ export const RecipeIngredients = ({
     });
   };
 
-  const toggleIngredient = (ingredientKey: string) => {
-    setCheckedIngredients((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(ingredientKey)) {
-        newSet.delete(ingredientKey);
-      } else {
-        newSet.add(ingredientKey);
-      }
-      return newSet;
-    });
-  };
+  const toggleIngredient = useCallback(
+    (ingredientKey: string) => {
+      setCheckedIngredients((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(ingredientKey)) {
+          newSet.delete(ingredientKey);
+        } else {
+          newSet.add(ingredientKey);
+        }
+
+        // Lưu progress mới
+        CookingProgressService.saveIngredientsProgress(
+          recipeId,
+          Array.from(newSet)
+        );
+
+        return newSet;
+      });
+    },
+    [recipeId]
+  );
 
   useEffect(() => {
     const totalIngredients = ingredients.length;
@@ -183,6 +196,18 @@ export const RecipeIngredients = ({
       setExpandedGroups(new Set(allGroups));
     }
   }, [defaultExpanded, groupedIngredients]);
+
+  // Thêm useEffect để load saved progress
+  useEffect(() => {
+    const loadSavedProgress = async () => {
+      if (isCooking) {
+        const savedChecked =
+          await CookingProgressService.getIngredientsProgress(recipeId);
+        setCheckedIngredients(new Set(savedChecked));
+      }
+    };
+    loadSavedProgress();
+  }, [recipeId, isCooking]);
 
   // Thêm điều kiện hiển thị cho progress bar và checkbox
   const shouldShowProgress = isCooking;
