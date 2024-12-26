@@ -239,13 +239,15 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
     // Lấy tất cả công thức đang nấu
     const cookingRecipesSection = {
-      title: 'Công thức đang nấu',
+      // title: 'Công thức đang nấu',
+      title: '',
       data: recipes.filter((item) => isRecipeInCooking(item.recipe.id)),
     };
 
     // Lấy tất cả công thức đã lưu (bao gồm cả đang nấu)
     const savedRecipesSection = {
-      title: 'Công thức đã lưu',
+      // title: 'Công thức đã lưu',
+      title: '',
       data: recipes, // Không filter nữa, hiển thị tất cả
     };
 

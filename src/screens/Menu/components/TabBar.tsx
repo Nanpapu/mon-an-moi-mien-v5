@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -26,26 +26,39 @@ export const TabBar = ({
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const containerRef = useRef<View>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  // Tạo animated value để control vị trí của indicator
+  // Sửa lại giá trị khởi tạo của Animated.Value
   const translateX = useRef(
-    new Animated.Value(activeTab === 'saved' ? 0 : 1)
+    new Animated.Value(activeTab === 'cooking' ? 1 : 0)
   ).current;
 
-  // Animation khi tab thay đổi
+  const onLayout = useCallback(() => {
+    if (containerRef.current) {
+      containerRef.current.measure((x, y, width) => {
+        setContainerWidth(width);
+      });
+    }
+  }, []);
+
+  // Sửa lại logic animation
   useEffect(() => {
     Animated.spring(translateX, {
-      toValue: activeTab === 'saved' ? 0 : 1,
+      toValue: activeTab === 'cooking' ? 1 : 0,
       useNativeDriver: true,
       tension: 68,
       friction: 10,
     }).start();
   }, [activeTab]);
 
-  const { width } = Dimensions.get('window');
+  // Tính toán lại vị trí indicator
+  const indicatorWidth = containerWidth
+    ? (containerWidth - theme.spacing.xs * 2) / 2
+    : 0;
 
   return (
-    <View style={styles.container}>
+    <View ref={containerRef} onLayout={onLayout} style={styles.container}>
       {/* Tab Đã lưu */}
       <TouchableOpacity style={styles.tab} onPress={() => onTabChange('saved')}>
         <Typography
@@ -80,11 +93,15 @@ export const TabBar = ({
         style={[
           styles.indicator,
           {
+            width: indicatorWidth,
             transform: [
               {
                 translateX: translateX.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, width / 2 - 8],
+                  outputRange: [
+                    theme.spacing.xs,
+                    indicatorWidth + theme.spacing.xs,
+                  ],
                 }),
               },
             ],
@@ -129,8 +146,6 @@ const createStyles = (theme: any) =>
     indicator: {
       position: 'absolute',
       top: 4,
-      left: 4,
-      width: '48%',
       height: 40,
       backgroundColor: theme.colors.primary.main,
       borderRadius: theme.spacing.xs,
