@@ -69,4 +69,7 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.success.dark,
       opacity: 0.8,
     },
+    removeCookingButton: {
+      backgroundColor: theme.colors.error.main,
+    },
   });

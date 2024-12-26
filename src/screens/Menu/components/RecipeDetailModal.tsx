@@ -16,6 +16,8 @@ interface Props {
   onAddToCooking?: () => void;
   showReviews?: boolean;
   isSaved?: boolean;
+  isCooking?: boolean;
+  onRemoveFromCooking?: (recipe: Recipe) => void;
 }
 
 export const RecipeDetailModal = ({
@@ -27,6 +29,8 @@ export const RecipeDetailModal = ({
   onAddToCooking,
   showReviews = true,
   isSaved = false,
+  isCooking,
+  onRemoveFromCooking,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -112,6 +116,8 @@ export const RecipeDetailModal = ({
               showReviews={showReviews}
               mode="detailed"
               isSaved={isSaved}
+              isCooking={isCooking}
+              onRemoveFromCooking={onRemoveFromCooking}
             />
           </View>
         </ScrollView>

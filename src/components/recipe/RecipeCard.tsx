@@ -23,7 +23,7 @@ interface Props {
   onSave?: () => Promise<boolean>;
   onDelete?: (recipe: Recipe) => void;
   onAddToCooking?: () => void;
-  onRemoveFromCooking?: () => void;
+  onRemoveFromCooking?: (recipe: Recipe) => void;
   showActions?: boolean;
   showReviews?: boolean;
   mode?: 'compact' | 'detailed';
@@ -146,6 +146,8 @@ export function RecipeCard({
               onSave={onSave}
               onDelete={onDelete}
               onAddToCooking={onAddToCooking}
+              isCooking={isCooking}
+              onRemoveFromCooking={onRemoveFromCooking}
             />
           </View>
         )}

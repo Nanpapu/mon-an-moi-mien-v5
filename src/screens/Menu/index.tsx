@@ -56,6 +56,7 @@ export default function MenuScreen() {
     favoriteRecipes,
     addToCooking,
     isRecipeInCooking,
+    removeFromCooking,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -182,6 +183,13 @@ export default function MenuScreen() {
     [addToCooking]
   );
 
+  const handleRemoveFromCooking = useCallback(
+    (recipe: Recipe) => {
+      removeFromCooking(recipe);
+    },
+    [removeFromCooking]
+  );
+
   return (
     <View
       style={{
@@ -303,6 +311,7 @@ export default function MenuScreen() {
             sections={sections}
             onAddToCooking={handleAddToCooking}
             isRecipeInCooking={isRecipeInCooking}
+            onRemoveFromCooking={handleRemoveFromCooking}
           />
           {user && (
             <ZoomControls

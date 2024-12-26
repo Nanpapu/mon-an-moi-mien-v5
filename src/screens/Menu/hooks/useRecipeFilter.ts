@@ -290,6 +290,20 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     loadCookingRecipes();
   }, [user]);
 
+  const removeFromCooking = useCallback(
+    async (recipe: Recipe) => {
+      if (!user) return;
+
+      setCookingRecipes((prev) => {
+        const newRecipes = prev.filter((item) => item.id !== recipe.id);
+        // Lưu xuống storage và sync
+        CookingRecipesService.saveCookingRecipes(user.uid, newRecipes);
+        return newRecipes;
+      });
+    },
+    [user]
+  );
+
   return {
     filterOptions,
     setFilterOptions,
@@ -303,5 +317,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     addToCooking,
     sections: groupRecipes(filteredRecipes),
     isRecipeInCooking, // Thêm vào return
+    removeFromCooking,
   };
 };

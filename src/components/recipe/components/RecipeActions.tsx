@@ -11,6 +11,7 @@ interface Props {
   onSave?: () => Promise<boolean>;
   onDelete?: (recipe: Recipe) => void;
   onAddToCooking?: () => void;
+  onRemoveFromCooking?: (recipe: Recipe) => void;
   isCooking?: boolean;
 }
 
@@ -19,6 +20,7 @@ export const RecipeActions = ({
   onSave,
   onDelete,
   onAddToCooking,
+  onRemoveFromCooking,
   isCooking,
 }: Props) => {
   const { theme } = useTheme();
@@ -44,6 +46,44 @@ export const RecipeActions = ({
             Xóa
           </Typography>
         </TouchableOpacity>
+      )}
+
+      {isCooking && onRemoveFromCooking ? (
+        <TouchableOpacity
+          style={[styles.cookingButton, styles.removeCookingButton]}
+          onPress={() => onRemoveFromCooking(recipe)}
+        >
+          <Ionicons
+            name="close-circle-outline"
+            size={24}
+            color={theme.colors.background.default}
+            style={{ marginRight: 8 }}
+          />
+          <Typography variant="body1" style={styles.buttonText}>
+            Bỏ nấu
+          </Typography>
+        </TouchableOpacity>
+      ) : (
+        onAddToCooking && (
+          <TouchableOpacity
+            style={[
+              styles.cookingButton,
+              isCooking && styles.cookingActiveButton,
+            ]}
+            onPress={onAddToCooking}
+            disabled={isCooking}
+          >
+            <Ionicons
+              name={isCooking ? 'checkmark-circle' : 'restaurant-outline'}
+              size={24}
+              color={theme.colors.background.default}
+              style={{ marginRight: 8 }}
+            />
+            <Typography variant="body1" style={styles.buttonText}>
+              {isCooking ? 'Đã thêm' : 'Nấu ngay'}
+            </Typography>
+          </TouchableOpacity>
+        )
       )}
 
       {onSave && (
@@ -106,27 +146,6 @@ export const RecipeActions = ({
               style={{ marginLeft: 8 }}
             />
           )}
-        </TouchableOpacity>
-      )}
-
-      {onAddToCooking && (
-        <TouchableOpacity
-          style={[
-            styles.cookingButton,
-            isCooking && styles.cookingActiveButton,
-          ]}
-          onPress={onAddToCooking}
-          disabled={isCooking}
-        >
-          <Ionicons
-            name={isCooking ? 'checkmark-circle' : 'restaurant-outline'}
-            size={24}
-            color={theme.colors.background.default}
-            style={{ marginRight: 8 }}
-          />
-          <Typography variant="body1" style={styles.buttonText}>
-            {isCooking ? 'Đã thêm' : 'Nấu ngay'}
-          </Typography>
         </TouchableOpacity>
       )}
     </View>
