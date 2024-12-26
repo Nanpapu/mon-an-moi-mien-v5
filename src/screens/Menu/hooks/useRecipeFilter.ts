@@ -230,54 +230,50 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   }, [savedRecipes]);
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
-    if (!filterOptions.searchQuery || !filterOptions.groupBySearch) {
-      return [
-        {
-          title: 'Tất cả công thức đã lưu',
-          data: recipes,
-        },
-      ];
-    }
+    // Khi có search query và bật chế độ group thì giữ nguyên logic cũ
+    if (filterOptions.searchQuery && filterOptions.groupBySearch) {
+      const byName: { recipe: Recipe; visible: boolean }[] = [];
+      const byIngredients: { recipe: Recipe; visible: boolean }[] = [];
 
-    const byName: { recipe: Recipe; visible: boolean }[] = [];
-    const byIngredients: { recipe: Recipe; visible: boolean }[] = [];
+      recipes.forEach((item) => {
+        const matchesName = containsSearchQuery(
+          item.recipe.name,
+          filterOptions.searchQuery
+        );
+        const matchesIngredients = item.recipe.ingredients.some((ingredient) =>
+          containsSearchQuery(ingredient.name, filterOptions.searchQuery)
+        );
 
-    recipes.forEach((item) => {
-      const matchesName = containsSearchQuery(
-        item.recipe.name,
-        filterOptions.searchQuery
-      );
-      const matchesIngredients = item.recipe.ingredients.some((ingredient) =>
-        containsSearchQuery(ingredient.name, filterOptions.searchQuery)
-      );
+        if (filterOptions.showDuplicateResults) {
+          if (matchesName) byName.push(item);
+          if (matchesIngredients) byIngredients.push(item);
+        } else {
+          if (matchesName) byName.push(item);
+          else if (matchesIngredients) byIngredients.push(item);
+        }
+      });
 
-      // Nếu cho phép hiển thị kết quả trùng lặp
-      if (filterOptions.showDuplicateResults) {
-        if (matchesName) {
-          byName.push(item);
-        }
-        if (matchesIngredients) {
-          byIngredients.push(item);
-        }
-      } else {
-        // Logic cũ - chỉ hiển thị ở section phù hợp nhất
-        if (matchesName) {
-          byName.push(item);
-        } else if (matchesIngredients) {
-          byIngredients.push(item);
-        }
+      const sections: RecipeSection[] = [];
+      if (byName.length > 0) {
+        sections.push({ title: 'Tìm theo tên', data: byName });
       }
-    });
-
-    const sections: RecipeSection[] = [];
-    if (byName.length > 0) {
-      sections.push({ title: 'Tìm theo tên', data: byName });
-    }
-    if (byIngredients.length > 0) {
-      sections.push({ title: 'Tìm theo nguyên liệu', data: byIngredients });
+      if (byIngredients.length > 0) {
+        sections.push({ title: 'Tìm theo nguyên liệu', data: byIngredients });
+      }
+      return sections;
     }
 
-    return sections;
+    // Khi không tìm kiếm, chia thành 2 section mặc định
+    return [
+      {
+        title: 'Công thức đang nấu',
+        data: [], // Tạm thời để trống vì chưa có data
+      },
+      {
+        title: 'Công thức đã lưu',
+        data: recipes,
+      },
+    ];
   };
 
   return {
