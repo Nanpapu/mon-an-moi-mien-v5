@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useDisplay } from '../../../context/DisplayContext';
+import { useMapStyle } from '../../../context/MapStyleContext';
 
 export const DisplaySettings = () => {
   const { theme } = useTheme();
@@ -19,6 +20,7 @@ export const DisplaySettings = () => {
   const [expanded, setExpanded] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [notifications, setNotifications] = useState(false);
+  const { simpleMapMode, toggleSimpleMapMode } = useMapStyle();
   const animatedHeight = useRef(new Animated.Value(0)).current;
   const contentHeight = useRef(0);
 
@@ -168,15 +170,14 @@ export const DisplaySettings = () => {
             'eye-outline',
             false
           )}
-          {/* {renderSettingItem(
-            'Hiển thị số liệu',
-            'Hiển thị thông tin chi tiết về thời gian và khối lượng',
-            showStats,
-            () => setShowStats(!showStats),
-            'stats-chart-outline',
-            true,
-            'Tính năng đang phát triển'
-          )} */}
+          {renderSettingItem(
+            'Đơn giản hóa bản đồ',
+            'Ẩn tên đường, tăng độ dày biên giới và ranh giới hành chính',
+            simpleMapMode,
+            toggleSimpleMapMode,
+            'map-outline',
+            false
+          )}
           {renderSettingItem(
             'Thông báo',
             'Nhận thông báo về công thức mới và cập nhật',

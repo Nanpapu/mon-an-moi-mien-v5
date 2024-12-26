@@ -23,6 +23,8 @@ import {
   RETRY_DELAY,
   MAX_RETRIES,
 } from '../../constants/timeout';
+import { MAP_STYLES } from './constants/mapStyles';
+import { useMapStyle } from '../../context/MapStyleContext';
 
 // Thêm hằng số cho animation
 const MARKER_ZOOM_ANIMATION = {
@@ -66,6 +68,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const { animateRandomSearch, cleanupAnimation } = useRandomAnimation(mapRef);
 
   const { user } = useAuth();
+  const { simpleMapMode } = useMapStyle();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -283,6 +286,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         onLayout={() => {
           console.log('Map layout complete');
         }}
+        customMapStyle={simpleMapMode ? MAP_STYLES.SIMPLE : MAP_STYLES.DEFAULT}
       >
         {!isMapLoading && isMapReady && mapInitialized && (
           <MapMarkers

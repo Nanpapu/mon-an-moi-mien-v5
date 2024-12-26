@@ -23,6 +23,7 @@ import { ImageCacheService } from './src/services/imageCacheService';
 import { useEffect, useState } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import { SyncQueueService } from './src/services/syncQueueService';
+import { MapStyleProvider } from './src/context/MapStyleContext';
 
 // Khởi tạo Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -78,68 +79,73 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeProvider>
           <DisplayProvider>
-            <ToastProvider>
-              <ThemedStatusBar />
-              <AuthProvider>
-                <RecipeProvider>
-                  <NavigationContainer>
-                    <Tab.Navigator
-                      screenOptions={({ route }) => {
-                        const { theme } = useTheme();
-                        const { user } = useAuth();
+            <MapStyleProvider>
+              <ToastProvider>
+                <ThemedStatusBar />
+                <AuthProvider>
+                  <RecipeProvider>
+                    <NavigationContainer>
+                      <Tab.Navigator
+                        screenOptions={({ route }) => {
+                          const { theme } = useTheme();
+                          const { user } = useAuth();
 
-                        return {
-                          header: () => {
-                            if (!user) return null;
-                            return <AppBar title={route.name} />;
-                          },
-                          tabBarStyle: {
-                            height: 60,
-                            paddingBottom: 5,
-                            backgroundColor: theme.colors.background.paper,
-                            borderTopColor: theme.colors.divider,
-                            display: isKeyboardVisible ? 'none' : 'flex',
-                          },
-                          tabBarIcon: ({ focused, size }) => {
-                            let iconName: keyof typeof Ionicons.glyphMap;
-                            if (route.name === 'Bản đồ') {
-                              iconName = focused ? 'map' : 'map-outline';
-                            } else if (route.name === 'Menu') {
-                              iconName = focused ? 'book' : 'book-outline';
-                            } else {
-                              iconName = focused ? 'person' : 'person-outline';
-                            }
-                            return (
-                              <Animated.View
-                                style={{
-                                  transform: [{ scale: focused ? 1.2 : 1 }],
-                                }}
-                              >
-                                <Ionicons
-                                  name={iconName}
-                                  size={size}
-                                  color={theme.colors.primary.main}
-                                />
-                              </Animated.View>
-                            );
-                          },
-                          tabBarActiveTintColor: theme.colors.primary.main,
-                          tabBarInactiveTintColor: theme.colors.text.secondary,
-                          headerStyle: {
-                            backgroundColor: theme.colors.background.paper,
-                          },
-                          headerTintColor: theme.colors.text.primary,
-                        };
-                      }}
-                    >
-                      <Tab.Screen name="Bản đồ" component={MapScreen} />
-                      <Tab.Screen name="Menu" component={MenuScreen} />
-                      <Tab.Screen name="Cá nhân" component={ProfileScreen} />
-                    </Tab.Navigator>
-                  </NavigationContainer>
-                </RecipeProvider>
-              </AuthProvider>
-            </ToastProvider>
+                          return {
+                            header: () => {
+                              if (!user) return null;
+                              return <AppBar title={route.name} />;
+                            },
+                            tabBarStyle: {
+                              height: 60,
+                              paddingBottom: 5,
+                              backgroundColor: theme.colors.background.paper,
+                              borderTopColor: theme.colors.divider,
+                              display: isKeyboardVisible ? 'none' : 'flex',
+                            },
+                            tabBarIcon: ({ focused, size }) => {
+                              let iconName: keyof typeof Ionicons.glyphMap;
+                              if (route.name === 'Bản đồ') {
+                                iconName = focused ? 'map' : 'map-outline';
+                              } else if (route.name === 'Menu') {
+                                iconName = focused ? 'book' : 'book-outline';
+                              } else {
+                                iconName = focused
+                                  ? 'person'
+                                  : 'person-outline';
+                              }
+                              return (
+                                <Animated.View
+                                  style={{
+                                    transform: [{ scale: focused ? 1.2 : 1 }],
+                                  }}
+                                >
+                                  <Ionicons
+                                    name={iconName}
+                                    size={size}
+                                    color={theme.colors.primary.main}
+                                  />
+                                </Animated.View>
+                              );
+                            },
+                            tabBarActiveTintColor: theme.colors.primary.main,
+                            tabBarInactiveTintColor:
+                              theme.colors.text.secondary,
+                            headerStyle: {
+                              backgroundColor: theme.colors.background.paper,
+                            },
+                            headerTintColor: theme.colors.text.primary,
+                          };
+                        }}
+                      >
+                        <Tab.Screen name="Bản đồ" component={MapScreen} />
+                        <Tab.Screen name="Menu" component={MenuScreen} />
+                        <Tab.Screen name="Cá nhân" component={ProfileScreen} />
+                      </Tab.Navigator>
+                    </NavigationContainer>
+                  </RecipeProvider>
+                </AuthProvider>
+              </ToastProvider>
+            </MapStyleProvider>
           </DisplayProvider>
         </ThemeProvider>
       </SafeAreaProvider>

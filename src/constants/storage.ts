@@ -6,4 +6,5 @@ export const STORAGE_KEYS = {
     DEFAULT_SPECIAL: '@theme/defaultSpecial',
   },
   FOCUS_MODE: '@display/focus_mode',
+  SIMPLE_MAP_MODE: '@simple_map_mode',
 };
