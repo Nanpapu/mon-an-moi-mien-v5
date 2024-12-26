@@ -31,13 +31,17 @@ export const UserSavedRecipesService = {
       const docSnap = await getDoc(docRef);
       const currentVersion = docSnap.exists() ? docSnap.data().version : 0;
 
-      await setDoc(docRef, {
-        userId,
-        recipeIds,
-        updatedAt: Timestamp.now(),
-        version: currentVersion + 1,
-        lastSyncedAt: Timestamp.now(),
-      });
+      await setDoc(
+        docRef,
+        {
+          userId,
+          recipeIds,
+          updatedAt: Timestamp.now(),
+          version: currentVersion + 1,
+          lastSyncedAt: Timestamp.now(),
+        },
+        { merge: true }
+      );
 
       return true;
     } catch (error) {
