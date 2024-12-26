@@ -36,15 +36,15 @@ export const RecipeActions = ({
           style={styles.deleteButton}
           onPress={() => {
             Alert.alert(
-              'Xác nhận xóa công thức',
-              `Bạn có chắc muốn xóa "${recipe.name}" khỏi danh sách đã lưu?\n\nLưu ý: Hành động này không thể hoàn tác và công thức sẽ bị xóa vĩnh viễn khỏi danh sách đã lưu của bạn.`,
+              'Xác nhận xóa',
+              `Bạn có chắc muốn xóa "${recipe.name}" khỏi danh sách đã lưu?\n\nLưu ý: Không thể hoàn tác sau khi xóa.`,
               [
                 {
                   text: 'Hủy',
                   style: 'cancel',
                 },
                 {
-                  text: 'Xóa vĩnh viễn',
+                  text: 'Xóa',
                   style: 'destructive',
                   onPress: () => onDelete(recipe),
                 },
@@ -71,10 +71,7 @@ export const RecipeActions = ({
           onPress={() => {
             Alert.alert(
               'Xác nhận dừng nấu',
-              `Bạn có chắc muốn dừng nấu "${recipe.name}"?\n\nLưu ý: 
-              - Công thức vẫn được lưu trong danh sách yêu thích của bạn
-              - Chỉ bỏ khỏi danh sách đang nấu
-              - Bạn có thể thêm lại vào danh sách đang nấu bất cứ lúc nào`,
+              `Bạn có chắc muốn dừng nấu "${recipe.name}"?\n\nCông thức vẫn được lưu, bạn có thể nấu lại sau.`,
               [
                 {
                   text: 'Hủy',
