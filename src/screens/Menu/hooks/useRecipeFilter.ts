@@ -76,12 +76,15 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     const timer = setTimeout(() => {
       setFilterOptions((prev) => ({
         ...prev,
-        searchQuery: searchQuery,
+        [activeTab]: {
+          ...prev[activeTab],
+          searchQuery: searchQuery,
+        },
       }));
-    }, 300); // Delay 300ms
+    }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [searchQuery, activeTab]);
 
   // Tạo hàm update search riêng
   const updateSearchQuery = useCallback((query: string) => {
@@ -211,18 +214,12 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
         // Lọc theo từ khóa tìm kiếm
         if (currentFilterOptions.searchQuery) {
-          const matchesName = containsSearchQuery(
-            item.recipe.name,
-            currentFilterOptions.searchQuery
-          );
+          const query = currentFilterOptions.searchQuery.toLowerCase().trim();
+          const matchesName = containsSearchQuery(item.recipe.name, query);
           const matchesIngredients = item.recipe.ingredients.some(
-            (ingredient) =>
-              containsSearchQuery(
-                ingredient.name,
-                currentFilterOptions.searchQuery
-              )
+            (ingredient) => containsSearchQuery(ingredient.name, query)
           );
-          return matchesName || matchesIngredients;
+          if (!matchesName && !matchesIngredients) return false;
         }
 
         return true;
@@ -267,6 +264,18 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
       return 0;
     });
+
+    console.log('Current filter options:', currentFilterOptions);
+    console.log('Filtering recipes with options:', {
+      searchQuery: currentFilterOptions.searchQuery,
+      showFavorites: currentFilterOptions.showFavorites,
+      region: currentFilterOptions.region,
+    });
+    console.log('Total recipes before filter:', savedRecipes.length);
+
+    console.log('Recipes after favorite filter:', results.length);
+    console.log('Recipes after search filter:', results.length);
+    console.log('Recipes after region filter:', results.length);
 
     return results.map((item) => ({
       recipe: item.recipe,

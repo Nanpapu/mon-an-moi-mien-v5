@@ -77,6 +77,11 @@ export const MenuSearchBar = ({
     }
   };
 
+  console.log('Search submitted with value:', value);
+
+  console.log('Processing suggestions for value:', value);
+  console.log('Recent searches:', recentSearches);
+
   return (
     <View
       style={[

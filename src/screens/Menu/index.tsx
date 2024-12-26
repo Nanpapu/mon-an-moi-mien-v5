@@ -205,6 +205,14 @@ export default function MenuScreen() {
     [removeFromCooking]
   );
 
+  console.log('Filtered recipes in MenuScreen:', filteredRecipes.length);
+  console.log('Active filters:', hasActiveFilters);
+
+  console.log('Rendering RecipeList with:', {
+    totalRecipes: filteredRecipes.length,
+    visibleRecipes: filteredRecipes.filter((item) => item.visible).length,
+  });
+
   return (
     <View
       style={{
