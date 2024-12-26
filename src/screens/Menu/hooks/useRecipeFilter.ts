@@ -231,7 +231,12 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
     if (!filterOptions.searchQuery || !filterOptions.groupBySearch) {
-      return [{ title: '', data: recipes }];
+      return [
+        {
+          title: 'Tất cả công thức đã lưu',
+          data: recipes,
+        },
+      ];
     }
 
     const byName: { recipe: Recipe; visible: boolean }[] = [];

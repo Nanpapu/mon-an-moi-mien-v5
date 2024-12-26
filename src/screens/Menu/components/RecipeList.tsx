@@ -103,7 +103,7 @@ export const RecipeList = ({
               {section.title && (
                 <SectionHeader
                   title={section.title}
-                  count={section.data.length}
+                  count={section.data.filter((item) => item.visible).length}
                 />
               )}
               <View style={styles.grid}>
