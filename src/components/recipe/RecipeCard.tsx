@@ -96,8 +96,7 @@ export function RecipeCard({
           )}
           {isCooking && (
             <View style={[styles.statusBadge, styles.cookingBadge]}>
-              <Ionicons name="flame" size={12} color="#FFFFFF" />
-              <Typography style={styles.badgeText}>Đang nấu</Typography>
+              <Ionicons name="flame" size={14} color="#FFFFFF" />
             </View>
           )}
         </View>

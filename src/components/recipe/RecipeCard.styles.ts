@@ -77,10 +77,10 @@ export const createStyles = (theme: Theme) =>
       ...theme.shadows.sm,
     },
     savedBadge: {
-      backgroundColor: theme.colors.primary.main,
+      backgroundColor: theme.colors.success.main,
     },
     cookingBadge: {
-      backgroundColor: theme.colors.success.main,
+      backgroundColor: theme.colors.error.main,
     },
     badgeText: {
       color: '#FFFFFF',

@@ -288,8 +288,7 @@ export const RecipeGridItem = memo(
         )}
         {isCooking && (
           <View style={[styles.statusBadge, styles.cookingBadge]}>
-            <Ionicons name="flame" size={12} color="#FFFFFF" />
-            <Typography style={styles.badgeText}>Đang nấu</Typography>
+            <Ionicons name="flame" size={14} color="#FFFFFF" />
           </View>
         )}
       </TouchableOpacity>
@@ -396,17 +395,19 @@ const createStyles = (
     statusBadge: {
       position: 'absolute',
       top: 8,
-      right: 8,
+      left: 8,
       backgroundColor: '#FFA500',
-      borderRadius: 10,
-      padding: 4,
+      borderRadius: 12,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: 4,
+      ...theme.shadows.sm,
     },
     cookingBadge: {
-      backgroundColor: '#FF4500',
+      backgroundColor: theme.colors.error.main,
     },
     badgeText: {
       color: '#FFFFFF',
