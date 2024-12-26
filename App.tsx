@@ -21,6 +21,8 @@ import { AppBar } from './src/components/shared/AppBar';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { ImageCacheService } from './src/services/imageCacheService';
 import { useEffect, useState } from 'react';
+import NetInfo from '@react-native-community/netinfo';
+import { SyncQueueService } from './src/services/syncQueueService';
 
 // Khởi tạo Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -58,6 +60,17 @@ export default function App() {
       keyboardWillShowListener.remove();
       keyboardWillHideListener.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    // Xử lý sync khi có internet
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isConnected) {
+        SyncQueueService.processQueue();
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (

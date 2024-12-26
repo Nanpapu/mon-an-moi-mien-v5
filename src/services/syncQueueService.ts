@@ -1,27 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { UserSavedRecipesService } from './userSavedRecipesService';
+import { CookingRecipesService } from './cookingRecipesService';
 
 const SYNC_QUEUE_KEY = '@sync_queue';
 
 interface SyncQueueItem {
+  type: 'RECIPES' | 'COOKING_RECIPES' | 'REMOVE_COOKING_RECIPE';
   userId: string;
-  recipeIds: string[];
+  data: any;
   timestamp: number;
   retryCount: number;
 }
 
 export const SyncQueueService = {
-  /**
-   * Thêm một sync task vào queue
-   */
-  addToQueue: async (userId: string, recipeIds: string[]) => {
+  addToQueue: async (item: Omit<SyncQueueItem, 'retryCount'>) => {
     try {
       const queue = await SyncQueueService.getQueue();
       queue.push({
-        userId,
-        recipeIds,
-        timestamp: Date.now(),
+        ...item,
         retryCount: 0,
       });
       await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
@@ -30,9 +27,6 @@ export const SyncQueueService = {
     }
   },
 
-  /**
-   * Lấy toàn bộ queue
-   */
   getQueue: async (): Promise<SyncQueueItem[]> => {
     try {
       const queueStr = await AsyncStorage.getItem(SYNC_QUEUE_KEY);
@@ -43,9 +37,6 @@ export const SyncQueueService = {
     }
   },
 
-  /**
-   * Xử lý queue khi có internet
-   */
   processQueue: async () => {
     try {
       const queue = await SyncQueueService.getQueue();
@@ -56,10 +47,29 @@ export const SyncQueueService = {
 
       for (const item of queue) {
         try {
-          await UserSavedRecipesService.syncToCloud(
-            item.userId,
-            item.recipeIds
-          );
+          switch (item.type) {
+            case 'RECIPES':
+              await UserSavedRecipesService.syncToCloud(item.userId, item.data);
+              break;
+            case 'COOKING_RECIPES':
+              await CookingRecipesService.saveCookingRecipes(
+                item.userId,
+                item.data
+              );
+              break;
+            case 'REMOVE_COOKING_RECIPE':
+              const currentRecipes =
+                await CookingRecipesService.getCookingRecipes(item.userId);
+              const updatedRecipes = currentRecipes.filter(
+                (r) => r.id !== item.data.recipeId
+              );
+              await CookingRecipesService.saveCookingRecipes(
+                item.userId,
+                updatedRecipes
+              );
+              break;
+          }
+
           // Remove successful item
           const updatedQueue = queue.filter(
             (q) => q.userId !== item.userId || q.timestamp !== item.timestamp
@@ -69,7 +79,6 @@ export const SyncQueueService = {
             JSON.stringify(updatedQueue)
           );
         } catch (error) {
-          // Increment retry count
           item.retryCount++;
           if (item.retryCount > 3) {
             console.error('Sync failed after 3 retries:', error);

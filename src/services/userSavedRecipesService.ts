@@ -4,6 +4,7 @@ import { COLLECTIONS } from '../constants';
 import { UserSavedRecipes } from '../types/savedRecipes';
 import { SyncService } from './syncService';
 import NetInfo from '@react-native-community/netinfo';
+import { SyncQueueService } from './syncQueueService';
 
 export const UserSavedRecipesService = {
   /**
@@ -14,26 +15,26 @@ export const UserSavedRecipesService = {
     recipeIds: string[]
   ): Promise<boolean> => {
     try {
-      // Check internet connection
       const networkState = await NetInfo.fetch();
       if (!networkState.isConnected) {
-        await SyncService.addToQueue({
+        await SyncQueueService.addToQueue({
+          type: 'RECIPES',
           userId,
           data: recipeIds,
-          type: 'RECIPES',
           timestamp: Date.now(),
         });
         return false;
       }
 
-      // Get current version from cloud
       const docRef = doc(db, COLLECTIONS.USER_SAVED_RECIPES, userId);
       const docSnap = await getDoc(docRef);
       const currentVersion = docSnap.exists() ? docSnap.data().version : 0;
+      const currentData = docSnap.exists() ? docSnap.data() : {};
 
       await setDoc(
         docRef,
         {
+          ...currentData,
           userId,
           recipeIds,
           updatedAt: Timestamp.now(),
@@ -46,12 +47,6 @@ export const UserSavedRecipesService = {
       return true;
     } catch (error) {
       console.error('Lỗi khi sync lên cloud:', error);
-      await SyncService.addToQueue({
-        userId,
-        data: recipeIds,
-        type: 'RECIPES',
-        timestamp: Date.now(),
-      });
       return false;
     }
   },

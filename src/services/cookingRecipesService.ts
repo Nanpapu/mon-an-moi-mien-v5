@@ -6,6 +6,8 @@ import { Recipe } from '../types';
 import { CacheService } from './cacheService';
 import { RecipeService } from './recipeService';
 import { Timestamp } from 'firebase/firestore';
+import NetInfo from '@react-native-community/netinfo';
+import { SyncQueueService } from './syncQueueService';
 
 const COOKING_RECIPES_KEY = (userId: string) => `cooking_recipes_${userId}`;
 
@@ -21,6 +23,17 @@ export const CookingRecipesService = {
         COOKING_RECIPES_KEY(userId),
         JSON.stringify(recipes)
       );
+
+      const networkState = await NetInfo.fetch();
+      if (!networkState.isConnected) {
+        await SyncQueueService.addToQueue({
+          type: 'COOKING_RECIPES',
+          userId,
+          data: recipes,
+          timestamp: Date.now(),
+        });
+        return true;
+      }
 
       // Sync lên cloud
       const recipeIds = recipes.map((r) => r.id);
@@ -99,6 +112,41 @@ export const CookingRecipesService = {
     } catch (error) {
       console.error('Lỗi khi lấy công thức đang nấu:', error);
       return [];
+    }
+  },
+
+  removeCookingRecipe: async (
+    userId: string,
+    recipeId: string
+  ): Promise<boolean> => {
+    try {
+      const localData = await AsyncStorage.getItem(COOKING_RECIPES_KEY(userId));
+      const recipes = localData ? JSON.parse(localData) : [];
+
+      const updatedRecipes = recipes.filter((r: Recipe) => r.id !== recipeId);
+      await AsyncStorage.setItem(
+        COOKING_RECIPES_KEY(userId),
+        JSON.stringify(updatedRecipes)
+      );
+
+      const networkState = await NetInfo.fetch();
+      if (!networkState.isConnected) {
+        await SyncQueueService.addToQueue({
+          type: 'REMOVE_COOKING_RECIPE',
+          userId,
+          data: { recipeId },
+          timestamp: Date.now(),
+        });
+        return true;
+      }
+
+      const recipeIds = updatedRecipes.map((r: Recipe) => r.id);
+      await CookingRecipesService.saveCookingRecipes(userId, updatedRecipes);
+
+      return true;
+    } catch (error) {
+      console.error('Lỗi khi xóa công thức đang nấu:', error);
+      return false;
     }
   },
 };
