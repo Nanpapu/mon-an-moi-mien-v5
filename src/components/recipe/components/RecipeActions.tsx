@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  Animated,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { Recipe } from '../../../types';
 import { createStyles } from './RecipeActions.styles';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -15,6 +22,9 @@ interface Props {
   isCooking?: boolean;
 }
 
+const AnimatedTouchableOpacity =
+  Animated.createAnimatedComponent(TouchableOpacity);
+
 export const RecipeActions = ({
   recipe,
   onSave,
@@ -28,6 +38,45 @@ export const RecipeActions = ({
   const [isSaving, setIsSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [wasSaved, setWasSaved] = useState(false);
+
+  const scaleAnim = new Animated.Value(1);
+  const opacityAnim = new Animated.Value(1);
+
+  const handleCookingPress = async () => {
+    if (isCooking || !onAddToCooking) return;
+
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(scaleAnim, {
+          toValue: 0.95,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 0.8,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          speed: 20,
+          bounciness: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+
+    onAddToCooking();
+  };
 
   return (
     <View style={styles.actions}>
@@ -99,12 +148,16 @@ export const RecipeActions = ({
         </TouchableOpacity>
       ) : (
         onAddToCooking && (
-          <TouchableOpacity
+          <AnimatedTouchableOpacity
             style={[
               styles.cookingButton,
               isCooking && styles.cookingActiveButton,
+              {
+                transform: [{ scale: scaleAnim }],
+                opacity: opacityAnim,
+              },
             ]}
-            onPress={onAddToCooking}
+            onPress={handleCookingPress}
             disabled={isCooking}
           >
             <Ionicons
@@ -116,7 +169,7 @@ export const RecipeActions = ({
             <Typography variant="body1" style={styles.buttonText}>
               {isCooking ? 'Đã thêm' : 'Nấu ngay'}
             </Typography>
-          </TouchableOpacity>
+          </AnimatedTouchableOpacity>
         )
       )}
 
