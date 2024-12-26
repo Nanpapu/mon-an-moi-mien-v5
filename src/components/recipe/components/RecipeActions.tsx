@@ -27,6 +27,23 @@ export const RecipeActions = ({
 
   return (
     <View style={styles.actions}>
+      {onDelete && (
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => onDelete(recipe)}
+        >
+          <Ionicons
+            name="trash-outline"
+            size={20}
+            color={theme.colors.background.default}
+            style={{ marginRight: 4 }}
+          />
+          <Typography variant="body2" style={styles.deleteButtonText}>
+            Xóa
+          </Typography>
+        </TouchableOpacity>
+      )}
+
       {onSave && (
         <TouchableOpacity
           style={[
@@ -100,23 +117,6 @@ export const RecipeActions = ({
           />
           <Typography variant="body1" style={styles.buttonText}>
             Nấu ngay
-          </Typography>
-        </TouchableOpacity>
-      )}
-
-      {onDelete && (
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => onDelete(recipe)}
-        >
-          <Ionicons
-            name="trash-outline"
-            size={20}
-            color={theme.colors.background.default}
-            style={{ marginRight: 4 }}
-          />
-          <Typography variant="body2" style={styles.deleteButtonText}>
-            Xóa
           </Typography>
         </TouchableOpacity>
       )}

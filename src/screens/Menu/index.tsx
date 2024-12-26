@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -26,6 +26,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FilterModal } from './components/FilterModal';
 import { FilterOptions } from './types';
 import { RecipeGridListSkeleton } from '../../components/recipe/components/RecipeGridListSkeleton';
+import { Recipe } from '../../types';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -52,6 +53,8 @@ export default function MenuScreen() {
     sections,
     searchQuery,
     updateSearchQuery,
+    favoriteRecipes,
+    addToCooking,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -171,9 +174,12 @@ export default function MenuScreen() {
     setTempFilterOptions(newOptions);
   };
 
-  const handleAddToCooking = () => {
-    console.log('Thêm vào danh sách nấu');
-  };
+  const handleAddToCooking = useCallback(
+    (recipe: Recipe) => {
+      addToCooking(recipe);
+    },
+    [addToCooking]
+  );
 
   return (
     <View

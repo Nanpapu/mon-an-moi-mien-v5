@@ -37,7 +37,7 @@ interface Props {
   isAuthenticated: boolean;
   isSaved?: boolean;
   sections: RecipeSection[];
-  onAddToCooking?: () => void;
+  onAddToCooking?: (recipe: Recipe) => void;
 }
 
 export const RecipeList = ({
@@ -164,7 +164,11 @@ export const RecipeList = ({
                 showReviews={true}
                 onDelete={onDeleteRecipe}
                 isSaved={true}
-                onAddToCooking={onAddToCooking}
+                onAddToCooking={() => {
+                  if (selectedRecipe && onAddToCooking) {
+                    onAddToCooking(selectedRecipe);
+                  }
+                }}
               />
             </ScrollView>
           </View>

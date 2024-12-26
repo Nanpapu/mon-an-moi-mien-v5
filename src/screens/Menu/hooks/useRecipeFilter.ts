@@ -31,6 +31,9 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   // Thêm state riêng cho search query
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Thêm state mới
+  const [cookingRecipes, setCookingRecipes] = useState<Recipe[]>([]);
+
   // Debounce search query
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -230,44 +233,11 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   }, [savedRecipes]);
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
-    // Khi có search query và bật chế độ group thì giữ nguyên logic cũ
-    if (filterOptions.searchQuery && filterOptions.groupBySearch) {
-      const byName: { recipe: Recipe; visible: boolean }[] = [];
-      const byIngredients: { recipe: Recipe; visible: boolean }[] = [];
-
-      recipes.forEach((item) => {
-        const matchesName = containsSearchQuery(
-          item.recipe.name,
-          filterOptions.searchQuery
-        );
-        const matchesIngredients = item.recipe.ingredients.some((ingredient) =>
-          containsSearchQuery(ingredient.name, filterOptions.searchQuery)
-        );
-
-        if (filterOptions.showDuplicateResults) {
-          if (matchesName) byName.push(item);
-          if (matchesIngredients) byIngredients.push(item);
-        } else {
-          if (matchesName) byName.push(item);
-          else if (matchesIngredients) byIngredients.push(item);
-        }
-      });
-
-      const sections: RecipeSection[] = [];
-      if (byName.length > 0) {
-        sections.push({ title: 'Tìm theo tên', data: byName });
-      }
-      if (byIngredients.length > 0) {
-        sections.push({ title: 'Tìm theo nguyên liệu', data: byIngredients });
-      }
-      return sections;
-    }
-
-    // Khi không tìm kiếm, chia thành 2 section mặc định
+    // Khi không tìm kiếm, chia thành 2 section
     return [
       {
         title: 'Công thức đang nấu',
-        data: [], // Tạm thời để trống vì chưa có data
+        data: cookingRecipes.map((recipe) => ({ recipe, visible: true })), // Sử dụng cookingRecipes
       },
       {
         title: 'Công thức đã lưu',
@@ -275,6 +245,18 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       },
     ];
   };
+
+  // Thêm hàm để thêm công thức vào danh sách nấu
+  const addToCooking = useCallback((recipe: Recipe) => {
+    setCookingRecipes((prev) => {
+      // Kiểm tra xem công thức đã có trong danh sách chưa
+      const exists = prev.some((item) => item.id === recipe.id);
+      if (!exists) {
+        return [...prev, recipe];
+      }
+      return prev;
+    });
+  }, []);
 
   return {
     filterOptions,
@@ -285,6 +267,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     favoriteRecipes,
     refreshFavorites: loadFavorites,
     regions,
+    cookingRecipes,
+    addToCooking,
     sections: groupRecipes(filteredRecipes),
   };
 };
