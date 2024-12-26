@@ -146,7 +146,10 @@ export interface Recipe extends BaseRecipe {
   servings?: number;
   /** Phân loại món chay/mặn */
   category: DishCategory;
+  /** Trạng thái hiển thị */
   visible?: boolean;
+  /** Trạng thái đang nấu */
+  isCooking?: boolean;
 }
 
 /**

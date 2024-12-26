@@ -125,6 +125,7 @@ export const RecipeList = ({
                       isSelected={selectedRecipes.has(recipe.id)}
                       onLongPress={() => onLongPress?.(recipe.id)}
                       onToggleSelect={() => onToggleSelect?.(recipe.id)}
+                      isCooking={isRecipeInCooking(recipe.id)}
                     />
                   );
                 })}

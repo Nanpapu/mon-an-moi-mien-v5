@@ -23,6 +23,7 @@ interface Props {
   onSave?: () => Promise<boolean>;
   onDelete?: (recipe: Recipe) => void;
   onAddToCooking?: () => void;
+  onRemoveFromCooking?: () => void;
   showActions?: boolean;
   showReviews?: boolean;
   mode?: 'compact' | 'detailed';
@@ -35,10 +36,12 @@ export function RecipeCard({
   onSave,
   onDelete,
   onAddToCooking,
+  onRemoveFromCooking,
   showActions = false,
   showReviews = false,
   mode = 'compact',
   isSaved = false,
+  isCooking = false,
 }: Props) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -83,6 +86,21 @@ export function RecipeCard({
           transition={200}
           cachePolicy="memory-disk"
         />
+
+        <View style={styles.statusBadgeContainer}>
+          {isSaved && (
+            <View style={[styles.statusBadge, styles.savedBadge]}>
+              <Ionicons name="bookmark" size={12} color="#FFFFFF" />
+              <Typography style={styles.badgeText}>Đã lưu</Typography>
+            </View>
+          )}
+          {isCooking && (
+            <View style={[styles.statusBadge, styles.cookingBadge]}>
+              <Ionicons name="flame" size={12} color="#FFFFFF" />
+              <Typography style={styles.badgeText}>Đang nấu</Typography>
+            </View>
+          )}
+        </View>
 
         <View
           style={[

@@ -60,4 +60,31 @@ export const createStyles = (theme: Theme) =>
     reviewsContainer: {
       marginTop: theme.spacing.sm,
     },
+    statusBadgeContainer: {
+      position: 'absolute',
+      top: theme.spacing.sm,
+      left: theme.spacing.sm,
+      flexDirection: 'row',
+      gap: theme.spacing.xs,
+    },
+    statusBadge: {
+      paddingHorizontal: theme.spacing.sm,
+      paddingVertical: theme.spacing.xs,
+      borderRadius: theme.spacing.lg,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.xxs,
+      ...theme.shadows.sm,
+    },
+    savedBadge: {
+      backgroundColor: theme.colors.primary.main,
+    },
+    cookingBadge: {
+      backgroundColor: theme.colors.success.main,
+    },
+    badgeText: {
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: '500',
+    },
   });

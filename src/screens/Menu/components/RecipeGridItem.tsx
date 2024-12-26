@@ -25,6 +25,7 @@ interface Props {
   onLongPress?: (recipeId: string) => void;
   onToggleSelect?: () => void;
   visible?: boolean;
+  isCooking?: boolean;
 }
 
 interface FavoriteButtonStyleProps {
@@ -48,6 +49,7 @@ export const RecipeGridItem = memo(
     onLongPress,
     onToggleSelect,
     visible = true,
+    isCooking,
   }: Props) => {
     const { theme } = useTheme();
     const styles = createStyles(theme, width, config);
@@ -284,6 +286,12 @@ export const RecipeGridItem = memo(
             )}
           </View>
         )}
+        {isCooking && (
+          <View style={[styles.statusBadge, styles.cookingBadge]}>
+            <Ionicons name="flame" size={12} color="#FFFFFF" />
+            <Typography style={styles.badgeText}>Đang nấu</Typography>
+          </View>
+        )}
       </TouchableOpacity>
     );
   },
@@ -384,5 +392,25 @@ const createStyles = (
       alignItems: 'center',
       justifyContent: 'center',
       ...theme.shadows.sm,
+    },
+    statusBadge: {
+      position: 'absolute',
+      top: 8,
+      right: 8,
+      backgroundColor: '#FFA500',
+      borderRadius: 10,
+      padding: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 4,
+    },
+    cookingBadge: {
+      backgroundColor: '#FF4500',
+    },
+    badgeText: {
+      color: '#FFFFFF',
+      fontSize: 10,
+      fontWeight: 'bold',
     },
   });

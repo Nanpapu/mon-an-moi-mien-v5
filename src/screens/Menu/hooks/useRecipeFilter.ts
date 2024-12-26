@@ -233,15 +233,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   }, [savedRecipes]);
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
-    // Khi không tìm kiếm, chia thành 2 section
     return [
       {
         title: 'Công thức đang nấu',
-        data: cookingRecipes.map((recipe) => ({ recipe, visible: true })), // Sử dụng cookingRecipes
+        data: recipes.filter((item) => isRecipeInCooking(item.recipe.id)),
       },
       {
         title: 'Công thức đã lưu',
-        data: recipes,
+        data: recipes.filter((item) => !isRecipeInCooking(item.recipe.id)),
       },
     ];
   };
