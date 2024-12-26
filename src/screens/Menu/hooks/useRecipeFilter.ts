@@ -3,8 +3,12 @@ import { Recipe, IngredientType } from '../../../types';
 import { SortField, FilterOptions, RecipeSection } from '../types';
 import { FavoriteService } from '../../../services/favoriteService';
 import { containsSearchQuery } from '../../../utils/stringUtils';
+import { CookingRecipesService } from '../../../services/cookingRecipesService';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useRecipeFilter = (savedRecipes: Recipe[]) => {
+  const { user } = useAuth();
+
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     searchQuery: '',
     region: null,
@@ -249,16 +253,23 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   };
 
   // Thêm hàm để thêm công thức vào danh sách nấu
-  const addToCooking = useCallback((recipe: Recipe) => {
-    setCookingRecipes((prev) => {
-      // Kiểm tra xem công thức đã có trong danh sách chưa
-      const exists = prev.some((item) => item.id === recipe.id);
-      if (!exists) {
-        return [...prev, recipe];
-      }
-      return prev;
-    });
-  }, []);
+  const addToCooking = useCallback(
+    async (recipe: Recipe) => {
+      if (!user) return;
+
+      setCookingRecipes((prev) => {
+        const exists = prev.some((item) => item.id === recipe.id);
+        if (!exists) {
+          const newRecipes = [...prev, recipe];
+          // Lưu xuống storage và sync
+          CookingRecipesService.saveCookingRecipes(user.uid, newRecipes);
+          return newRecipes;
+        }
+        return prev;
+      });
+    },
+    [user]
+  );
 
   // Thêm hàm kiểm tra
   const isRecipeInCooking = useCallback(
@@ -267,6 +278,17 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     },
     [cookingRecipes]
   );
+
+  // Load cooking recipes khi component mount và khi user thay đổi
+  useEffect(() => {
+    const loadCookingRecipes = async () => {
+      if (user) {
+        const recipes = await CookingRecipesService.getCookingRecipes(user.uid);
+        setCookingRecipes(recipes);
+      }
+    };
+    loadCookingRecipes();
+  }, [user]);
 
   return {
     filterOptions,
