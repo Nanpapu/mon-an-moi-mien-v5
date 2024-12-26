@@ -51,7 +51,13 @@ export const UserProfile = ({
 
   return (
     // <Card style={{ padding: theme.spacing.lg }}>
-    <View style={{ alignItems: 'center', padding: theme.spacing.xxl }}>
+    <View
+      style={{
+        alignItems: 'center',
+        padding: theme.spacing.xxl,
+        width: '100%',
+      }}
+    >
       <TouchableOpacity onPress={onPickImage}>
         <View
           style={{

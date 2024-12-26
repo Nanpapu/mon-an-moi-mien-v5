@@ -153,6 +153,7 @@ export default function ProfileScreen() {
           paddingBottom: theme.spacing.xl * 2,
           justifyContent: user ? 'flex-start' : 'center',
           paddingHorizontal: user ? theme.spacing.lg : 0,
+          width: '100%',
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -165,15 +166,17 @@ export default function ProfileScreen() {
             style={{
               opacity: profileFadeAnim,
               transform: [{ translateY: profileSlideAnim }],
+              width: '100%',
             }}
           >
-            <View style={styles.container}>
+            <View style={[styles.container, { width: '100%' }]}>
               <Card
                 style={[
                   styles.profileCard,
                   {
                     backgroundColor: theme.colors.background.paper,
                     ...theme.shadows.md,
+                    width: '100%',
                   },
                 ]}
               >
@@ -200,25 +203,6 @@ export default function ProfileScreen() {
 
               <DisplaySettings />
               <ThemeSelector />
-
-              {/* <Card
-                style={[
-                  styles.logoutCard,
-                  {
-                    backgroundColor: theme.colors.background.paper,
-                    ...theme.shadows.md,
-                  },
-                ]}
-              >
-                <Button
-                  variant="secondary"
-                  icon="log-out-outline"
-                  onPress={handleLogout}
-                  style={styles.logoutButton}
-                >
-                  Đăng xuất
-                </Button>
-              </Card> */}
             </View>
           </Animated.View>
         ) : (
@@ -264,7 +248,7 @@ const styles = StyleSheet.create({
   profileCard: {
     borderRadius: 16,
     padding: 0,
-    // padding: 16,
+    overflow: 'hidden',
   },
   logoutCard: {
     width: '60%',
