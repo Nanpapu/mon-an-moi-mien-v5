@@ -1,5 +1,11 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
 
@@ -21,12 +27,27 @@ export const TabBar = ({
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  // Tạo animated value để control vị trí của indicator
+  const translateX = useRef(
+    new Animated.Value(activeTab === 'saved' ? 0 : 1)
+  ).current;
+
+  // Animation khi tab thay đổi
+  useEffect(() => {
+    Animated.spring(translateX, {
+      toValue: activeTab === 'saved' ? 0 : 1,
+      useNativeDriver: true,
+      tension: 68,
+      friction: 10,
+    }).start();
+  }, [activeTab]);
+
+  const { width } = Dimensions.get('window');
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.tab, activeTab === 'saved' && styles.activeTab]}
-        onPress={() => onTabChange('saved')}
-      >
+      {/* Tab Đã lưu */}
+      <TouchableOpacity style={styles.tab} onPress={() => onTabChange('saved')}>
         <Typography
           variant="body1"
           style={[
@@ -38,8 +59,9 @@ export const TabBar = ({
         </Typography>
       </TouchableOpacity>
 
+      {/* Tab Đang nấu */}
       <TouchableOpacity
-        style={[styles.tab, activeTab === 'cooking' && styles.activeTab]}
+        style={styles.tab}
         onPress={() => onTabChange('cooking')}
       >
         <Typography
@@ -52,6 +74,23 @@ export const TabBar = ({
           Đang nấu ({cookingCount})
         </Typography>
       </TouchableOpacity>
+
+      {/* Animated Indicator */}
+      <Animated.View
+        style={[
+          styles.indicator,
+          {
+            transform: [
+              {
+                translateX: translateX.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, width / 2 - 8],
+                }),
+              },
+            ],
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -65,21 +104,36 @@ const createStyles = (theme: any) =>
       padding: theme.spacing.xs,
       marginHorizontal: theme.spacing.md,
       marginVertical: theme.spacing.sm,
+      position: 'relative',
+      height: 48,
+      alignItems: 'center',
       ...theme.shadows.sm,
     },
     tab: {
       flex: 1,
-      paddingVertical: theme.spacing.sm,
+      height: '100%',
       alignItems: 'center',
+      justifyContent: 'center',
       borderRadius: theme.spacing.xs,
-    },
-    activeTab: {
-      backgroundColor: theme.colors.primary.main,
+      zIndex: 1,
+      paddingHorizontal: theme.spacing.sm,
     },
     tabText: {
       color: theme.colors.text.primary,
+      fontWeight: '500',
     },
     activeTabText: {
       color: theme.colors.primary.contrast,
+      fontWeight: '600',
+    },
+    indicator: {
+      position: 'absolute',
+      top: 4,
+      left: 4,
+      width: '48%',
+      height: 40,
+      backgroundColor: theme.colors.primary.main,
+      borderRadius: theme.spacing.xs,
+      zIndex: 0,
     },
   });
