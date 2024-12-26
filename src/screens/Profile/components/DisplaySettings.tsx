@@ -114,6 +114,20 @@ export const DisplaySettings = () => {
     </View>
   );
 
+  const getFocusModeDescription = (isFocusMode: boolean) => {
+    if (isFocusMode) {
+      return 'Đã bật chế độ tập trung - Thanh điều hướng đã được ẩn để tối ưu không gian hiển thị. Nhấn để tắt chế độ này';
+    }
+    return 'Ẩn thanh điều hướng (App Bar) để tối ưu không gian hiển thị và tập trung vào nội dung';
+  };
+
+  const getMapModeDescription = (isSimpleMode: boolean) => {
+    if (isSimpleMode) {
+      return 'Đã bật chế độ đơn giản - Đường xá và tên đường đã được ẩn, biên giới được làm nổi bật. Nhấn để tắt chế độ này';
+    }
+    return 'Ẩn đường xá và tên đường, tăng độ nổi bật cho biên giới và ranh giới hành chính';
+  };
+
   return (
     <View style={[styles.container, { borderRadius: 16, overflow: 'hidden' }]}>
       <TouchableOpacity
@@ -164,7 +178,7 @@ export const DisplaySettings = () => {
         <View style={styles.content} onLayout={onLayout}>
           {renderSettingItem(
             'Chế độ tập trung',
-            'Ẩn thanh điều hướng (App Bar) để tập trung vào nội dung chính',
+            getFocusModeDescription(focusMode),
             focusMode,
             toggleFocusMode,
             'eye-outline',
@@ -172,7 +186,7 @@ export const DisplaySettings = () => {
           )}
           {renderSettingItem(
             'Đơn giản hóa bản đồ',
-            'Ẩn tên đường, tăng độ dày biên giới và ranh giới hành chính',
+            getMapModeDescription(simpleMapMode),
             simpleMapMode,
             toggleSimpleMapMode,
             'map-outline',
