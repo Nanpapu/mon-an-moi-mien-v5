@@ -67,17 +67,11 @@ export const RecipeActions = ({
                     ? 'bookmark'
                     : 'bookmark-outline'
             }
-            size={20}
+            size={24}
             color={theme.colors.background.default}
             style={{ marginRight: 8 }}
           />
-          <Typography
-            variant="body1"
-            style={{
-              color: theme.colors.background.default,
-              fontWeight: justSaved ? 'bold' : 'normal',
-            }}
-          >
+          <Typography variant="body1" style={styles.buttonText}>
             {isSaving
               ? 'Đang lưu...'
               : justSaved
@@ -100,12 +94,12 @@ export const RecipeActions = ({
         <TouchableOpacity style={styles.cookingButton} onPress={onAddToCooking}>
           <Ionicons
             name="restaurant-outline"
-            size={20}
+            size={24}
             color={theme.colors.background.default}
             style={{ marginRight: 8 }}
           />
           <Typography variant="body1" style={styles.buttonText}>
-            Thêm vào danh sách nấu
+            Nấu ngay
           </Typography>
         </TouchableOpacity>
       )}
@@ -119,12 +113,10 @@ export const RecipeActions = ({
             name="trash-outline"
             size={20}
             color={theme.colors.background.default}
+            style={{ marginRight: 4 }}
           />
-          <Typography
-            variant="body1"
-            style={{ color: theme.colors.background.default }}
-          >
-            Xóa công thức
+          <Typography variant="body2" style={styles.deleteButtonText}>
+            Xóa
           </Typography>
         </TouchableOpacity>
       )}
