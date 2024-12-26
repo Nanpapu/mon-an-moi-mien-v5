@@ -27,6 +27,7 @@ import { FilterModal } from './components/FilterModal';
 import { FilterOptions } from './types';
 import { RecipeGridListSkeleton } from '../../components/recipe/components/RecipeGridListSkeleton';
 import { Recipe } from '../../types';
+import { TabBar, TabType } from './components/TabBar';
 
 export default function MenuScreen() {
   const { theme } = useTheme();
@@ -76,6 +77,7 @@ export default function MenuScreen() {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [tempFilterOptions, setTempFilterOptions] =
     useState<FilterOptions>(filterOptions);
+  const [activeTab, setActiveTab] = useState<TabType>('saved');
 
   const activeFiltersCount = [
     filterOptions.region,
@@ -88,6 +90,20 @@ export default function MenuScreen() {
 
   const hasActiveFilters =
     filterOptions.searchQuery || filterOptions.region || activeFiltersCount > 0;
+
+  const cookingRecipesCount = sections[0].data.filter(
+    (item) => item.visible
+  ).length;
+  const savedRecipesCount = sections[1].data.filter(
+    (item) => item.visible
+  ).length;
+
+  const visibleSections = useMemo(() => {
+    if (activeTab === 'cooking') {
+      return [sections[0]];
+    }
+    return [sections[1]];
+  }, [sections, activeTab]);
 
   useEffect(() => {
     loadSearchHistory();
@@ -229,9 +245,16 @@ export default function MenuScreen() {
             </TouchableOpacity>
           </View>
 
+          <TabBar
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            cookingCount={cookingRecipesCount}
+            savedCount={savedRecipesCount}
+          />
+
           <FilterModal
             visible={showFilterModal}
-            onClose={() => setShowFilterModal(false)}
+            onClose={handleCloseFilterModal}
             filterOptions={tempFilterOptions}
             onFilterChange={setTempFilterOptions}
             onApply={handleApplyFilter}
@@ -308,7 +331,7 @@ export default function MenuScreen() {
             onToggleSelect={handleToggleSelect}
             isAuthenticated={!!user}
             isSaved={true}
-            sections={sections}
+            sections={visibleSections}
             onAddToCooking={handleAddToCooking}
             isRecipeInCooking={isRecipeInCooking}
             onRemoveFromCooking={handleRemoveFromCooking}
