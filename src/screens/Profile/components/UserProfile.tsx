@@ -70,7 +70,7 @@ export const UserProfile = ({
             backgroundColor: theme.colors.background.paper,
             ...theme.shadows.md,
             marginBottom: theme.spacing.md,
-            opacity: isEditing ? 1 : 0.8,
+            opacity: isEditing ? 0.8 : 1,
             ...(isEditing && {
               borderWidth: 2,
               borderColor: theme.colors.primary.main,
