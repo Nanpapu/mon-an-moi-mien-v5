@@ -55,6 +55,7 @@ export default function MenuScreen() {
     updateSearchQuery,
     favoriteRecipes,
     addToCooking,
+    isRecipeInCooking,
   } = useRecipeFilter(savedRecipes);
 
   const {
@@ -301,6 +302,7 @@ export default function MenuScreen() {
             isSaved={true}
             sections={sections}
             onAddToCooking={handleAddToCooking}
+            isRecipeInCooking={isRecipeInCooking}
           />
           {user && (
             <ZoomControls

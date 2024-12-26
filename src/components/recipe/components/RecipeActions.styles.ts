@@ -65,4 +65,8 @@ export const createStyles = (theme: Theme) =>
       borderRadius: theme.spacing.sm,
       ...theme.shadows.sm,
     },
+    cookingActiveButton: {
+      backgroundColor: theme.colors.success.dark,
+      opacity: 0.8,
+    },
   });

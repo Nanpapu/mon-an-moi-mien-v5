@@ -38,6 +38,7 @@ interface Props {
   isSaved?: boolean;
   sections: RecipeSection[];
   onAddToCooking?: (recipe: Recipe) => void;
+  isRecipeInCooking: (recipeId: string) => boolean;
 }
 
 export const RecipeList = ({
@@ -58,6 +59,7 @@ export const RecipeList = ({
   isSaved,
   sections,
   onAddToCooking,
+  isRecipeInCooking,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -164,6 +166,9 @@ export const RecipeList = ({
                 showReviews={true}
                 onDelete={onDeleteRecipe}
                 isSaved={true}
+                isCooking={
+                  selectedRecipe ? isRecipeInCooking(selectedRecipe.id) : false
+                }
                 onAddToCooking={() => {
                   if (selectedRecipe && onAddToCooking) {
                     onAddToCooking(selectedRecipe);

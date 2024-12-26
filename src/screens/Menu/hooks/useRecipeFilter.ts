@@ -258,6 +258,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     });
   }, []);
 
+  // Thêm hàm kiểm tra
+  const isRecipeInCooking = useCallback(
+    (recipeId: string) => {
+      return cookingRecipes.some((recipe) => recipe.id === recipeId);
+    },
+    [cookingRecipes]
+  );
+
   return {
     filterOptions,
     setFilterOptions,
@@ -270,5 +278,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     cookingRecipes,
     addToCooking,
     sections: groupRecipes(filteredRecipes),
+    isRecipeInCooking, // Thêm vào return
   };
 };

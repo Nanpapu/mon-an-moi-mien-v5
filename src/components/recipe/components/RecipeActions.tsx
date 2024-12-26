@@ -11,6 +11,7 @@ interface Props {
   onSave?: () => Promise<boolean>;
   onDelete?: (recipe: Recipe) => void;
   onAddToCooking?: () => void;
+  isCooking?: boolean;
 }
 
 export const RecipeActions = ({
@@ -18,6 +19,7 @@ export const RecipeActions = ({
   onSave,
   onDelete,
   onAddToCooking,
+  isCooking,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -108,15 +110,22 @@ export const RecipeActions = ({
       )}
 
       {onAddToCooking && (
-        <TouchableOpacity style={styles.cookingButton} onPress={onAddToCooking}>
+        <TouchableOpacity
+          style={[
+            styles.cookingButton,
+            isCooking && styles.cookingActiveButton,
+          ]}
+          onPress={onAddToCooking}
+          disabled={isCooking}
+        >
           <Ionicons
-            name="restaurant-outline"
+            name={isCooking ? 'checkmark-circle' : 'restaurant-outline'}
             size={24}
             color={theme.colors.background.default}
             style={{ marginRight: 8 }}
           />
           <Typography variant="body1" style={styles.buttonText}>
-            Nấu ngay
+            {isCooking ? 'Đã thêm' : 'Nấu ngay'}
           </Typography>
         </TouchableOpacity>
       )}

@@ -27,6 +27,7 @@ interface Props {
   showReviews?: boolean;
   mode?: 'compact' | 'detailed';
   isSaved?: boolean;
+  isCooking?: boolean;
 }
 
 export function RecipeCard({
