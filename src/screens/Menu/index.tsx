@@ -343,6 +343,7 @@ export default function MenuScreen() {
             onAddToCooking={handleAddToCooking}
             isRecipeInCooking={isRecipeInCooking}
             onRemoveFromCooking={handleRemoveFromCooking}
+            activeTab={activeTab}
           />
           {user && (
             <ZoomControls

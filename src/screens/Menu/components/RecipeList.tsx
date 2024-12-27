@@ -40,6 +40,7 @@ interface Props {
   onAddToCooking?: (recipe: Recipe) => void;
   isRecipeInCooking: (recipeId: string) => boolean;
   onRemoveFromCooking?: (recipe: Recipe) => void;
+  activeTab: 'cooking' | 'saved';
 }
 
 export const RecipeList = ({
@@ -62,6 +63,7 @@ export const RecipeList = ({
   onAddToCooking,
   isRecipeInCooking,
   onRemoveFromCooking,
+  activeTab,
 }: Props) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -75,13 +77,27 @@ export const RecipeList = ({
     setSelectedRecipe(recipe);
   };
 
-  if (!isAuthenticated || (!isLoading && filteredRecipes.length === 0)) {
+  const hasNoData = () => {
+    if (!sections || sections.length === 0) return true;
+
+    // Kiểm tra dựa vào tab hiện tại
+    if (activeTab === 'cooking') {
+      // Với tab đang nấu, kiểm tra cookingRecipes
+      return !sections[0] || sections[0].data.length === 0;
+    } else {
+      // Với tab đã lưu, kiểm tra savedRecipes
+      return savedRecipes.length === 0;
+    }
+  };
+
+  if (!isAuthenticated || (!isLoading && hasNoData())) {
     return (
       <EmptyState
         hasRecipes={savedRecipes.length > 0}
         isRefreshing={isRefreshing}
         onRefresh={onRefresh}
         isAuthenticated={isAuthenticated}
+        activeTab={activeTab}
       />
     );
   }
@@ -101,39 +117,46 @@ export const RecipeList = ({
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         >
-          {sections.map((section, index) => (
-            <View
-              key={index}
-              style={index > 0 ? { marginTop: theme.spacing.md } : undefined}
-            >
-              {section.title && (
-                <SectionHeader
-                  title={section.title}
-                  count={section.data.filter((item) => item.visible).length}
-                />
-              )}
-              <View style={styles.grid}>
-                {section.data.map(({ recipe, visible }) => {
-                  if (!visible) return null;
-                  return (
-                    <RecipeGridItem
-                      key={recipe.id}
-                      recipe={recipe}
-                      onPress={() => handleRecipePress(recipe)}
-                      width={calculateItemWidth()}
-                      config={currentConfig}
-                      onFavoriteChange={onFavoriteChange}
-                      isSelectionMode={isSelectionMode}
-                      isSelected={selectedRecipes.has(recipe.id)}
-                      onLongPress={() => onLongPress?.(recipe.id)}
-                      onToggleSelect={() => onToggleSelect?.(recipe.id)}
-                      isCooking={isRecipeInCooking(recipe.id)}
+          {sections &&
+            sections.map((section, index) => {
+              if (!section) return null;
+
+              return (
+                <View
+                  key={index}
+                  style={
+                    index > 0 ? { marginTop: theme.spacing.md } : undefined
+                  }
+                >
+                  {section.title && (
+                    <SectionHeader
+                      title={section.title}
+                      count={section.data.filter((item) => item.visible).length}
                     />
-                  );
-                })}
-              </View>
-            </View>
-          ))}
+                  )}
+                  <View style={styles.grid}>
+                    {section.data.map(({ recipe, visible }) => {
+                      if (!visible) return null;
+                      return (
+                        <RecipeGridItem
+                          key={recipe.id}
+                          recipe={recipe}
+                          onPress={() => handleRecipePress(recipe)}
+                          width={calculateItemWidth()}
+                          config={currentConfig}
+                          onFavoriteChange={onFavoriteChange}
+                          isSelectionMode={isSelectionMode}
+                          isSelected={selectedRecipes.has(recipe.id)}
+                          onLongPress={() => onLongPress?.(recipe.id)}
+                          onToggleSelect={() => onToggleSelect?.(recipe.id)}
+                          isCooking={isRecipeInCooking(recipe.id)}
+                        />
+                      );
+                    })}
+                  </View>
+                </View>
+              );
+            })}
         </ScrollView>
       )}
 

@@ -289,18 +289,21 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   }, [savedRecipes]);
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
-    // Lấy tất cả công thức đang nấu
+    // Đảm bảo luôn trả về mảng có 2 phần tử
     const cookingRecipesSection = {
-      // title: 'Công thức đang nấu',
       title: '',
-      data: recipes.filter((item) => isRecipeInCooking(item.recipe.id)),
+      data:
+        activeTab === 'cooking'
+          ? recipes.filter((item) => isRecipeInCooking(item.recipe.id))
+          : [],
     };
 
-    // Lấy tất cả công thức đã lưu (bao gồm cả đang nấu)
     const savedRecipesSection = {
-      // title: 'Công thức đã lưu',
       title: '',
-      data: recipes, // Không filter nữa, hiển thị tất cả
+      data:
+        activeTab === 'saved'
+          ? recipes.filter((item) => !isRecipeInCooking(item.recipe.id))
+          : [],
     };
 
     return [cookingRecipesSection, savedRecipesSection];

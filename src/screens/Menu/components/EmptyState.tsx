@@ -22,6 +22,7 @@ interface Props {
   isRefreshing?: boolean;
   onRefresh?: () => void;
   isAuthenticated: boolean;
+  activeTab?: 'cooking' | 'saved';
 }
 
 export const EmptyState = ({
@@ -29,6 +30,7 @@ export const EmptyState = ({
   isRefreshing = false,
   onRefresh,
   isAuthenticated,
+  activeTab = 'saved',
 }: Props) => {
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp>();
@@ -47,9 +49,11 @@ export const EmptyState = ({
         name={
           !isAuthenticated
             ? 'lock-closed-outline'
-            : hasRecipes
-              ? 'search'
-              : 'book-outline'
+            : activeTab === 'cooking'
+              ? 'flame-outline'
+              : hasRecipes
+                ? 'search'
+                : 'book-outline'
         }
         size={64}
         color={theme.colors.text.secondary}
@@ -64,9 +68,11 @@ export const EmptyState = ({
       >
         {!isAuthenticated
           ? 'Bạn cần đăng nhập để xem và quản lý các công thức đã lưu'
-          : hasRecipes
-            ? 'Không tìm thấy công thức phù hợp với điều kiện lọc.'
-            : 'Bạn chưa lưu công thức nào.\nHãy khám phá các món ăn trong phần Bản đồ!'}
+          : activeTab === 'cooking'
+            ? 'Bạn chưa thêm công thức nào vào danh sách nấu.\nHãy thêm từ danh sách công thức đã lưu!'
+            : hasRecipes
+              ? 'Không tìm thấy công thức phù hợp với điều kiện lọc.'
+              : 'Bạn chưa lưu công thức nào.\nHãy khám phá các món ăn trong phần Bản đồ!'}
       </Typography>
 
       {!isAuthenticated && (
