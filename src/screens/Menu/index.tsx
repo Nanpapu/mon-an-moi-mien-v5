@@ -115,9 +115,6 @@ export default function MenuScreen() {
   }, [filteredRecipes]);
 
   const visibleSections = useMemo(() => {
-    if (activeTab === 'cooking') {
-      return [sections[0]];
-    }
     return sections;
   }, [sections, activeTab]);
 

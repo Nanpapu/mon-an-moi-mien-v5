@@ -71,6 +71,17 @@ export const RecipeList = ({
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const { refreshSavedRecipes } = useRecipes();
 
+  console.log('RecipeList - activeTab:', activeTab);
+  console.log('RecipeList - sections:', sections);
+  console.log('RecipeList - filteredRecipes:', filteredRecipes.length);
+
+  if (activeTab === 'cooking') {
+    const cookingRecipes = filteredRecipes.filter(
+      (item) => item.visible && isRecipeInCooking(item.recipe.id)
+    );
+    console.log('RecipeList - cookingRecipes:', cookingRecipes.length);
+  }
+
   const handleRecipePress = async (recipe: Recipe) => {
     // Refresh data trước khi show
     await refreshSavedRecipes();
@@ -118,22 +129,18 @@ export const RecipeList = ({
           }
         >
           {sections &&
-            sections.map((section, index) => {
-              if (!section || section.data.length === 0) return null;
-
-              return (
-                <View
-                  key={index}
-                  style={
-                    index > 0 ? { marginTop: theme.spacing.md } : undefined
-                  }
-                >
-                  {section.title && (
-                    <SectionHeader
-                      title={section.title}
-                      count={section.data.length}
-                    />
-                  )}
+            sections.map((section, index) => (
+              <View
+                key={index}
+                style={index > 0 ? { marginTop: theme.spacing.md } : undefined}
+              >
+                {section.title && (
+                  <SectionHeader
+                    title={section.title}
+                    count={section.data.length}
+                  />
+                )}
+                {section.data.length > 0 && (
                   <View style={styles.grid}>
                     {section.data.map(({ recipe, visible }) => {
                       if (!visible) return null;
@@ -154,9 +161,9 @@ export const RecipeList = ({
                       );
                     })}
                   </View>
-                </View>
-              );
-            })}
+                )}
+              </View>
+            ))}
         </ScrollView>
       )}
 

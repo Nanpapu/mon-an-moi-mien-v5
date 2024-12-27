@@ -297,7 +297,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     if (currentFilterOptions.searchQuery) {
       const query = currentFilterOptions.searchQuery.toLowerCase().trim();
 
-      // Lọc recipes theo tab hiện tại
+      // Lọc recipes theo tab hiện tại trước khi tìm kiếm
       const tabRecipes =
         activeTab === 'cooking'
           ? visibleRecipes.filter((item) => isRecipeInCooking(item.recipe.id))
@@ -330,23 +330,13 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     }
 
     // Nếu không có search query
-    if (activeTab === 'cooking') {
-      // Tab đang nấu: chỉ hiển thị các món đang nấu
-      return [
-        {
-          title: '',
-          data: visibleRecipes.filter((item) =>
-            isRecipeInCooking(item.recipe.id)
-          ),
-        },
-      ];
-    }
-
-    // Tab đã lưu: hiển thị tất cả trong 1 section
     return [
       {
         title: '',
-        data: visibleRecipes,
+        data:
+          activeTab === 'cooking'
+            ? visibleRecipes.filter((item) => isRecipeInCooking(item.recipe.id))
+            : visibleRecipes,
       },
     ];
   };
