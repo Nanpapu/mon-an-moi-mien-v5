@@ -7,8 +7,8 @@ import { CookingRecipesService } from '../../../services/cookingRecipesService';
 import { useAuth } from '../../../context/AuthContext';
 import { TabType } from '../components/TabBar';
 
-// Thêm interface cho filter options của từng tab
-interface TabFilterOptions {
+// Thêm export vào trước interface
+export interface TabFilterOptions {
   cooking: FilterOptions;
   saved: FilterOptions;
 }
@@ -50,7 +50,8 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   });
 
   // Helper để lấy filter options của tab hiện tại
-  const currentFilterOptions = filterOptions[activeTab];
+  const currentFilterOptions: FilterOptions =
+    filterOptions[activeTab as keyof TabFilterOptions];
 
   // Cập nhật hàm setFilterOptions
   const updateFilterOptions = (newOptions: Partial<FilterOptions>) => {
@@ -289,12 +290,14 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   }, [savedRecipes]);
 
   const groupRecipes = (recipes: { recipe: Recipe; visible: boolean }[]) => {
-    // Đảm bảo luôn trả về mảng có 2 phần tử
+    // Lọc các công thức có visible = true
+    const visibleRecipes = recipes.filter((item) => item.visible);
+
     const cookingRecipesSection = {
       title: '',
       data:
         activeTab === 'cooking'
-          ? recipes.filter((item) => isRecipeInCooking(item.recipe.id))
+          ? visibleRecipes.filter((item) => isRecipeInCooking(item.recipe.id))
           : [],
     };
 
@@ -302,11 +305,28 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       title: '',
       data:
         activeTab === 'saved'
-          ? recipes.filter((item) => !isRecipeInCooking(item.recipe.id))
+          ? visibleRecipes.filter((item) => !isRecipeInCooking(item.recipe.id))
           : [],
     };
 
     return [cookingRecipesSection, savedRecipesSection];
+  };
+
+  // Thêm hàm mới để kiểm tra có filter nào đang active không
+  const hasActiveFilters = () => {
+    const options = filterOptions[activeTab];
+    return (
+      options.searchQuery ||
+      options.region ||
+      options.showFavorites ||
+      options.category ||
+      options.difficulty ||
+      options.cookingTime.min ||
+      options.cookingTime.max ||
+      options.servings.min ||
+      options.servings.max ||
+      options.mainIngredientTypes.length > 0
+    );
   };
 
   // Thêm hàm để thêm công thức vào danh sách nấu
@@ -377,5 +397,6 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     sections: groupRecipes(filteredRecipes),
     isRecipeInCooking, // Thêm vào return
     removeFromCooking,
+    hasActiveFilters,
   };
 };

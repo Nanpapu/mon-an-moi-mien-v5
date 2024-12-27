@@ -11,7 +11,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Loading } from '../../components/shared';
 import { MenuSearchBar } from './components/MenuSearchBar';
 import { useMenuData } from './hooks/useMenuData';
-import { useRecipeFilter } from './hooks/useRecipeFilter';
+import { useRecipeFilter, TabFilterOptions } from './hooks/useRecipeFilter';
 import { RecipeList } from './components/RecipeList';
 import { Ionicons } from '@expo/vector-icons';
 import { useGridZoom } from './hooks/useGridZoom';
@@ -89,8 +89,20 @@ export default function MenuScreen() {
     filterOptions.mainIngredientTypes.length > 0,
   ].filter(Boolean).length;
 
-  const hasActiveFilters =
-    filterOptions.searchQuery || filterOptions.region || activeFiltersCount > 0;
+  const hasActiveFilters = useMemo(() => {
+    return (
+      filterOptions.searchQuery ||
+      filterOptions.region ||
+      filterOptions.showFavorites ||
+      filterOptions.category ||
+      filterOptions.difficulty ||
+      filterOptions.cookingTime.min ||
+      filterOptions.cookingTime.max ||
+      filterOptions.servings.min ||
+      filterOptions.servings.max ||
+      filterOptions.mainIngredientTypes.length > 0
+    );
+  }, [filterOptions, activeTab]);
 
   const cookingRecipesCount = sections[0].data.filter(
     (item) => item.visible
@@ -356,7 +368,6 @@ export default function MenuScreen() {
         </>
       )}
 
-      {/* Hiển thị số lượng kt quả nếu có filter active */}
       {hasActiveFilters && (
         <Typography
           variant="caption"

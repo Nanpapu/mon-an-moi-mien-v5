@@ -35,6 +35,23 @@ export const EmptyState = ({
   const { theme } = useTheme();
   const navigation = useNavigation<NavigationProp>();
 
+  const getMessage = () => {
+    if (!isAuthenticated) {
+      return 'Bạn cần đăng nhập để xem và quản lý các công thức đã lưu';
+    }
+
+    if (activeTab === 'cooking') {
+      return 'Bạn chưa thêm công thức nào vào danh sách nấu.\nHãy thêm từ danh sách công thức đã lưu!';
+    }
+
+    // Tab đã lưu
+    if (!hasRecipes) {
+      return 'Bạn chưa lưu công thức nào.\nHãy khám phá các món ăn trong phần Bản đồ!';
+    }
+
+    return 'Không tìm thấy công thức phù hợp với điều kiện lọc.';
+  };
+
   const EmptyContent = () => (
     <View
       style={{
@@ -66,13 +83,7 @@ export const EmptyState = ({
         align="center"
         style={{ marginBottom: 20 }}
       >
-        {!isAuthenticated
-          ? 'Bạn cần đăng nhập để xem và quản lý các công thức đã lưu'
-          : activeTab === 'cooking'
-            ? 'Bạn chưa thêm công thức nào vào danh sách nấu.\nHãy thêm từ danh sách công thức đã lưu!'
-            : hasRecipes
-              ? 'Không tìm thấy công thức phù hợp với điều kiện lọc.'
-              : 'Bạn chưa lưu công thức nào.\nHãy khám phá các món ăn trong phần Bản đồ!'}
+        {getMessage()}
       </Typography>
 
       {!isAuthenticated && (
