@@ -136,36 +136,36 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     }, 0);
   };
 
-  const onSearch = async (query: string) => {
+  const onSearch = (query: string) => {
     if (!query.trim()) return;
 
-    try {
-      if (!hasLocationPermission) {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          showToast('error', 'Cần quyền truy cập vị trí để tìm kiếm');
-          return;
-        }
-        setHasLocationPermission(true);
-      }
+    // Tìm kiếm trong regions hiện có
+    const results = regions.filter((region) => {
+      // Chuyển về lowercase để so sánh không phân biệt hoa thường
+      const regionName = region.name.toLowerCase();
+      const searchQuery = query.toLowerCase();
 
-      const result = await Location.geocodeAsync(query);
-      if (result.length > 0) {
-        const { latitude, longitude } = result[0];
-        const newRegion = {
-          latitude,
-          longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        };
-        mapRef.current?.animateToRegion(newRegion, 1000);
-        showToast('success', 'Đã tìm thấy địa điểm');
-      } else {
-        showToast('warning', 'Không tìm thấy địa điểm');
-      }
-    } catch (error) {
-      console.error('Lỗi tìm kiếm:', error);
-      showToast('error', 'Không thể tìm kiếm địa điểm');
+      // Kiểm tra nếu tên region chứa query
+      return regionName.includes(searchQuery);
+    });
+
+    if (results.length > 0) {
+      // Lấy kết quả đầu tiên tìm được
+      const firstResult = results[0];
+
+      // Tạo region mới để animate map
+      const newRegion = {
+        latitude: firstResult.coordinate.latitude,
+        longitude: firstResult.coordinate.longitude,
+        latitudeDelta: 0.05, // Zoom gần để thấy rõ địa điểm
+        longitudeDelta: 0.05,
+      };
+
+      // Di chuyển map đến vị trí tìm thấy
+      mapRef.current?.animateToRegion(newRegion, 1000);
+      showToast('success', 'Đã tìm thấy địa điểm');
+    } else {
+      showToast('warning', 'Không tìm thấy địa điểm');
     }
   };
 
