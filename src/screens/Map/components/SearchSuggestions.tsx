@@ -1,7 +1,14 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   suggestions: string[];
@@ -13,58 +20,93 @@ export const SearchSuggestions = ({ suggestions, onSelect }: Props) => {
 
   if (suggestions.length === 0) return null;
 
+  // Giới hạn chỉ lấy 5 suggestions đầu tiên
+  const limitedSuggestions = suggestions.slice(0, 5);
+
   return (
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: theme.colors.background.paper,
-          borderColor: theme.colors.divider,
-        },
+        { backgroundColor: theme.colors.background.paper },
       ]}
     >
-      <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
-        {suggestions.map((suggestion, index) => (
-          <TouchableOpacity
-            key={index}
+      {limitedSuggestions.map((suggestion, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            styles.suggestionItem,
+            {
+              borderBottomColor: theme.colors.divider,
+              borderBottomWidth:
+                index === limitedSuggestions.length - 1 ? 0 : 1,
+            },
+          ]}
+          onPress={() => onSelect(suggestion)}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name="location-outline"
+            size={20}
+            color={theme.colors.text.secondary}
+            style={styles.icon}
+          />
+          <Typography
+            variant="body2"
             style={[
-              styles.suggestionItem,
-              {
-                borderBottomColor: theme.colors.divider,
-                borderBottomWidth: index === suggestions.length - 1 ? 0 : 1,
-              },
+              styles.suggestionText,
+              { color: theme.colors.text.primary },
             ]}
-            onPress={() => onSelect(suggestion)}
+            numberOfLines={1}
           >
-            <Typography variant="body2">{suggestion}</Typography>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+            {suggestion}
+          </Typography>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.text.disabled}
+            style={styles.arrowIcon}
+          />
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
 
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: '100%',
-    left: 0,
+    top: '90%',
+    left: -48,
     right: 0,
-    maxHeight: 200,
-    borderRadius: 8,
+    borderRadius: 12,
     marginTop: 4,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    maxHeight: 240,
+    overflow: 'hidden',
     zIndex: 1000,
   },
-  scroll: {
-    maxHeight: 200,
-  },
   suggestionItem: {
-    padding: 12,
-    borderBottomWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    height: 48,
+  },
+  icon: {
+    marginRight: 12,
+  },
+  suggestionText: {
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  arrowIcon: {
+    marginLeft: 8,
   },
 });
