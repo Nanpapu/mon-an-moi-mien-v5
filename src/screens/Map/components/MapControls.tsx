@@ -238,18 +238,20 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
   searchBarWrapper: {
     flex: 1,
-    paddingRight: 16,
     position: 'relative',
-    zIndex: 1,
+    paddingRight: 16,
+    width: '100%',
   },
   input: {
     flex: 1,
     height: 48,
     fontSize: 16,
     paddingVertical: 8,
+    paddingHorizontal: 16,
   },
   reloadButton: {
     position: 'absolute',

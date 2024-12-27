@@ -77,11 +77,11 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: '100%',
-    left: 0,
+    top: '90%',
+    left: -48,
     right: 0,
     borderRadius: 12,
-    marginTop: 0,
+    marginTop: 4,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
