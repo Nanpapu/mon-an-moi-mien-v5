@@ -25,6 +25,7 @@ import {
 } from '../../constants/timeout';
 import { MAP_STYLES } from './constants/mapStyles';
 import { useMapStyle } from '../../context/MapStyleContext';
+import { removeAccents, containsSearchQuery } from '../../utils/stringUtils';
 
 // Thêm hằng số cho animation
 const MARKER_ZOOM_ANIMATION = {
@@ -141,28 +142,24 @@ export default function MapScreen({ navigation }: { navigation: any }) {
 
     // Tìm kiếm trong regions hiện có
     const results = regions.filter((region) => {
-      // Chuyển về lowercase để so sánh không phân biệt hoa thường
-      const regionName = region.name.toLowerCase();
-      const searchQuery = query.toLowerCase();
-
-      // Kiểm tra nếu tên region chứa query
-      return regionName.includes(searchQuery);
+      return containsSearchQuery(region.name, query);
     });
 
     if (results.length > 0) {
-      // Lấy kết quả đầu tiên tìm được
       const firstResult = results[0];
 
-      // Tạo region mới để animate map
+      // Dùng lại các giá trị animation giống marker
       const newRegion = {
         latitude: firstResult.coordinate.latitude,
         longitude: firstResult.coordinate.longitude,
-        latitudeDelta: 0.05, // Zoom gần để thấy rõ địa điểm
-        longitudeDelta: 0.05,
+        latitudeDelta: MARKER_ZOOM_ANIMATION.LATITUDE_DELTA,
+        longitudeDelta: MARKER_ZOOM_ANIMATION.LONGITUDE_DELTA,
       };
 
-      // Di chuyển map đến vị trí tìm thấy
-      mapRef.current?.animateToRegion(newRegion, 1000);
+      mapRef.current?.animateToRegion(
+        newRegion,
+        MARKER_ZOOM_ANIMATION.DURATION
+      );
       showToast('success', 'Đã tìm thấy địa điểm');
     } else {
       showToast('warning', 'Không tìm thấy địa điểm');
