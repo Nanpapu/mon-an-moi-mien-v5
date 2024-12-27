@@ -21,6 +21,7 @@ export const SplashScreen = ({
 }: {
   onAnimationComplete: () => void;
 }) => {
+  // Load fonts
   const [fontsLoaded] = useFonts({
     DancingScript: DancingScript_700Bold,
     Pacifico: Pacifico_400Regular,
@@ -115,6 +116,7 @@ export const SplashScreen = ({
     });
   }, [fontsLoaded]);
 
+  // Đợi font load xong
   if (!fontsLoaded) return null;
 
   const rotate = logoRotate.interpolate({
@@ -150,8 +152,15 @@ export const SplashScreen = ({
         ]}
       >
         <Typography
-          variant="h1"
-          style={[styles.appName, { fontFamily: 'DancingScript' }]}
+          variant="body1"
+          style={[
+            styles.appName,
+            {
+              fontFamily: 'DancingScript',
+              includeFontPadding: false,
+              textAlignVertical: 'center',
+            },
+          ]}
         >
           Món Việt
         </Typography>
@@ -168,7 +177,14 @@ export const SplashScreen = ({
       >
         <Typography
           variant="body1"
-          style={[styles.slogan, { fontFamily: 'Pacifico' }]}
+          style={[
+            styles.slogan,
+            {
+              fontFamily: 'Pacifico',
+              includeFontPadding: false,
+              textAlignVertical: 'center',
+            },
+          ]}
         >
           Khám phá tinh hoa ẩm thực Việt
         </Typography>
@@ -187,21 +203,24 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: width * 0.4,
     height: width * 0.4,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   logo: {
     width: '100%',
     height: '100%',
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#2196F3', // Hoặc theme.colors.primary.main
+    borderColor: '#2196F3',
   },
   textContainer: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 20,
+    height: 70,
+    justifyContent: 'center',
   },
   sloganContainer: {
     alignItems: 'center',
+    marginTop: 10,
   },
   appName: {
     fontSize: 48,
@@ -209,10 +228,15 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.15)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 3,
+    lineHeight: 70,
+    height: 70,
+    paddingTop: 0,
+    includeFontPadding: false,
   },
   slogan: {
     fontSize: 18,
     color: '#666666',
     opacity: 0.9,
+    lineHeight: 24,
   },
 });
