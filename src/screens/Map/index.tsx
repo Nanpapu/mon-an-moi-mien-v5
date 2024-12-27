@@ -162,7 +162,10 @@ export default function MapScreen({ navigation }: { navigation: any }) {
       );
       showToast('success', 'Đã tìm thấy địa điểm');
     } else {
-      showToast('warning', 'Không tìm thấy địa điểm');
+      showToast(
+        'warning',
+        'Địa điểm không tồn tại hoặc hiện chưa có món nào'
+      );
     }
   };
 
