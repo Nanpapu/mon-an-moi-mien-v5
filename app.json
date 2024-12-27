@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/viet-splash.png",
+      "image": null,
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
