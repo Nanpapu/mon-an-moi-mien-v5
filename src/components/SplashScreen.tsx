@@ -85,23 +85,26 @@ export const SplashScreen = ({
         }),
       ]),
       // Delay before exit
-      Animated.delay(800),
+      Animated.delay(600),
     ]).start(() => {
       // Fade out everything
       Animated.parallel([
         Animated.timing(logoOpacity, {
           toValue: 0,
-          duration: 500,
+          duration: 400,
+          easing: Easing.ease,
           useNativeDriver: true,
         }),
         Animated.timing(textOpacity, {
           toValue: 0,
-          duration: 500,
+          duration: 400,
+          easing: Easing.ease,
           useNativeDriver: true,
         }),
         Animated.timing(sloganOpacity, {
           toValue: 0,
-          duration: 500,
+          duration: 400,
+          easing: Easing.ease,
           useNativeDriver: true,
         }),
       ]).start(onAnimationComplete);
