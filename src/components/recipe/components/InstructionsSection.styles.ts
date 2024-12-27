@@ -108,7 +108,7 @@ export const createStyles = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      // marginLeft: theme.spacing.sm,
+      marginBottom: theme.spacing.sm,
       color: theme.colors.text.primary,
       fontWeight: '600',
     },
