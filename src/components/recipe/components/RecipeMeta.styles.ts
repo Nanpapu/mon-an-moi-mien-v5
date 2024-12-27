@@ -8,7 +8,7 @@ export const createStyles = (theme: Theme) =>
       justifyContent: 'space-between',
       backgroundColor: theme.colors.background.default,
       borderRadius: theme.spacing.xs,
-      padding: theme.spacing.xs,
+      paddingVertical: theme.spacing.xs,
     },
     metaItem: {
       alignItems: 'center',

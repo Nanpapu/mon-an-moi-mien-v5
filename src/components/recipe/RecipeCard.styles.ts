@@ -15,11 +15,12 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.colors.background.paper,
     },
     content: {
-      padding: theme.spacing.sm,
+      // padding: theme.spacing.md,
       backgroundColor: theme.colors.background.paper,
     },
     details: {
       paddingTop: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
     },
     metaContainer: {
       marginTop: theme.spacing.xs,
@@ -55,9 +56,11 @@ export const createStyles = (theme: Theme) =>
       textShadowRadius: 2,
     },
     actionsContainer: {
+      paddingHorizontal: theme.spacing.md,
       marginTop: theme.spacing.sm,
     },
     reviewsContainer: {
+      paddingHorizontal: theme.spacing.md,
       marginTop: theme.spacing.sm,
     },
     statusBadgeContainer: {

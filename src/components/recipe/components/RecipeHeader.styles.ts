@@ -7,7 +7,7 @@ export const createStyles = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingBottom: theme.spacing.sm,
+      padding: theme.spacing.md,
     },
     headerContent: {
       flex: 1,

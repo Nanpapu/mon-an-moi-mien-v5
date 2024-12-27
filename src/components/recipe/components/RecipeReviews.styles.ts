@@ -6,14 +6,14 @@ const { width } = Dimensions.get('window');
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     ratingContainer: {
-      padding: theme.spacing.md,
+      paddingVertical: theme.spacing.md,
       borderTopWidth: 1,
       borderTopColor: theme.colors.divider,
       marginTop: theme.spacing.md,
     },
     ratingHeader: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'space-around',
       alignItems: 'center',
     },
     ratingScore: {

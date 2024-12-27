@@ -6,7 +6,7 @@ export const createStyles = (theme: Theme) =>
     ingredientsContainer: {
       backgroundColor: theme.colors.background.paper,
       borderRadius: theme.spacing.md,
-      padding: theme.spacing.sm,
+      paddingVertical: theme.spacing.sm,
       marginTop: theme.spacing.md,
     },
     header: {
