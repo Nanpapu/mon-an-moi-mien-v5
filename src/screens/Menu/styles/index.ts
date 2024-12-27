@@ -18,8 +18,8 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
       backgroundColor: theme.colors.background.paper,
       borderRadius: theme.spacing.lg,
       ...theme.shadows.sm,
-      width: 40,
-      height: 40,
+      width: 45,
+      height: 45,
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: 1,
@@ -69,9 +69,9 @@ export const createStyles = (theme: Theme, insets: EdgeInsets) => {
     headerControls: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.xs,
-      gap: theme.spacing.xs,
+      gap: theme.spacing.sm,
     },
     zoomControls: {
       flexDirection: 'row',
