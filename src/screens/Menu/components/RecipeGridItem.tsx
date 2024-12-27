@@ -147,6 +147,14 @@ export const RecipeGridItem = memo(
 
     const favoriteButtonStyle = getFavoriteButtonStyle();
 
+    console.log('RecipeGridItem render:', {
+      id: recipe.id,
+      isSelectionMode,
+      isSelected,
+      width,
+      config,
+    });
+
     return (
       <TouchableOpacity
         style={[
@@ -306,13 +314,32 @@ export const RecipeGridItem = memo(
     );
   },
   (prevProps, nextProps) => {
-    return (
-      prevProps.recipe.id === nextProps.recipe.id &&
-      prevProps.width === nextProps.width &&
-      prevProps.isSelectionMode === nextProps.isSelectionMode &&
-      prevProps.isSelected === nextProps.isSelected &&
-      prevProps.visible === nextProps.visible
-    );
+    const shouldUpdate =
+      prevProps.recipe.id !== nextProps.recipe.id ||
+      prevProps.width !== nextProps.width ||
+      prevProps.isSelectionMode !== nextProps.isSelectionMode ||
+      prevProps.isSelected !== nextProps.isSelected ||
+      prevProps.visible !== nextProps.visible ||
+      prevProps.isCooking !== nextProps.isCooking ||
+      prevProps.config !== nextProps.config;
+
+    if (shouldUpdate) {
+      console.log('RecipeGridItem will update:', {
+        id: prevProps.recipe.id,
+        reason: {
+          id: prevProps.recipe.id !== nextProps.recipe.id,
+          width: prevProps.width !== nextProps.width,
+          isSelectionMode:
+            prevProps.isSelectionMode !== nextProps.isSelectionMode,
+          isSelected: prevProps.isSelected !== nextProps.isSelected,
+          visible: prevProps.visible !== nextProps.visible,
+          isCooking: prevProps.isCooking !== nextProps.isCooking,
+          config: prevProps.config !== nextProps.config,
+        },
+      });
+    }
+
+    return !shouldUpdate;
   }
 );
 

@@ -54,14 +54,22 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     filterOptions[activeTab as keyof TabFilterOptions];
 
   // Cập nhật hàm setFilterOptions
-  const updateFilterOptions = (newOptions: Partial<FilterOptions>) => {
-    setFilterOptions((prev) => ({
-      ...prev,
-      [activeTab]: {
-        ...prev[activeTab],
-        ...newOptions,
-      },
-    }));
+  const updateFilterOptions = (
+    newOptions:
+      | Partial<FilterOptions>
+      | ((prev: TabFilterOptions) => TabFilterOptions)
+  ) => {
+    if (typeof newOptions === 'function') {
+      setFilterOptions(newOptions);
+    } else {
+      setFilterOptions((prev) => ({
+        ...prev,
+        [activeTab]: {
+          ...prev[activeTab],
+          ...newOptions,
+        },
+      }));
+    }
   };
 
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -163,6 +171,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
   };
 
   const filteredRecipes = useMemo(() => {
+    console.log('Recalculating filteredRecipes');
     let results = savedRecipes
       .map((recipe) => {
         const isFavorite = favoriteRecipes.some((fav) => fav.id === recipe.id);
@@ -282,7 +291,13 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       recipe: item.recipe,
       visible: true,
     }));
-  }, [savedRecipes, currentFilterOptions, favoriteRecipes]);
+  }, [
+    savedRecipes,
+    currentFilterOptions,
+    favoriteRecipes,
+    activeTab,
+    cookingRecipes,
+  ]);
 
   const regions = useMemo(() => {
     const uniqueRegions = new Set(savedRecipes.map((recipe) => recipe.region));

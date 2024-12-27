@@ -148,7 +148,11 @@ export const RecipeList = ({
                         <RecipeGridItem
                           key={recipe.id}
                           recipe={recipe}
-                          onPress={() => handleRecipePress(recipe)}
+                          onPress={() =>
+                            isSelectionMode
+                              ? onToggleSelect?.(recipe.id)
+                              : handleRecipePress(recipe)
+                          }
                           width={calculateItemWidth()}
                           config={currentConfig}
                           onFavoriteChange={onFavoriteChange}

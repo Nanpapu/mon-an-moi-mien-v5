@@ -8,6 +8,7 @@ interface Props {
   onZoomOut: () => void;
   canZoomIn: boolean;
   canZoomOut: boolean;
+  onZoomChange?: () => void;
 }
 
 export const ZoomControls = ({
@@ -15,26 +16,41 @@ export const ZoomControls = ({
   onZoomOut,
   canZoomIn,
   canZoomOut,
+  onZoomChange,
 }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleZoomIn = () => {
+    onZoomIn();
+    onZoomChange?.();
+  };
+
+  const handleZoomOut = () => {
+    onZoomOut();
+    onZoomChange?.();
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={onZoomOut}
-        disabled={!canZoomOut} 
-        style={[styles.button, !canZoomOut && styles.buttonDisabled]}
-      >
-        <Ionicons name="add" size={24} color={theme.colors.text.primary} />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={onZoomIn}
+        onPress={handleZoomIn}
         disabled={!canZoomIn}
         style={[styles.button, !canZoomIn && styles.buttonDisabled]}
       >
-        <Ionicons name="remove" size={24} color={theme.colors.text.primary} />
+        <Ionicons name="add" size={24} color={canZoomIn ? '#000' : '#999'} />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleZoomOut}
+        disabled={!canZoomOut}
+        style={[styles.button, !canZoomOut && styles.buttonDisabled]}
+      >
+        <Ionicons
+          name="remove"
+          size={24}
+          color={canZoomOut ? '#000' : '#999'}
+        />
       </TouchableOpacity>
     </View>
   );

@@ -135,26 +135,29 @@ export default function MenuScreen() {
   };
 
   const enterSelectionMode = useCallback((recipeId: string) => {
+    console.log('Entering selection mode with recipe:', recipeId);
     setIsSelectionMode(true);
     setSelectedRecipes(new Set([recipeId]));
   }, []);
 
   const exitSelectionMode = useCallback(() => {
+    console.log('Exiting selection mode');
     setIsSelectionMode(false);
     setSelectedRecipes(new Set());
   }, []);
 
   const toggleSelectRecipe = useCallback(
     (recipeId: string) => {
+      console.log('Toggling recipe selection:', recipeId);
       setSelectedRecipes((prev) => {
         const newSet = new Set(prev);
         if (newSet.has(recipeId)) {
           newSet.delete(recipeId);
+          if (newSet.size === 0) {
+            exitSelectionMode();
+          }
         } else {
           newSet.add(recipeId);
-        }
-        if (newSet.size === 0) {
-          exitSelectionMode();
         }
         return newSet;
       });
@@ -222,6 +225,13 @@ export default function MenuScreen() {
     },
     [removeFromCooking]
   );
+
+  const handleZoomChange = useCallback(() => {
+    setFilterOptions((prev) => ({
+      cooking: { ...prev.cooking },
+      saved: { ...prev.saved },
+    }));
+  }, [setFilterOptions]);
 
   console.log('Filtered recipes in MenuScreen:', filteredRecipes.length);
   console.log('Active filters:', hasActiveFilters);
@@ -369,6 +379,7 @@ export default function MenuScreen() {
               onZoomOut={zoomOut}
               canZoomIn={canZoomIn}
               canZoomOut={canZoomOut}
+              onZoomChange={handleZoomChange}
             />
           )}
         </>
@@ -382,7 +393,7 @@ export default function MenuScreen() {
             color: theme.colors.text.secondary,
           }}
         >
-          T��m thấy {filteredRecipes.filter((item) => item.visible).length} công
+          Tìm thấy {filteredRecipes.filter((item) => item.visible).length} công
           thức
         </Typography>
       )}
