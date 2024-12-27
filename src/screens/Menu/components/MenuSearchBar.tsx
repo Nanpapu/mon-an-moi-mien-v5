@@ -114,6 +114,7 @@ export const MenuSearchBar = ({
             color: theme.colors.text.primary,
             height: 32,
             textAlignVertical: 'center',
+            fontSize: 13,
           },
         ]}
         onSubmitEditing={handleSubmitEditing}
