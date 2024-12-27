@@ -23,11 +23,10 @@ export const RecipeService = {
    * @returns {Promise<object | null>} Thông tin công thức hoặc null nếu không tìm thấy
    * @throws {Error} Lỗi khi lấy thông tin công thức
    */
-  getRecipeById: async (recipeId: string) => {
+  getRecipeById: async (recipeId: string): Promise<Recipe | null> => {
     try {
       const cacheKey = `${CACHE_KEYS.RECIPES}${recipeId}`;
 
-      // Lấy recipe và stats
       const recipeDoc = await getDoc(doc(db, COLLECTIONS.RECIPES, recipeId));
       const statsDoc = await getDoc(
         doc(db, COLLECTIONS.RECIPE_STATS, recipeId)
@@ -35,14 +34,17 @@ export const RecipeService = {
 
       if (!recipeDoc.exists()) return null;
 
-      const recipe = {
+      const recipeData = recipeDoc.data();
+      const recipe: Recipe = {
         id: recipeDoc.id,
-        ...recipeDoc.data(),
-        rating: statsDoc.exists() ? statsDoc.data().averageRating : 0,
-        totalReviews: statsDoc.exists() ? statsDoc.data().totalReviews : 0,
+        name: recipeData.name,
+        category: recipeData.category,
+        region: recipeData.region,
+        image: recipeData.image,
+        ingredients: recipeData.ingredients,
+        instructions: recipeData.instructions,
       };
 
-      // Luôn cập nhật cache mới nhất
       await CacheService.setCache(cacheKey, recipe);
       return recipe;
     } catch (error) {
@@ -59,56 +61,62 @@ export const RecipeService = {
   getSavedRecipes: async (userId: string) => {
     try {
       const cacheKey = `${CACHE_KEYS.SAVED_RECIPES}${userId}`;
+      let localRecipes: Recipe[] = [];
+
+      // 1. Lấy dữ liệu từ cache
       const cachedRecipes = await CacheService.getCache(
         cacheKey,
         CACHE_EXPIRY.SAVED_RECIPES
       );
-
       if (cachedRecipes) {
-        // Sync lên cloud ngầm nếu có cache
-        const recipeIds = cachedRecipes.map((r: Recipe) => r.id);
-        UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
-          console.error
+        localRecipes = cachedRecipes;
+      } else {
+        // 2. Nếu không có cache, lấy từ AsyncStorage
+        const savedRecipesStr = await AsyncStorage.getItem(
+          `saved_recipes_${userId}`
         );
-        return cachedRecipes;
+        if (savedRecipesStr) {
+          localRecipes = JSON.parse(savedRecipesStr);
+        }
       }
 
-      const savedRecipes = await AsyncStorage.getItem(
-        `saved_recipes_${userId}`
-      );
-      if (savedRecipes) {
-        const recipes = JSON.parse(savedRecipes);
-        await CacheService.setCache(cacheKey, recipes);
-
-        // Sync lên cloud khi lấy từ storage
-        const recipeIds = recipes.map((r: Recipe) => r.id);
-        UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
-          console.error
-        );
-
-        return recipes;
-      }
-
-      // Nếu không có local data, thử lấy từ cloud
+      // 3. Lấy dữ liệu từ cloud
       const { recipeIds } = await UserSavedRecipesService.getFromCloud(userId);
+      let cloudRecipes: Recipe[] = [];
       if (recipeIds.length > 0) {
-        // Convert IDs thành recipes
         const recipes = await Promise.all(
           recipeIds.map((id) => RecipeService.getRecipeById(id))
         );
-        const validRecipes = recipes.filter((r) => r !== null);
-
-        // Save xuống local
-        await AsyncStorage.setItem(
-          `saved_recipes_${userId}`,
-          JSON.stringify(validRecipes)
-        );
-        await CacheService.setCache(cacheKey, validRecipes);
-
-        return validRecipes;
+        cloudRecipes = recipes.filter(
+          (r): r is Recipe => r !== null
+        ) as Recipe[];
       }
 
-      return [];
+      // 4. Merge dữ liệu từ local và cloud
+      const mergedRecipes = [
+        ...localRecipes,
+        ...cloudRecipes.filter(
+          (cloudRecipe) =>
+            !localRecipes.some(
+              (localRecipe) => localRecipe.id === cloudRecipe.id
+            )
+        ),
+      ];
+
+      // 5. Cập nhật lại local storage và cache
+      await AsyncStorage.setItem(
+        `saved_recipes_${userId}`,
+        JSON.stringify(mergedRecipes)
+      );
+      await CacheService.setCache(cacheKey, mergedRecipes);
+
+      // 6. Sync lại lên cloud để đảm bảo dữ liệu đồng nhất
+      const mergedRecipeIds = mergedRecipes.map((r) => r.id);
+      UserSavedRecipesService.syncToCloud(userId, mergedRecipeIds).catch(
+        console.error
+      );
+
+      return mergedRecipes;
     } catch (error) {
       console.error('Lỗi khi lấy công thức đã lưu:', error);
       return [];
@@ -128,17 +136,15 @@ export const RecipeService = {
    */
   saveRecipe: async (recipe: Recipe, userId: string) => {
     try {
-      const cacheKey = `${CACHE_KEYS.SAVED_RECIPES}${userId}`;
-      const savedRecipes = await AsyncStorage.getItem(
-        `saved_recipes_${userId}`
-      );
-      let recipes: Recipe[] = savedRecipes ? JSON.parse(savedRecipes) : [];
+      // 1. Lấy danh sách hiện tại (đã được merge)
+      const currentRecipes = await RecipeService.getSavedRecipes(userId);
 
-      if (recipes.some((r) => r.id === recipe.id)) {
+      // 2. Kiểm tra trùng lặp
+      if (currentRecipes.some((r) => r.id === recipe.id)) {
         return false;
       }
 
-      // Cache ảnh trước khi lưu công thức
+      // 3. Cache ảnh trước khi lưu công thức
       if (recipe.image) {
         const imageUrl = await ImageUtils.getRecipeImageUrl(recipe.image);
         if (imageUrl) {
@@ -146,20 +152,20 @@ export const RecipeService = {
         }
       }
 
-      recipes.push(recipe);
+      // 4. Thêm công thức mới vào danh sách
+      const updatedRecipes = [...currentRecipes, recipe];
 
-      // Save local
+      // 5. Cập nhật local storage và cache
+      const cacheKey = `${CACHE_KEYS.SAVED_RECIPES}${userId}`;
       await AsyncStorage.setItem(
         `saved_recipes_${userId}`,
-        JSON.stringify(recipes)
+        JSON.stringify(updatedRecipes)
       );
-      await CacheService.setCache(cacheKey, recipes);
+      await CacheService.setCache(cacheKey, updatedRecipes);
 
-      // Sync to cloud
-      const recipeIds = recipes.map((r) => r.id);
-      UserSavedRecipesService.syncToCloud(userId, recipeIds).catch(
-        console.error
-      );
+      // 6. Sync to cloud
+      const recipeIds = updatedRecipes.map((r) => r.id);
+      await UserSavedRecipesService.syncToCloud(userId, recipeIds);
 
       return true;
     } catch (error) {
