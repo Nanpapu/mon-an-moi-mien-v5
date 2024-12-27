@@ -111,7 +111,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     try {
       const success = await saveRecipe(recipe, user.uid);
       if (success) {
-        showToast('success', 'Đã lưu công th��c');
+        showToast('success', 'Đã lưu công thức');
       } else {
         showToast('info', 'Công thức đã được lưu trước đó');
       }

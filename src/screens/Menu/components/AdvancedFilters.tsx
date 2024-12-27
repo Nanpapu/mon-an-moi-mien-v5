@@ -321,55 +321,6 @@ export const AdvancedFilters = ({
           ))}
         </View>
       </View>
-
-      <View style={styles.divider} />
-
-      {/* Tùy chọn hiển thị kết quả trùng lặp */}
-      <View style={styles.filterGroup}>
-        <View style={styles.groupHeader}>
-          <MaterialCommunityIcons
-            name="content-copy"
-            size={24}
-            color={theme.colors.text.primary}
-          />
-          <Typography variant="subtitle1" style={styles.groupTitle}>
-            Tùy chọn tìm kiếm
-          </Typography>
-        </View>
-
-        <Typography variant="body2" style={styles.description}>
-          Hiển thị món ăn trong cả kết quả tìm theo tên và tìm theo nguyên liệu.
-        </Typography>
-
-        <TouchableOpacity
-          style={styles.switchContainer}
-          onPress={() =>
-            onFilterChange({
-              ...filterOptions,
-              showDuplicateResults: !filterOptions.showDuplicateResults,
-            })
-          }
-        >
-          <Typography variant="body1">
-            {filterOptions.showDuplicateResults
-              ? 'Đang hiện kết quả trùng lặp'
-              : 'Ẩn kết quả trùng lặp'}
-          </Typography>
-          <Switch
-            value={filterOptions.showDuplicateResults}
-            onValueChange={(value) =>
-              onFilterChange({
-                ...filterOptions,
-                showDuplicateResults: value,
-              })
-            }
-            trackColor={{
-              false: theme.colors.text.disabled,
-              true: theme.colors.primary.main,
-            }}
-          />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
