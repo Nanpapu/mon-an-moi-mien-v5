@@ -303,10 +303,7 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
 
     const savedRecipesSection = {
       title: '',
-      data:
-        activeTab === 'saved'
-          ? visibleRecipes.filter((item) => !isRecipeInCooking(item.recipe.id))
-          : [],
+      data: activeTab === 'saved' ? visibleRecipes : [],
     };
 
     return [cookingRecipesSection, savedRecipesSection];

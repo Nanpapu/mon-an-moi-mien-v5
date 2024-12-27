@@ -104,12 +104,15 @@ export default function MenuScreen() {
     );
   }, [filterOptions, activeTab]);
 
-  const cookingRecipesCount = sections[0].data.filter(
-    (item) => item.visible
-  ).length;
-  const savedRecipesCount = sections[1].data.filter(
-    (item) => item.visible
-  ).length;
+  const cookingRecipesCount = useMemo(() => {
+    return filteredRecipes.filter(
+      (item) => item.visible && isRecipeInCooking(item.recipe.id)
+    ).length;
+  }, [filteredRecipes, isRecipeInCooking]);
+
+  const savedRecipesCount = useMemo(() => {
+    return filteredRecipes.filter((item) => item.visible).length;
+  }, [filteredRecipes]);
 
   const visibleSections = useMemo(() => {
     if (activeTab === 'cooking') {
