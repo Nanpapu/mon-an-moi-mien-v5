@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Typography } from '../../../components/shared';
@@ -44,11 +44,11 @@ export const RecipeGridItem = memo(
     width,
     config,
     onFavoriteChange,
-    isSelectionMode = false,
-    isSelected = false,
+    isSelectionMode,
+    isSelected,
     onLongPress,
     onToggleSelect,
-    visible = true,
+    visible,
     isCooking,
   }: Props) => {
     const { theme } = useTheme();
@@ -100,13 +100,19 @@ export const RecipeGridItem = memo(
       loadImage();
     }, [recipe.image]);
 
-    const handlePress = () => {
+    const handlePress = useCallback(() => {
       if (isSelectionMode) {
         onToggleSelect?.();
       } else {
         onPress();
       }
-    };
+    }, [isSelectionMode, onToggleSelect, onPress]);
+
+    const handleLongPress = useCallback(() => {
+      if (!isSelectionMode) {
+        onLongPress?.(recipe.id);
+      }
+    }, [isSelectionMode, onLongPress, recipe.id]);
 
     const getFavoriteButtonStyle = (): FavoriteButtonStyleProps => {
       if (config.columns === 4) {
@@ -143,9 +149,14 @@ export const RecipeGridItem = memo(
 
     return (
       <TouchableOpacity
-        style={[styles.container, { width }, !visible && { display: 'none' }]}
+        style={[
+          styles.container,
+          { width },
+          !visible && { display: 'none' },
+          isSelected && styles.selectedContainer,
+        ]}
         onPress={handlePress}
-        onLongPress={() => onLongPress?.(recipe.id)}
+        onLongPress={handleLongPress}
         activeOpacity={0.7}
         delayLongPress={300}
       >
@@ -298,6 +309,7 @@ export const RecipeGridItem = memo(
     return (
       prevProps.recipe.id === nextProps.recipe.id &&
       prevProps.width === nextProps.width &&
+      prevProps.isSelectionMode === nextProps.isSelectionMode &&
       prevProps.isSelected === nextProps.isSelected &&
       prevProps.visible === nextProps.visible
     );
@@ -413,5 +425,10 @@ const createStyles = (
       color: '#FFFFFF',
       fontSize: 10,
       fontWeight: 'bold',
+    },
+    selectedContainer: {
+      opacity: 0.8,
+      borderWidth: 2,
+      borderColor: theme.colors.primary.main,
     },
   });

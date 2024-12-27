@@ -134,27 +134,33 @@ export default function MenuScreen() {
     }
   };
 
-  const handleLongPress = (recipeId: string) => {
+  const enterSelectionMode = useCallback((recipeId: string) => {
     setIsSelectionMode(true);
     setSelectedRecipes(new Set([recipeId]));
-  };
+  }, []);
 
-  const handleExitSelectionMode = () => {
+  const exitSelectionMode = useCallback(() => {
     setIsSelectionMode(false);
     setSelectedRecipes(new Set());
-  };
+  }, []);
 
-  const handleToggleSelect = (recipeId: string) => {
-    setSelectedRecipes((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(recipeId)) {
-        newSet.delete(recipeId);
-      } else {
-        newSet.add(recipeId);
-      }
-      return newSet;
-    });
-  };
+  const toggleSelectRecipe = useCallback(
+    (recipeId: string) => {
+      setSelectedRecipes((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(recipeId)) {
+          newSet.delete(recipeId);
+        } else {
+          newSet.add(recipeId);
+        }
+        if (newSet.size === 0) {
+          exitSelectionMode();
+        }
+        return newSet;
+      });
+    },
+    [exitSelectionMode]
+  );
 
   const handleDeleteSelected = async () => {
     if (!user) {
@@ -181,7 +187,7 @@ export default function MenuScreen() {
               }
               await refreshSavedRecipes();
               showToast('success', 'Đã xóa các công thức đã chọn');
-              handleExitSelectionMode();
+              exitSelectionMode();
             } catch (error) {
               console.error('Lỗi khi xóa công thức:', error);
               showToast('error', 'Không thể xóa một số công thức');
@@ -287,7 +293,7 @@ export default function MenuScreen() {
         <View style={styles.selectionHeader}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity
-              onPress={handleExitSelectionMode}
+              onPress={exitSelectionMode}
               style={styles.selectionButton}
             >
               <Ionicons
@@ -347,8 +353,8 @@ export default function MenuScreen() {
             onFavoriteChange={refreshFavorites}
             isSelectionMode={isSelectionMode}
             selectedRecipes={selectedRecipes}
-            onLongPress={handleLongPress}
-            onToggleSelect={handleToggleSelect}
+            onLongPress={(recipeId) => enterSelectionMode(recipeId)}
+            onToggleSelect={toggleSelectRecipe}
             isAuthenticated={!!user}
             isSaved={true}
             sections={visibleSections}
@@ -376,7 +382,7 @@ export default function MenuScreen() {
             color: theme.colors.text.secondary,
           }}
         >
-          Tìm thấy {filteredRecipes.filter((item) => item.visible).length} công
+          T��m thấy {filteredRecipes.filter((item) => item.visible).length} công
           thức
         </Typography>
       )}
