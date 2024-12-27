@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     left: 16,
+    right: 16,
     height: 48,
     borderRadius: 24,
     overflow: 'visible',
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: 16,
     position: 'relative',
+    zIndex: 1,
   },
   input: {
     flex: 1,

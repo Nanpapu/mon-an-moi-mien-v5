@@ -1,7 +1,14 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { Typography } from '../../../components/shared';
 import { useTheme } from '../../../theme/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   suggestions: string[];
@@ -37,18 +44,35 @@ export const SearchSuggestions = ({ suggestions, onSelect }: Props) => {
           onPress={() => onSelect(suggestion)}
           activeOpacity={0.7}
         >
+          <Ionicons
+            name="location-outline"
+            size={20}
+            color={theme.colors.text.secondary}
+            style={styles.icon}
+          />
           <Typography
             variant="body2"
-            style={styles.suggestionText}
+            style={[
+              styles.suggestionText,
+              { color: theme.colors.text.primary },
+            ]}
             numberOfLines={1}
           >
             {suggestion}
           </Typography>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={theme.colors.text.disabled}
+            style={styles.arrowIcon}
+          />
         </TouchableOpacity>
       ))}
     </View>
   );
 };
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -56,23 +80,33 @@ const styles = StyleSheet.create({
     top: '100%',
     left: 0,
     right: 0,
-    borderRadius: 8,
-    marginTop: 4,
+    borderRadius: 12,
+    marginTop: 0,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    maxHeight: 220, // Chiều cao tối đa cho 5 items
+    maxHeight: 240,
     overflow: 'hidden',
+    zIndex: 1000,
   },
   suggestionItem: {
-    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
     paddingHorizontal: 16,
-    height: 44, // Chiều cao cố định cho mỗi item
+    height: 48,
+  },
+  icon: {
+    marginRight: 12,
   },
   suggestionText: {
-    fontSize: 14,
-    lineHeight: 24,
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  arrowIcon: {
+    marginLeft: 8,
   },
 });
