@@ -13,6 +13,7 @@ import { RandomRecipeButton } from './RandomRecipeButton';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
+import { SearchSuggestions } from './SearchSuggestions';
 
 interface Props {
   onRefresh: () => Promise<void>;
@@ -39,6 +40,7 @@ export function MapControls({
   const searchWidth = useRef(new Animated.Value(48)).current;
   const reloadTop = useRef(new Animated.Value(20)).current;
   const spinValue = useRef(new Animated.Value(0)).current;
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     if (isRefreshing) {
@@ -82,6 +84,23 @@ export function MapControls({
     outputRange: ['0deg', '360deg'],
   });
 
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
+
+    console.log('Search text:', text);
+    console.log('Available regions:', regions);
+
+    if (text.trim().length > 0 && regions && regions.length > 0) {
+      const filtered = regions
+        .map((r) => r.name)
+        .filter((name) => name.toLowerCase().includes(text.toLowerCase()));
+      console.log('Filtered suggestions:', filtered);
+      setSuggestions(filtered.slice(0, 5));
+    } else {
+      setSuggestions([]);
+    }
+  };
+
   return (
     <>
       <Animated.View
@@ -114,16 +133,28 @@ export function MapControls({
             <View style={styles.searchBarWrapper}>
               <TextInput
                 value={searchQuery}
-                onChangeText={setSearchQuery}
+                onChangeText={handleSearchChange}
                 placeholder="Tìm kiếm địa điểm..."
                 placeholderTextColor={theme.colors.text.secondary}
                 style={[styles.input, { color: theme.colors.text.primary }]}
                 onSubmitEditing={() => {
                   onSearch(searchQuery);
                   setSearchQuery('');
+                  setSuggestions([]);
                   toggleSearch();
                 }}
               />
+              {suggestions.length > 0 && (
+                <SearchSuggestions
+                  suggestions={suggestions}
+                  onSelect={(suggestion) => {
+                    onSearch(suggestion);
+                    setSearchQuery('');
+                    setSuggestions([]);
+                    toggleSearch();
+                  }}
+                />
+              )}
             </View>
           </View>
         )}
@@ -176,8 +207,8 @@ const styles = StyleSheet.create({
     left: 16,
     height: 48,
     borderRadius: 24,
-    overflow: 'hidden',
-    zIndex: 1,
+    overflow: 'visible',
+    zIndex: 1000,
   },
   searchIcon: {
     width: 48,
@@ -193,6 +224,7 @@ const styles = StyleSheet.create({
   searchBarWrapper: {
     flex: 1,
     paddingRight: 16,
+    position: 'relative',
   },
   input: {
     flex: 1,
