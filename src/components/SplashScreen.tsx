@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Typography } from './shared';
+import { useTheme } from '../theme/ThemeContext';
 import {
   useFonts,
   DancingScript_700Bold,
@@ -21,6 +22,7 @@ export const SplashScreen = ({
 }: {
   onAnimationComplete: () => void;
 }) => {
+  const { theme } = useTheme();
   // Load fonts
   const [fontsLoaded] = useFonts({
     DancingScript: DancingScript_700Bold,
@@ -30,7 +32,6 @@ export const SplashScreen = ({
   // Các giá trị animation
   const logoScale = new Animated.Value(0.8);
   const logoOpacity = new Animated.Value(0);
-  const logoRotate = new Animated.Value(0);
   const textOpacity = new Animated.Value(0);
   const textSlide = new Animated.Value(50);
   const sloganOpacity = new Animated.Value(0);
@@ -45,40 +46,18 @@ export const SplashScreen = ({
       Animated.parallel([
         Animated.timing(logoOpacity, {
           toValue: 1,
-          duration: 1000,
+          duration: 800,
           useNativeDriver: true,
         }),
         Animated.spring(logoScale, {
           toValue: 1,
-          tension: 15,
-          friction: 8,
+          tension: 20,
+          friction: 7,
           useNativeDriver: true,
         }),
       ]),
-      // Logo nhẹ nhàng lắc qua lại
-      Animated.sequence([
-        Animated.timing(logoRotate, {
-          toValue: -0.1,
-          duration: 400,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoRotate, {
-          toValue: 0.1,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoRotate, {
-          toValue: 0,
-          duration: 400,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
-      // Text animations
+      // App name animation
       Animated.parallel([
-        // App name
         Animated.timing(textOpacity, {
           toValue: 1,
           duration: 800,
@@ -86,42 +65,43 @@ export const SplashScreen = ({
         }),
         Animated.spring(textSlide, {
           toValue: 0,
-          tension: 30,
-          friction: 8,
+          tension: 50,
+          friction: 7,
           useNativeDriver: true,
         }),
-        // Slogan
+      ]),
+      // Slogan animation
+      Animated.parallel([
         Animated.timing(sloganOpacity, {
           toValue: 1,
           duration: 800,
-          delay: 300,
           useNativeDriver: true,
         }),
         Animated.spring(sloganSlide, {
           toValue: 0,
-          tension: 30,
-          friction: 8,
+          tension: 50,
+          friction: 7,
           useNativeDriver: true,
         }),
       ]),
       // Delay before exit
-      Animated.delay(1500),
+      Animated.delay(1000),
     ]).start(() => {
       // Fade out everything
       Animated.parallel([
         Animated.timing(logoOpacity, {
           toValue: 0,
-          duration: 600,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.timing(textOpacity, {
           toValue: 0,
-          duration: 600,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.timing(sloganOpacity, {
           toValue: 0,
-          duration: 600,
+          duration: 500,
           useNativeDriver: true,
         }),
       ]).start(onAnimationComplete);
@@ -131,27 +111,43 @@ export const SplashScreen = ({
   // Đợi font load xong
   if (!fontsLoaded) return null;
 
-  const rotate = logoRotate.interpolate({
-    inputRange: [-0.1, 0, 0.1],
-    outputRange: ['-10deg', '0deg', '10deg'],
-  });
-
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background.default },
+      ]}
+    >
       <Animated.View
         style={[
           styles.logoContainer,
           {
             opacity: logoOpacity,
-            transform: [{ scale: logoScale }, { rotate }],
+            transform: [{ scale: logoScale }],
           },
         ]}
       >
-        <Image
-          source={require('../../assets/viet-logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <View
+          style={{
+            shadowColor: theme.colors.primary.main,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 8,
+          }}
+        >
+          <Image
+            source={require('../../assets/viet-logo.png')}
+            style={[
+              styles.logo,
+              {
+                borderColor: theme.colors.primary.main,
+                backgroundColor: theme.colors.background.paper,
+              },
+            ]}
+            resizeMode="contain"
+          />
+        </View>
       </Animated.View>
 
       <Animated.View
@@ -169,6 +165,8 @@ export const SplashScreen = ({
             styles.appName,
             {
               fontFamily: 'DancingScript',
+              color: theme.colors.primary.main,
+              textShadowColor: `${theme.colors.primary.main}40`,
               includeFontPadding: false,
               textAlignVertical: 'center',
             },
@@ -193,6 +191,7 @@ export const SplashScreen = ({
             styles.slogan,
             {
               fontFamily: 'Pacifico',
+              color: theme.colors.text.secondary,
               includeFontPadding: false,
               textAlignVertical: 'center',
             },
@@ -201,6 +200,16 @@ export const SplashScreen = ({
           Khám phá tinh hoa ẩm thực Việt
         </Typography>
       </Animated.View>
+
+      <Animated.View
+        style={[
+          styles.gradientOverlay,
+          {
+            backgroundColor: `${theme.colors.primary.main}10`,
+            opacity: logoOpacity,
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -208,7 +217,6 @@ export const SplashScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: height * 0.1,
@@ -223,7 +231,14 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#2196F3',
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   },
   textContainer: {
     alignItems: 'center',
