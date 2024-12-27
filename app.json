@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "your.app.bundle"
+      "bundleIdentifier": "your.app.bundle",
+      "splash": {
+        "resizeMode": "native"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +30,10 @@
         }
       },
       "package": "com.monanmoimien.v2",
-      "scheme": "monanmoimien"
+      "scheme": "monanmoimien",
+      "splash": {
+        "resizeMode": "native"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,8 +53,6 @@
         "name": "Pacifico_400Regular"
       }
     ],
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"]
   }
 }
