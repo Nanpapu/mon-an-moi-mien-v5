@@ -39,3 +39,4 @@ build/
 
 # Service account
 service-account.json
+google-services.json
