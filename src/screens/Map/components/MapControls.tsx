@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,6 +14,8 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Region } from '../../../types';
 import { SearchSuggestions } from './SearchSuggestions';
+import { removeAccents } from '../../../utils/stringUtils';
+import Fuse from 'fuse.js';
 
 interface Props {
   onRefresh: () => Promise<void>;
@@ -84,18 +86,33 @@ export function MapControls({
     outputRange: ['0deg', '360deg'],
   });
 
+  const fuse = useMemo(() => {
+    const options = {
+      includeScore: true,
+      threshold: 0.4,
+      keys: ['name'],
+      ignoreLocation: true,
+      shouldSort: true,
+    };
+
+    const searchData = regions.map((region) => ({
+      name: removeAccents(region.name),
+      originalName: region.name,
+    }));
+
+    return new Fuse(searchData, options);
+  }, [regions]);
+
   const handleSearchChange = (text: string) => {
     setSearchQuery(text);
 
-    console.log('Search text:', text);
-    console.log('Available regions:', regions);
+    if (text.trim().length > 0) {
+      const searchResults = fuse
+        .search(removeAccents(text))
+        .slice(0, 5)
+        .map((result) => result.item.originalName);
 
-    if (text.trim().length > 0 && regions && regions.length > 0) {
-      const filtered = regions
-        .map((r) => r.name)
-        .filter((name) => name.toLowerCase().includes(text.toLowerCase()));
-      console.log('Filtered suggestions:', filtered);
-      setSuggestions(filtered.slice(0, 5));
+      setSuggestions(searchResults);
     } else {
       setSuggestions([]);
     }

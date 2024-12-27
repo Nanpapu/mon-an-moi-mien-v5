@@ -26,6 +26,7 @@ import {
 import { MAP_STYLES } from './constants/mapStyles';
 import { useMapStyle } from '../../context/MapStyleContext';
 import { removeAccents, containsSearchQuery } from '../../utils/stringUtils';
+import Fuse from 'fuse.js';
 
 // Thêm hằng số cho animation
 const MARKER_ZOOM_ANIMATION = {
@@ -110,7 +111,7 @@ export default function MapScreen({ navigation }: { navigation: any }) {
     try {
       const success = await saveRecipe(recipe, user.uid);
       if (success) {
-        showToast('success', 'Đã lưu công thức');
+        showToast('success', 'Đã lưu công th��c');
       } else {
         showToast('info', 'Công thức đã được lưu trước đó');
       }
@@ -140,18 +141,31 @@ export default function MapScreen({ navigation }: { navigation: any }) {
   const onSearch = (query: string) => {
     if (!query.trim()) return;
 
-    // Tìm kiếm trong regions hiện có
-    const results = regions.filter((region) => {
-      return containsSearchQuery(region.name, query);
-    });
+    // Khởi tạo Fuse với cùng options như trong MapControls
+    const fuse = new Fuse(
+      regions.map((region) => ({
+        name: removeAccents(region.name),
+        originalName: region.name,
+        coordinate: region.coordinate,
+      })),
+      {
+        includeScore: true,
+        threshold: 0.4,
+        keys: ['name'],
+        ignoreLocation: true,
+        shouldSort: true,
+      }
+    );
 
-    if (results.length > 0) {
-      const firstResult = results[0];
+    // Tìm kiếm với Fuse
+    const searchResults = fuse.search(removeAccents(query));
 
-      // Dùng lại các giá trị animation giống marker
+    if (searchResults.length > 0) {
+      const bestMatch = searchResults[0].item; // Lấy kết quả có score tốt nhất
+
       const newRegion = {
-        latitude: firstResult.coordinate.latitude,
-        longitude: firstResult.coordinate.longitude,
+        latitude: bestMatch.coordinate.latitude,
+        longitude: bestMatch.coordinate.longitude,
         latitudeDelta: MARKER_ZOOM_ANIMATION.LATITUDE_DELTA,
         longitudeDelta: MARKER_ZOOM_ANIMATION.LONGITUDE_DELTA,
       };
@@ -160,12 +174,9 @@ export default function MapScreen({ navigation }: { navigation: any }) {
         newRegion,
         MARKER_ZOOM_ANIMATION.DURATION
       );
-      showToast('success', 'Đã tìm thấy địa điểm');
+      showToast('success', `Đã tìm thấy: ${bestMatch.originalName}`);
     } else {
-      showToast(
-        'warning',
-        'Địa điểm không tồn tại hoặc hiện chưa có món nào'
-      );
+      showToast('warning', 'Địa điểm không tồn tại hoặc hiện chưa có món nào');
     }
   };
 
