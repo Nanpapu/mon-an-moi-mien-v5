@@ -12,6 +12,8 @@ export const SectionHeader = ({ title, count }: Props) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  if (!title) return null;
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>

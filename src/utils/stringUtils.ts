@@ -11,8 +11,9 @@ export const normalizeSearchString = (str: string): string => {
   return removeAccents(str.trim().toLowerCase());
 };
 
-// Hàm kiểm tra một chuỗi có chứa từ khóa tìm kiếm hay không
+// Hàm kiểm tra một chuỗi có chứa từ khóa tìm kiếm hay không (hỗ trợ tiếng Việt không dấu)
 export const containsSearchQuery = (text: string, query: string): boolean => {
+  // Chuẩn hóa cả text và query
   const normalizedText = normalizeSearchString(text);
   const normalizedQuery = normalizeSearchString(query);
 
@@ -22,5 +23,12 @@ export const containsSearchQuery = (text: string, query: string): boolean => {
     .filter((word) => word.length > 0);
 
   // Kiểm tra xem text có chứa tất cả các từ trong query không
-  return queryWords.every((word) => normalizedText.includes(word));
+  // Hỗ trợ cả dạng có dấu và không dấu
+  return queryWords.every((word) => {
+    // Kiểm tra cả dạng có dấu và không dấu
+    return (
+      normalizedText.includes(word) || // Kiểm tra dạng không dấu
+      text.toLowerCase().includes(word) // Kiểm tra dạng có dấu
+    );
+  });
 };

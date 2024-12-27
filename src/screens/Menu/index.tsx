@@ -118,7 +118,7 @@ export default function MenuScreen() {
     if (activeTab === 'cooking') {
       return [sections[0]];
     }
-    return [sections[1]];
+    return sections;
   }, [sections, activeTab]);
 
   useEffect(() => {

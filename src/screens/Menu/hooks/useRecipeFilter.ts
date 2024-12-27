@@ -293,20 +293,54 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     // Lọc các công thức có visible = true
     const visibleRecipes = recipes.filter((item) => item.visible);
 
-    const cookingRecipesSection = {
-      title: '',
-      data:
-        activeTab === 'cooking'
-          ? visibleRecipes.filter((item) => isRecipeInCooking(item.recipe.id))
-          : [],
-    };
+    if (activeTab === 'cooking') {
+      return [
+        {
+          title: '',
+          data: visibleRecipes.filter((item) =>
+            isRecipeInCooking(item.recipe.id)
+          ),
+        },
+      ];
+    }
 
-    const savedRecipesSection = {
-      title: '',
-      data: activeTab === 'saved' ? visibleRecipes : [],
-    };
+    // Nếu có search query thì chia thành 2 section
+    if (currentFilterOptions.searchQuery) {
+      const query = currentFilterOptions.searchQuery.toLowerCase().trim();
 
-    return [cookingRecipesSection, savedRecipesSection];
+      // Section tìm theo tên
+      const nameMatches = visibleRecipes.filter((item) =>
+        containsSearchQuery(item.recipe.name, query)
+      );
+
+      // Section tìm theo nguyên liệu
+      const ingredientMatches = visibleRecipes.filter(
+        (item) =>
+          !containsSearchQuery(item.recipe.name, query) && // Loại bỏ các món đã match tên
+          item.recipe.ingredients.some((ingredient) =>
+            containsSearchQuery(ingredient.name, query)
+          )
+      );
+
+      return [
+        {
+          title: 'Tìm theo tên món',
+          data: nameMatches,
+        },
+        {
+          title: 'Tìm theo nguyên liệu',
+          data: ingredientMatches,
+        },
+      ];
+    }
+
+    // Nếu không có search query thì hiện tất cả trong 1 section
+    return [
+      {
+        title: '',
+        data: visibleRecipes,
+      },
+    ];
   };
 
   // Thêm hàm mới để kiểm tra có filter nào đang active không

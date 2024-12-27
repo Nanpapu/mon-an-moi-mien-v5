@@ -119,7 +119,7 @@ export const RecipeList = ({
         >
           {sections &&
             sections.map((section, index) => {
-              if (!section) return null;
+              if (!section || section.data.length === 0) return null;
 
               return (
                 <View
@@ -131,7 +131,7 @@ export const RecipeList = ({
                   {section.title && (
                     <SectionHeader
                       title={section.title}
-                      count={section.data.filter((item) => item.visible).length}
+                      count={section.data.length}
                     />
                   )}
                   <View style={styles.grid}>
