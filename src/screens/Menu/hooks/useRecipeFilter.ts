@@ -293,30 +293,25 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
     // Lọc các công thức có visible = true
     const visibleRecipes = recipes.filter((item) => item.visible);
 
-    if (activeTab === 'cooking') {
-      return [
-        {
-          title: '',
-          data: visibleRecipes.filter((item) =>
-            isRecipeInCooking(item.recipe.id)
-          ),
-        },
-      ];
-    }
-
-    // Nếu có search query thì chia thành 2 section
+    // Nếu có search query thì chia thành 2 section cho cả 2 tab
     if (currentFilterOptions.searchQuery) {
       const query = currentFilterOptions.searchQuery.toLowerCase().trim();
 
+      // Lọc recipes theo tab hiện tại
+      const tabRecipes =
+        activeTab === 'cooking'
+          ? visibleRecipes.filter((item) => isRecipeInCooking(item.recipe.id))
+          : visibleRecipes;
+
       // Section tìm theo tên
-      const nameMatches = visibleRecipes.filter((item) =>
+      const nameMatches = tabRecipes.filter((item) =>
         containsSearchQuery(item.recipe.name, query)
       );
 
-      // Section tìm theo nguyên liệu
-      const ingredientMatches = visibleRecipes.filter(
+      // Section tìm theo nguyên liệu (loại bỏ các món đã match tên)
+      const ingredientMatches = tabRecipes.filter(
         (item) =>
-          !containsSearchQuery(item.recipe.name, query) && // Loại bỏ các món đã match tên
+          !containsSearchQuery(item.recipe.name, query) &&
           item.recipe.ingredients.some((ingredient) =>
             containsSearchQuery(ingredient.name, query)
           )
@@ -334,7 +329,20 @@ export const useRecipeFilter = (savedRecipes: Recipe[]) => {
       ];
     }
 
-    // Nếu không có search query thì hiện tất cả trong 1 section
+    // Nếu không có search query
+    if (activeTab === 'cooking') {
+      // Tab đang nấu: chỉ hiển thị các món đang nấu
+      return [
+        {
+          title: '',
+          data: visibleRecipes.filter((item) =>
+            isRecipeInCooking(item.recipe.id)
+          ),
+        },
+      ];
+    }
+
+    // Tab đã lưu: hiển thị tất cả trong 1 section
     return [
       {
         title: '',
