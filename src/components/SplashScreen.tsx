@@ -222,8 +222,8 @@ const styles = StyleSheet.create({
     paddingBottom: height * 0.1,
   },
   logoContainer: {
-    width: width * 0.35,
-    height: width * 0.35,
+    width: width * 0.5,
+    height: width * 0.5,
     marginBottom: height * 0.03,
   },
   logo: {
