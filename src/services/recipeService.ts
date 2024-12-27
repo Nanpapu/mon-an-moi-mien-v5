@@ -11,6 +11,7 @@ import { Recipe, Region } from '../types';
 import { UserSavedRecipesService } from './userSavedRecipesService';
 import { ImageUtils } from '../utils/imageUtils';
 import { ImageCacheService } from './imageCacheService';
+import { Timestamp } from 'firebase/firestore';
 
 /**
  * Service quản lý công thức nấu ăn
@@ -177,7 +178,29 @@ export const RecipeService = {
   syncToCloud: async (userId: string, recipes: Recipe[]) => {
     try {
       const userRecipesRef = doc(db, 'users', userId, 'saved_recipes', 'data');
-      await setDoc(userRecipesRef, { recipes });
+      const docSnap = await getDoc(userRecipesRef);
+
+      // Merge với data hiện tại nếu có
+      const currentData = docSnap.exists() ? docSnap.data() : { recipes: [] };
+      const mergedRecipes = [...currentData.recipes];
+
+      // Thêm recipes mới vào nếu chưa tồn tại
+      recipes.forEach((recipe) => {
+        if (!mergedRecipes.some((r) => r.id === recipe.id)) {
+          mergedRecipes.push(recipe);
+        }
+      });
+
+      await setDoc(
+        userRecipesRef,
+        {
+          recipes: mergedRecipes,
+          updatedAt: Timestamp.now(),
+          version: (currentData.version || 0) + 1,
+        },
+        { merge: true }
+      );
+
       return true;
     } catch (error) {
       console.error('Lỗi khi đồng bộ lên cloud:', error);
