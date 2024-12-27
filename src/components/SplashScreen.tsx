@@ -46,12 +46,12 @@ export const SplashScreen = ({
       Animated.parallel([
         Animated.timing(logoOpacity, {
           toValue: 1,
-          duration: 800,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.spring(logoScale, {
           toValue: 1,
-          tension: 20,
+          tension: 30,
           friction: 7,
           useNativeDriver: true,
         }),
@@ -60,12 +60,12 @@ export const SplashScreen = ({
       Animated.parallel([
         Animated.timing(textOpacity, {
           toValue: 1,
-          duration: 800,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.spring(textSlide, {
           toValue: 0,
-          tension: 50,
+          tension: 60,
           friction: 7,
           useNativeDriver: true,
         }),
@@ -74,18 +74,18 @@ export const SplashScreen = ({
       Animated.parallel([
         Animated.timing(sloganOpacity, {
           toValue: 1,
-          duration: 800,
+          duration: 500,
           useNativeDriver: true,
         }),
         Animated.spring(sloganSlide, {
           toValue: 0,
-          tension: 50,
+          tension: 60,
           friction: 7,
           useNativeDriver: true,
         }),
       ]),
       // Delay before exit
-      Animated.delay(1000),
+      Animated.delay(800),
     ]).start(() => {
       // Fade out everything
       Animated.parallel([
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: width * 0.35,
     height: width * 0.35,
-    marginBottom: height * 0.06,
+    marginBottom: height * 0.03,
   },
   logo: {
     width: '100%',
@@ -242,13 +242,13 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center',
-    marginBottom: height * 0.02,
+    marginBottom: height * 0.01,
     height: 70,
     justifyContent: 'center',
   },
   sloganContainer: {
     alignItems: 'center',
-    marginTop: height * 0.01,
+    marginTop: height * 0.005,
   },
   appName: {
     fontSize: width * 0.12,
