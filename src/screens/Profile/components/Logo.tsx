@@ -34,7 +34,7 @@ export const Logo = () => {
         />
         <View style={styles.textWrapper}>
           <Typography
-            variant="h2"
+            variant="caption"
             style={[
               styles.appName,
               {
