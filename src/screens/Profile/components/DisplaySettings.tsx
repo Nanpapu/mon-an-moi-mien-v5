@@ -192,7 +192,7 @@ export const DisplaySettings = () => {
             'map-outline',
             false
           )}
-          {renderSettingItem(
+          {/* {renderSettingItem(
             'Thông báo',
             'Nhận thông báo về công thức mới và cập nhật',
             notifications,
@@ -200,7 +200,7 @@ export const DisplaySettings = () => {
             'notifications-outline',
             true,
             'Tính năng đang phát triển'
-          )}
+          )} */}
         </View>
       </Animated.View>
     </View>
